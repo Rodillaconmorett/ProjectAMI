@@ -5,6 +5,7 @@ package is.ecci.ucr.projectami.SamplingPoints;
  */
 
 public class Site {
+
     private String siteName;
     private double latitude;
     private double longitude;
@@ -17,5 +18,19 @@ public class Site {
         this.description = description;
     }
 
+    public String getSiteName() {
+        return siteName;
+    }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
