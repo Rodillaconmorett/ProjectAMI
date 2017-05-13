@@ -5,13 +5,27 @@ package is.ecci.ucr.projectami;
  */
 
 public class Authenticator {
+
+    /*---------------------------------------MÉTODOS----------------------------------------------*/
+    /* ENTRADAS:
+    *  SALIDAS:
+    *  RESTRICCIONES:
+    * */
+
     public Authenticator(){
 
     }
-
+    /* ENTRADAS:
+        *  SALIDAS:
+        *  RESTRICCIONES:
+        * */
     public TokenPrivilegios login(String username, String password){
     }
 
+    /* ENTRADAS:
+        *  SALIDAS:
+        *  RESTRICCIONES:
+        * */
     public TokenPrivilegios login(SocialNetwork token){
 
     }
