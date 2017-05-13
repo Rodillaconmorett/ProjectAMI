@@ -39,7 +39,7 @@ public class TokenPrivilegios {
     *  R: -
     * */
     public boolean reqTreeRgts(){
-
+        return true;
     }
 
 
@@ -48,6 +48,6 @@ public class TokenPrivilegios {
     *  R: -
     * */
     public boolean reqCatalogRgts(){
-
+        return true;
     }
 }

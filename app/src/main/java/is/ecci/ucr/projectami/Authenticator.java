@@ -20,14 +20,13 @@ public class Authenticator {
         *  RESTRICCIONES:
         * */
     public TokenPrivilegios login(String username, String password){
+        TokenPrivilegios paraQueCompile = new TokenPrivilegios();
+        return paraQueCompile;
     }
 
-    /* ENTRADAS:
-        *  SALIDAS:
-        *  RESTRICCIONES:
-        * */
-    public TokenPrivilegios login(SocialNetwork token){
-
+    public TokenPrivilegios login(/*SocialNetwork token*/){
+        TokenPrivilegios paraQueCompile = new TokenPrivilegios();
+        return paraQueCompile;
     }
 
 }
