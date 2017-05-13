@@ -5,4 +5,9 @@ package is.ecci.ucr.projectami;
  */
 
 public class UserInfo {
+    /*--------------------------------------ATRIBUTOS---------------------------------------------*/
+    private String email, password, firstName, lastName, role;
+    int age;
+
+
 }
