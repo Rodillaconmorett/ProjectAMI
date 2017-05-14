@@ -44,7 +44,7 @@ public class Inscriptor {
     *  RESTRICCIONES:
     * */
     public boolean validateInput(){
-
+        return true;
     }
 
     /* ENTRADAS:
@@ -68,7 +68,7 @@ public class Inscriptor {
     *  RESTRICCIONES:
     * */
     public boolean verifyUsername(){
-
+        return true;
     }
 
     /* ENTRADAS:

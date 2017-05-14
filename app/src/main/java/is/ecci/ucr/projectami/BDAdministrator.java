@@ -24,7 +24,8 @@ public class BDAdministrator {
     *  RESTRICCIONES:
     * */
     public Bug[] getBugs(){
-
+        Bug[] paraQueCompile = new Bug[1];
+        return paraQueCompile;
     }
 
     /* ENTRADAS:
@@ -32,7 +33,8 @@ public class BDAdministrator {
     *  RESTRICCIONES:
     * */
     public Bug[] getBugs(int[] bugsIds){ //Entradas estaban como 'bugsIds: [ids]' tipo ids no existe
-
+        Bug[] paraQueCompile = new Bug[1];
+        return paraQueCompile;
     }
 
     /* ENTRADAS:
@@ -72,7 +74,8 @@ public class BDAdministrator {
     *  RESTRICCIONES:
     * */
     public UserInfo[] getUserInfo(String email){
-
+        UserInfo[] paraQueCompile = new UserInfo[1];
+        return paraQueCompile;
     }
 
     /* ENTRADAS:
@@ -80,7 +83,7 @@ public class BDAdministrator {
     *  RESTRICCIONES:
     * */
     public boolean userExists(int userId){ // Entrada estaba como 'userId: id', no existe tipo id.
-
+        return true;
     }
 
     /* ENTRADAS:
@@ -88,7 +91,7 @@ public class BDAdministrator {
     *  RESTRICCIONES:
     * */
     public boolean userExists(String email) {
-
+        return true;
     }
 
     /* ENTRADAS:
@@ -128,7 +131,8 @@ public class BDAdministrator {
     *  RESTRICCIONES:
     * */
     public String getUserRole(String email){
-
+        String paraQueCompile = "";
+        return paraQueCompile;
     }
 
     /* ENTRADAS:
@@ -144,7 +148,8 @@ public class BDAdministrator {
     *  RESTRICCIONES:
     * */
     public String getSites(int siteId){// Entrada estaba como 'siteId: id', no existe tipo id.
-
+        String paraQueCompile = "";
+        return paraQueCompile;
     }
 
     /* ENTRADAS:
@@ -152,6 +157,7 @@ public class BDAdministrator {
     *  RESTRICCIONES:
     * */
     public Site[] getSiteInfo(int siteId){ // Entrada estaba como 'siteId: id', no existe tipo id.
-
+        Site[] paraQueCompile = new Site[1];
+        return paraQueCompile;
     }
 }

@@ -45,6 +45,7 @@ public class Catalog {
     *  RESTRICCIONES:
     * */
     public Bug getBugInformation(){
-
+        Bug paraQueCompile = new Bug("",0,"");
+        return paraQueCompile;
     }
 }

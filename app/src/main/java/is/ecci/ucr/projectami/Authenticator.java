@@ -10,10 +10,13 @@ public class Authenticator {
     }
 
     public TokenPrivilegios login(String username, String password){
+        TokenPrivilegios paraQueCompile = new TokenPrivilegios();
+        return paraQueCompile;
     }
 
-    public TokenPrivilegios login(SocialNetwork token){
-
+    public TokenPrivilegios login(/*SocialNetwork token*/){
+        TokenPrivilegios paraQueCompile = new TokenPrivilegios();
+        return paraQueCompile;
     }
 
 }
