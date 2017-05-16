@@ -16,6 +16,7 @@ import java.util.List;
 public class Catalog {
     private List<Bug> bugList;
 
+
     /* ENTRADAS:
     *  SALIDAS:
     *  RESTRICCIONES:

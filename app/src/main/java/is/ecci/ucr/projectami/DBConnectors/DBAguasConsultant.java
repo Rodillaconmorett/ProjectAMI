@@ -13,7 +13,8 @@ public class DBAguasConsultant {
     *  RESTRICCIONES:
     * */
     public Bug[] getBugs(){
-
+        Bug bugs[]=null;
+        return  bugs;
     }
 
     /* ENTRADAS:
@@ -21,7 +22,8 @@ public class DBAguasConsultant {
     *  RESTRICCIONES:
     * */
     public Bug[] getBugs(String[] bugNames){
-
+        Bug bugs[]=null;
+        return  bugs;
     }
 
     /* ENTRADAS:
@@ -29,7 +31,8 @@ public class DBAguasConsultant {
     *  RESTRICCIONES:
     * */
     public UserInfo[] getUsers(){
-
+        UserInfo userInfo[]=null;
+        return  userInfo;
     }
 
     /* ENTRADAS:
@@ -37,6 +40,7 @@ public class DBAguasConsultant {
     *  RESTRICCIONES:
     * */
     public UserInfo getUser(String email){
-
+        UserInfo userInfo=null;
+        return userInfo;
     }
 }
