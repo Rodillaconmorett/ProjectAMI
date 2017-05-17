@@ -1,4 +1,4 @@
-package is.ecci.ucr.projectami.DesitionTree;
+package is.ecci.ucr.projectami.DecisionTree;
 
 /**
  * Created by Milton on 17-May-17.
