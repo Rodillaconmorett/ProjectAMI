@@ -22,6 +22,8 @@ android {
 
 
 dependencies {
+    // https://mvnrepository.com/artifact/com.mcxiaoke.volley/library
+    compile group: 'com.mcxiaoke.volley', name: 'library', version: '1.0.19'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver
     compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.4.2'
