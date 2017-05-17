@@ -1,5 +1,8 @@
 package is.ecci.ucr.projectami;
 
+
+
+
 /**
  * Created by bjgd9 on 14/5/2017.
  */
@@ -11,6 +14,12 @@ public class Animal {
     public Animal(String nombre, int drawableImageID) {
         this.nombre = nombre;
         this.drawableImageID = drawableImageID;
+    }
+
+    public char[] getImage(){
+        char imagen[]=null;
+
+        return  imagen;
     }
 
     public String getNombre() {
