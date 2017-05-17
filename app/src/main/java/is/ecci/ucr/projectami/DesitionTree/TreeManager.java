@@ -6,9 +6,9 @@ package is.ecci.ucr.projectami.DesitionTree;
 
 
 public class TreeManager {
-    private ID3 decisionTree;
+    //private ID3 decisionTree;
     public TreeManager(){
-        decisionTree = new decisionTree();
+       // decisionTree = new decisionTree();
         this.beginTest();
     }
 
