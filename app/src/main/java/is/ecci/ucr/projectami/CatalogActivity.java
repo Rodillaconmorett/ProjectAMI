@@ -13,27 +13,32 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class CatalogActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private ArrayList<Animal> animales;
     AnimalesAdapter adapter;
     ListView lvAnimals;
     ImageView imagen;
     TextView nombre;
+    TextView numCelda;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         rellenarArrayList();
-        lvAnimals = (ListView) findViewById(R.id.lvAnimals);
-        nombre = (TextView) findViewById(R.id.textView);
         adapter = new AnimalesAdapter(this, animales);
+        setContentView(R.layout.activity_catalog);
+        lvAnimals = (ListView) findViewById(R.id.lvAnimals);
         lvAnimals.setAdapter(adapter);
         lvAnimals.setOnItemClickListener(this);
 
+        imagen = (ImageView) findViewById(R.id.imgAnimal);
+        nombre = (TextView) findViewById(R.id.tvContent);
+        numCelda = (TextView) findViewById(R.id.tvField);
+        lvAnimals.setOnItemClickListener(this);
 
+        setTitle("Catálogo");
     }
 
     @Override
@@ -41,14 +46,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             long ID) {
         // Al hacer click sobre uno de los items del ListView mostramos los
         // datos en los TextView.
-
         nombre.setText(animales.get(position).getNombre());
-        String nombre = animales.get(position).getNombre();
+        numCelda.setText(String.valueOf(position));
 
     }
 
     private void rellenarArrayList() {
-        animales = new ArrayList<>();
         animales.add(new Animal("aguila", R.drawable.aguila));
         animales.add(new Animal("ballena", R.drawable.ballena));
         animales.add(new Animal("caballo", R.drawable.caballo));
@@ -65,4 +68,5 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         animales.add(new Animal("perro", R.drawable.perro));
         animales.add(new Animal("vaca", R.drawable.vaca));
     }
+
 }

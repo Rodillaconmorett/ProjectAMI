@@ -5,8 +5,6 @@ package is.ecci.ucr.projectami.Bugs;
  */
 
 public class Bug {
-
-
     private String family;
     private double score;
     private String[] imageDir;
