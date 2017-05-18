@@ -18,7 +18,6 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-
 public class Custom_Volly_Request extends Request<JSONObject> {
     private Response.Listener<JSONObject> listener;
     private Map<String, String> headers;
