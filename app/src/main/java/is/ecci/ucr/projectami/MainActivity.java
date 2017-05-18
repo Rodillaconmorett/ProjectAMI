@@ -14,11 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         MongoAdmin db = new MongoAdmin(this.getApplicationContext());
-        try {
-            db.addSite("Estadio",-9355581.06,1109282.28,null,null);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        db.getSites();
     }
 
 }
