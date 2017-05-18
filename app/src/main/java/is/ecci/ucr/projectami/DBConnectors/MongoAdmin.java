@@ -12,8 +12,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.android.volley.Request;
 import com.android.volley.Response;
 
@@ -21,8 +21,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import is.ecci.ucr.projectami.Bugs.Bug;
+import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 
 public class MongoAdmin {
@@ -41,6 +45,10 @@ public class MongoAdmin {
         Log.d("CREATION","START");
         //Inicializamos la cola de consulta con el contexto de la aplicación
         queue = Volley.newRequestQueue(context);
+    }
+
+    public interface ServerCallback{
+        JSONObject onSuccess(JSONObject result);
     }
 
     public void addSite(String name, Double latitude, Double longitude, String description, String imagePath) throws JSONException {
@@ -62,6 +70,55 @@ public class MongoAdmin {
         if (description != null) jsonBody.put("description", description);
         if (imagePath != null) jsonBody.put("image",imagePath);
         jsonPostRequest(jsonBody,url,params);
+    }
+
+    public void getSites(ServerCallback callback) {
+        String getURL = FINAL_URL+"/Site";
+        Map<String, String> params = new HashMap<>();
+        String key = "Authorization";
+        String encodedString = Base64.encodeToString(String.format("%s:%s", "admin", "q1w2E3r4").getBytes(), Base64.NO_WRAP);
+        String value = String.format("Basic %s", encodedString);
+        params.put(key,value);//put your parameters here
+        params.put("Content-Type","application/json");
+        jsonGetRequest(getURL, params,callback);
+    }
+
+    public ArrayList<Bug> getBugs() {
+        ArrayList<Bug> bugs = new ArrayList<Bug>();
+        return bugs;
+    }
+
+    public ArrayList<Bug> getBugs(String[] ids) {
+        ArrayList<Bug> bugs = new ArrayList<Bug>();
+        return bugs;
+    }
+
+    public void insertSampling(String bugFamily, String siteId, int quantity, String userEmail) {
+
+    }
+
+    private void insertBug(String family, Double score, String[] imagesPaths) {
+
+    }
+
+    private void jsonGetRequest(String url, Map<String, String> params,final ServerCallback callback) {
+        Custom_Volly_Request jsonRequest;
+        jsonRequest = new Custom_Volly_Request(Request.Method.GET, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Response: ", response.toString());
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError response)
+                    {
+                        Log.d("Response: Error", response.toString());
+                    }
+                });
+        queue.add(jsonRequest);
     }
 
     private void jsonPostRequest(JSONObject jsonBody, String url, Map<String, String> params) {
