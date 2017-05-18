@@ -2,7 +2,8 @@ package is.ecci.ucr.projectami.SamplingPoints;
 
 import java.util.LinkedList;
 
-import is.ecci.ucr.projectami.DBConnectors.DBAguasConsultant;
+import is.ecci.ucr.projectami.BDAdministrator;
+import is.ecci.ucr.projectami.Bugs.Bug;
 
 /**
  * Created by Daniel on 5/10/2017.
@@ -13,21 +14,21 @@ public class SamplingPoint {
     private int lowQualBug;
     private int medQualBug;
     private int hghQualBug;
-    private DBAguasConsultant consultant;
+    private BDAdministrator administrator;
     /*
     * Cambiar String por la clase bicho, no solo aqui sino tambien en getBugList y en el constructor
     * */
-    private LinkedList<String> bugList;
+    private LinkedList<Bug> bugList;
     private Site site;
 
-    public SamplingPoint(Site site, DBAguasConsultant consultant) {
+    public SamplingPoint(Site site, BDAdministrator administrator) {
         score = 0;
         lowQualBug = 0;
         medQualBug = 0;
         hghQualBug = 0;
-        bugList = new LinkedList<String>();
+        bugList = new LinkedList<Bug>();
         this.site = site;
-        this.consultant = consultant;
+        this.administrator = administrator;
     }
 
     public void updateScore(){
@@ -66,7 +67,7 @@ public class SamplingPoint {
         return hghQualBug;
     }
 
-    public LinkedList<String> getBugList(){
+    public LinkedList<Bug> getBugList(){
         return bugList;
     }
 

@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class DBAdmin {
+public class MongoAdmin {
 //Cambio
 
 
@@ -37,7 +37,7 @@ public class DBAdmin {
     private String JSON_CONTENT_TYPE = "application/json";
     private RequestQueue queue;
 
-    public DBAdmin(Context  context) {
+    public MongoAdmin(Context  context) {
         Log.d("CREATION","START");
         //Inicializamos la cola de consulta con el contexto de la aplicación
         queue = Volley.newRequestQueue(context);
