@@ -32,7 +32,7 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
 public class MongoAdmin {
 //Cambio
 
-
+    //RESTHEART api
     private String URL = "http://ec2-35-164-117-191.us-west-2.compute.amazonaws.com:8080";
     private String DATABASE_NAME = "LifeFinder";
     private String FINAL_URL = URL+"/"+DATABASE_NAME;
@@ -116,6 +116,13 @@ public class MongoAdmin {
                     public void onErrorResponse(VolleyError response)
                     {
                         Log.d("Response: Error", response.toString());
+                        JSONObject jsonFailed = new JSONObject();
+                        try {
+                            jsonFailed.put("failed","true");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        callback.onSuccess(jsonFailed);
                     }
                 });
         queue.add(jsonRequest);
