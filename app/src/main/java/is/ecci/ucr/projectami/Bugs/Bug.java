@@ -12,10 +12,10 @@ public class Bug {
     private String[] imageDir;
     private int totalImages;
 
-    public Bug(String family, double score){
+    public Bug(String family, double score, String imageDir){
         this.family = family;
         this.score = score;
-        //this.imageDir[0] = imageDir;
+        this.imageDir[0] = imageDir;
         totalImages = 1;
     }
 
