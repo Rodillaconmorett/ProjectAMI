@@ -18,21 +18,27 @@ import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 public class SamplePointInfoActivity extends AppCompatActivity {
 
     private SamplingPoint samplingPoint;
-
+/*
     public SamplePointInfoActivity(SamplingPoint samplingPoint){
         this.samplingPoint = samplingPoint;
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String pathImage = "path";
-        File imgFile = new File(pathImage);
+        String pathSamplePointImage = "path";
+        File imgFile = new File(pathSamplePointImage);
         if(imgFile.exists()){
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             ImageView myImage = (ImageView) findViewById(R.id.siteImage);
             myImage.setImageBitmap(myBitmap);
         }
-
+        String pathSpeciesImage = "path";
+        imgFile = new File(pathSamplePointImage);
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            ImageView myImage = (ImageView) findViewById(R.id.siteImage);
+            myImage.setImageBitmap(myBitmap);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_sample_point);
         TextView textView = (TextView) findViewById(R.id.siteName);
