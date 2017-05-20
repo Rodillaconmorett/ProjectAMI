@@ -18,6 +18,11 @@ android {
         }
     }
 }
+apply plugin: 'com.android.application'
+dependencies {
+    compile 'com.google.android.gms:play-services:10.2.6'
+
+}
 
 dependencies {
     // https://mvnrepository.com/artifact/com.mcxiaoke.volley/library
@@ -25,9 +30,12 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    }
+    )
+   compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support.constraint:constraint-layout:+'
+    compile 'com.android.support:design:25.+'
     compile 'com.android.volley:volley:1.0.0'
 }
