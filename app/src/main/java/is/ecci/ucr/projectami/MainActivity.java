@@ -1,11 +1,27 @@
 package is.ecci.ucr.projectami;
 
+import android.app.FragmentTransaction;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
@@ -13,7 +29,10 @@ import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugAdater;
 import is.ecci.ucr.projectami.DBConnectors.DBAdmin;
 
-public class MainActivity extends AppCompatActivity {
+import static is.ecci.ucr.projectami.R.id.map;
+
+
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener {
 
     private ArrayList<Bug> bugs;
     BugAdater adapter;
@@ -21,22 +40,34 @@ public class MainActivity extends AppCompatActivity {
     ImageView imagen;
     TextView nombre;
     DBAdmin dbAdmin;
+    Fragment f;
+    MapFragment mMapFragment;
+    CameraUpdate cameraUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acivity_catalog);
+        setContentView(R.layout.frag);
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(map);
+        mapFragment.getMapAsync(this);
+
+        /*
         Context context;
-
-        fillArrayList();
-        lvAnimals = (ListView) findViewById(R.id.lvAnimals);
-        nombre = (TextView) findViewById(R.id.textView);
-        adapter = new BugAdater(this, bugs);
-        lvAnimals.setAdapter(adapter);
+        mMapFragment = MapFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.grid2, mMapFragment);
+        fragmentTransaction.commit();
+        */
+        //fillArrayList();
+        //lvAnimals = (ListView) findViewById(R.id.lvAnimals);
+        //nombre = (TextView) findViewById(R.id.textView);
+        //adapter = new BugAdater(this, bugs);
+        //lvAnimals.setAdapter(adapter);
         //lvAnimals.setOnItemClickListener(this);
-
-        
     }
+
+
 
 
     private void fillArrayList() {
@@ -57,5 +88,38 @@ public class MainActivity extends AppCompatActivity {
         bugs.add(new Bug("orca", R.drawable.orca));
         bugs.add(new Bug("perro", R.drawable.perro));
         bugs.add(new Bug("vaca", R.drawable.vaca));
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+
+         LatLng pt = new LatLng(9.86, -84.20);
+         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
+         putMarket(map,9.86,-84.20);
+        map.setOnMarkerClickListener(this);
+        map.setOnInfoWindowClickListener(this);
+
+
+    }
+
+
+     public void putMarket( GoogleMap map ,double lat, double lon){
+         LatLng pt = new LatLng(lat, lon);
+         map.addMarker(new MarkerOptions().position(pt).title("Nombre Río").snippet("ver información"));
+     }
+
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        String title=marker.getTitle();
+        Log.d("Prueba ","Imprimiendo seleccionado "+ title);
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        //Poner el evento de ir a ver la información de Rio
+        Toast.makeText(this, "Info window clicked",
+                Toast.LENGTH_SHORT).show();
     }
 }
