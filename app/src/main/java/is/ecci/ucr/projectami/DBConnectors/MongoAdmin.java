@@ -11,8 +11,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -26,40 +24,81 @@ import java.util.HashMap;
 import java.util.Map;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
-import is.ecci.ucr.projectami.SamplingPoints.Site;
-
 
 public class MongoAdmin {
-//Cambio
 
     //RESTHEART api
-    private String URL = "http://ec2-35-164-117-191.us-west-2.compute.amazonaws.com:8080";
-    private String DATABASE_NAME = "LifeFinder";
-    private String FINAL_URL = URL+"/"+DATABASE_NAME;
-    private String AUTH_KEY = "Authorization";
-    private String JSON_CONTENT_TYPE_KEK = "Content-Type";
-    private String JSON_CONTENT_TYPE = "application/json";
+    //Para conocer más, ingresen al siguiente enlace: http://restheart.org
     private RequestQueue queue;
 
     public MongoAdmin(Context  context) {
         Log.d("CREATION","START");
         //Inicializamos la cola de consulta con el contexto de la aplicación
+        //Nota: El contexto, es el entorno donde se está ejecutando la aplicación,...
+        //.. osea, el main en donde se crea el DB admin.
         queue = Volley.newRequestQueue(context);
+    }
+
+    //Este método nos sirve para disminuir la repetición de este código
+    //Nota: Para la siguiente etapa, hay que cambiar la autenticación
+    private Map<String,String> getDefaultParams() {
+        Map<String, String> params = new HashMap<>();
+        String encodedString = Base64.encodeToString(String.format("%s:%s", "admin", "q1w2E3r4").getBytes(), Base64.NO_WRAP);
+        String value = String.format("Basic %s", encodedString);
+        params.put(Config.AUTH_KEY,value);
+        params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
+        return params;
     }
 
     public interface ServerCallback{
         JSONObject onSuccess(JSONObject result);
+        JSONObject onFailure(JSONObject result);
     }
 
-    public void addSite(String name, Double latitude, Double longitude, String description, String imagePath) throws JSONException {
+    //Buscamos un documento dentro de una colección por medio de su _id
+    public void getDocById(ServerCallback callback, CollectionName coll, String docId) {
+        String getURL = Config.CONNECTION_STRING+coll.toString()+"/"+docId;
+        Map<String, String> params = getDefaultParams();
+        jsonGetRequest(getURL,params,callback);
+    }
+
+    //Buscamos todos los documentos dentro de una colección
+    public void getColl(ServerCallback callback, CollectionName coll) {
+        String getURL = Config.CONNECTION_STRING+coll.toString();
+        Map<String, String> params = getDefaultParams();
+        jsonGetRequest(getURL,params,callback);
+    }
+
+    //Lo usamos para restringir la cantidad de documentos que queremos mostrar
+    public void getColl(ServerCallback callback, CollectionName coll, int topDocs) {
+        String getURL = Config.CONNECTION_STRING+coll.toString()+"?pagesize="+topDocs;
+        Map<String, String> params = getDefaultParams();
+        jsonGetRequest(getURL,params,callback);
+    }
+
+//    public ArrayList<Bug> getBugs() {
+//        ArrayList<Bug> bugs = new ArrayList<Bug>();
+//        return bugs;
+//    }
+//
+//    public ArrayList<Bug> getBugs(String[] ids) {
+//        ArrayList<Bug> bugs = new ArrayList<Bug>();
+//        return bugs;
+//    }
+
+    public void insertSampling(String bugId, String siteId, int quantity, String userId) {
+
+    }
+
+    private void insertBug(String family, Double score, String[] imagesPaths) {
+
+    }
+
+    public void insertSite(String name, Double latitude, Double longitude, String description, String imagePath) throws JSONException {
         Log.d("ADD SITE","STARTING");
-        String url =FINAL_URL+"/Site";
-        Map<String, String> params = new HashMap<>();
-        String key = "Authorization";
-        String encodedString = Base64.encodeToString(String.format("%s:%s", "admin", "q1w2E3r4").getBytes(), Base64.NO_WRAP);
-        String value = String.format("Basic %s", encodedString);
-        params.put(key,value);//put your parameters here
-        params.put("Content-Type","application/json");
+        String url = Config.CONNECTION_STRING+"/Site";
+        Map<String, String> params = getDefaultParams();
+        //Necesitamos incluir los parametros de datos
         JSONObject coor = new JSONObject();
         coor.put("lat",latitude);
         coor.put("long",longitude);
@@ -72,35 +111,12 @@ public class MongoAdmin {
         jsonPostRequest(jsonBody,url,params);
     }
 
-    public void getSites(ServerCallback callback) {
-        String getURL = FINAL_URL+"/Site";
-        Map<String, String> params = new HashMap<>();
-        String key = "Authorization";
-        String encodedString = Base64.encodeToString(String.format("%s:%s", "admin", "q1w2E3r4").getBytes(), Base64.NO_WRAP);
-        String value = String.format("Basic %s", encodedString);
-        params.put(key,value);//put your parameters here
-        params.put("Content-Type","application/json");
-        jsonGetRequest(getURL, params,callback);
-    }
 
-    public ArrayList<Bug> getBugs() {
-        ArrayList<Bug> bugs = new ArrayList<Bug>();
-        return bugs;
-    }
+    /*------------------------- REQUEST SECTION -------------------------*/
+    /*Código que útilizamos para realizar las consultas HTTP al servidor.*/
 
-    public ArrayList<Bug> getBugs(String[] ids) {
-        ArrayList<Bug> bugs = new ArrayList<Bug>();
-        return bugs;
-    }
 
-    public void insertSampling(String bugFamily, String siteId, int quantity, String userEmail) {
-
-    }
-
-    private void insertBug(String family, Double score, String[] imagesPaths) {
-
-    }
-
+    //GET Request
     private void jsonGetRequest(String url, Map<String, String> params,final ServerCallback callback) {
         Custom_Volly_Request jsonRequest;
         jsonRequest = new Custom_Volly_Request(Request.Method.GET, url, params,
@@ -122,12 +138,13 @@ public class MongoAdmin {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        callback.onSuccess(jsonFailed);
+                        callback.onFailure(jsonFailed);
                     }
                 });
         queue.add(jsonRequest);
     }
 
+    //POST Request
     private void jsonPostRequest(JSONObject jsonBody, String url, Map<String, String> params) {
         final String requestBody = jsonBody.toString();
         Custom_Volly_Request jsonRequest;
