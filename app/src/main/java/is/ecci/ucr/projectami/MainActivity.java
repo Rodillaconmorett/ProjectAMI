@@ -12,6 +12,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.json.JSONObject;
+
+import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Fragment f;
     MapFragment mMapFragment;
     CameraUpdate cameraUpdate;
+
+    TextView textView;
+    Button getSites;
+    MongoAdmin db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -18,7 +18,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-
+//La clase original no tiene los headers dentro de los métodos
+//Decide extenderla y agregarle la funcionalidad
 public class Custom_Volly_Request extends Request<JSONObject> {
     private Response.Listener<JSONObject> listener;
     private Map<String, String> headers;
