@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="is.ecci.ucr.projectami.QuestionsGUI">
+    tools:context=".QuestionsGUI">
 
     <TextView
         android:id="@+id/questionID"
@@ -13,7 +13,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="117dp"
-        android:text="Question#1" />
+        android:text="Question#1"
+        tools:ignore="HardcodedText" />
 
     <LinearLayout
         android:id="@+id/answers"
@@ -21,6 +22,38 @@
         android:layout_height="400dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal"></LinearLayout>
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/userAnswer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Escriba su propia respuesta" />
+
+            <Button
+                android:id="@+id/naButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="catchAction"
+                android:text="NA" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="396dp"
+            android:layout_height="wrap_content"
+            android:onClick="catchAction"
+            android:text="Retroceder" />
+    </LinearLayout>
 
 </RelativeLayout>
