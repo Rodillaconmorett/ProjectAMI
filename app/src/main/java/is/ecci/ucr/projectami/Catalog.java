@@ -17,6 +17,7 @@ import java.util.List;
  RESTRICCIONES-> Describen cuando habrían excepciones (e.g. las entradas deben ser enteros > 0)
  */
 
+
 public class Catalog {
     private List<Bug> bugList;
     BDAdministrator bdAdministrator;
