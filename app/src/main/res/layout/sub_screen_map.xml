@@ -77,6 +77,7 @@
                 android:layout_row="0"
                 android:layout_column="0"
                 >
+                
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
@@ -86,7 +87,7 @@
                     android:layout_row="0"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/defaultImage" />
+                    android:src="@drawable/default_image" />
 
                 <TextView
                     android:id="@+id/textHghQualBugs"
@@ -127,7 +128,7 @@
                     android:layout_row="0"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/defaultImage" />
+                    android:src="@drawable/default_image" />
 
                 <TextView
                     android:id="@+id/textMedQualBugs"
@@ -166,7 +167,7 @@
                     android:layout_row="0"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/defaultImage" />
+                    android:src="@drawable/default_image" />
 
                 <TextView
                     android:id="@+id/textLowQualBugs"
@@ -245,7 +246,7 @@
                     android:layout_centerVertical="false"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/addBug" />
+                    android:src="@drawable/add_bug" />
 
                 <Button
                     android:id="@+id/buttonRegister"
