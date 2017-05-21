@@ -19,7 +19,9 @@
 
         <activity android:name=".SamplePointInfoActivity"
             android:label="SamplePointInfoActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        
+        <activity android:name=".SubScreenMap" ></activity>
     </application>
 
 </manifest>

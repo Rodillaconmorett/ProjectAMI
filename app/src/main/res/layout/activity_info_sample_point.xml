@@ -13,11 +13,16 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:columnCount="1"
-        android:rowCount="5"
+        android:rowCount="7"
         android:id="@+id/gridLayout">
 
 
-    <ImageView
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="116dp"
+            >
+
+            <ImageView
         android:id="@+id/siteImage"
         android:layout_width="match_parent"
         android:layout_height="116dp"
@@ -25,37 +30,25 @@
         android:layout_row="0"
 
         />
+        </RelativeLayout>
 
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="69dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="#4487ED"
+            android:background="@color/temaLifeFinder"
             android:columnCount="3"
             android:rowCount="1">
 
-            <!--
-            <EditText
-                android:id="@+id/editText"
-                android:layout_width="105dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_column="1"
-                android:gravity="left|center"
-                android:inputType="date" />
-            -->
-
-
             <ListView
                 android:id="@+id/datesList"
-                android:layout_width="158dp"
+                android:layout_width="155dp"
                 android:layout_height="match_parent"
                 android:layout_column="1"
-                android:gravity="left|center"
-
+                android:layout_row="0"
                 />
 
             <TextView
@@ -67,7 +60,8 @@
                 android:fontFamily="sans-serif"
                 android:gravity="left|center"
                 android:text="Nombre"
-                android:textSize="36sp" />
+                android:textColor="#FFFFFF"
+                android:textSize="28sp" />
         </GridLayout>
 
         <TextView
@@ -80,11 +74,22 @@
         android:text="Descripcion"
         android:textSize="18sp" />
 
-    <GridLayout
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="350dp"
+            android:layout_height="3dp"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_row="3"
+            android:gravity="center"
+            app:srcCompat="@color/temaLifeFinder" />
+
+        <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="170dp"
         android:layout_column="0"
-        android:layout_row="3"
+        android:layout_row="4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:columnCount="2"
@@ -114,12 +119,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_column="0"
-                android:layout_row="0"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:text="#"
-                android:textColor="#8DC63F"
+                android:textColor="@color/especiesColor"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -150,7 +153,7 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:text="#"
-                android:textColor="#F7941E"
+                android:textColor="@color/puntajeColor"
                 android:textSize="36sp"
                 android:textStyle="bold"
                 />
@@ -158,5 +161,14 @@
 
     </GridLayout>
 
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="350dp"
+            android:layout_height="3dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_row="5"
+            android:layout_column="0"
+            app:srcCompat="@color/temaLifeFinder" />
 </GridLayout>
 </RelativeLayout>
