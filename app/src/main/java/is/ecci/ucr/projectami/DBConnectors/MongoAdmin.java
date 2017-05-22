@@ -4,7 +4,6 @@ package is.ecci.ucr.projectami.DBConnectors;
  */
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 
@@ -16,15 +15,14 @@ import com.android.volley.toolbox.Volley;
 import com.android.volley.Request;
 import com.android.volley.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import is.ecci.ucr.projectami.Bugs.Bug;
 
 public class MongoAdmin {
 
@@ -77,37 +75,52 @@ public class MongoAdmin {
         jsonGetRequest(getURL,params,callback);
     }
 
-//    public ArrayList<Bug> getBugs() {
-//        ArrayList<Bug> bugs = new ArrayList<Bug>();
-//        return bugs;
-//    }
-//
-//    public ArrayList<Bug> getBugs(String[] ids) {
-//        ArrayList<Bug> bugs = new ArrayList<Bug>();
-//        return bugs;
-//    }
+    /*-------------------------- INSERT SECTION -------------------------*/
+    /*Métodos que utilizamos para insertar documentos a la base de datos.*/
 
     public void insertSampling(String bugId, String siteId, int quantity, String userId) {
 
     }
 
-    private void insertBug(String family, Double score, String[] imagesPaths) {
-
+    private void insertBug(String family, String desc, Double score, String[] imagesPaths) {
+        String url = Config.CONNECTION_STRING+CollectionName.BUGS;
+        Map<String, String> params = getDefaultParams();
+        //Necesitamos incluir los parametros de datos
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("family",family);
+            jsonBody.put("score",score);
+            if (imagesPaths != null) {
+                JSONArray imageArray = new JSONArray();
+                for (int i = 0; i<imagesPaths.length; i++) {
+                    imageArray.put(imagesPaths[i]);
+                }
+                jsonBody.put("images",imageArray);
+            }
+            if (desc != null) jsonBody.put("desc",desc);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonPostRequest(jsonBody,url,params);
     }
 
-    public void insertSite(String name, Double latitude, Double longitude, String description, String imagePath) throws JSONException {
+    public void insertSite(String name, Double latitude, Double longitude, String description, String imagePath) {
         String url = Config.CONNECTION_STRING+CollectionName.SITE;
         Map<String, String> params = getDefaultParams();
         //Necesitamos incluir los parametros de datos
-        JSONObject coor = new JSONObject();
-        coor.put("lat",latitude);
-        coor.put("long",longitude);
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("name",name);
-        jsonBody.put("coordinates",coor);
-        Log.d("JSON",jsonBody.toString());
-        if (description != null) jsonBody.put("description", description);
-        if (imagePath != null) jsonBody.put("image",imagePath);
+        JSONObject coor = new JSONObject();
+        try {
+            coor.put("lat", latitude);
+            coor.put("long", longitude);
+            jsonBody.put("name", name);
+            jsonBody.put("coordinates", coor);
+            Log.d("JSON", jsonBody.toString());
+            if (description != null) jsonBody.put("description", description);
+            if (imagePath != null) jsonBody.put("image", imagePath);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         jsonPostRequest(jsonBody,url,params);
     }
 
