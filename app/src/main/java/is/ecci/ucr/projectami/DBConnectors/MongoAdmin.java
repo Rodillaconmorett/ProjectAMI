@@ -4,6 +4,7 @@ package is.ecci.ucr.projectami.DBConnectors;
  */
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 
@@ -95,8 +96,7 @@ public class MongoAdmin {
     }
 
     public void insertSite(String name, Double latitude, Double longitude, String description, String imagePath) throws JSONException {
-        Log.d("ADD SITE","STARTING");
-        String url = Config.CONNECTION_STRING+"/Site";
+        String url = Config.CONNECTION_STRING+CollectionName.SITE;
         Map<String, String> params = getDefaultParams();
         //Necesitamos incluir los parametros de datos
         JSONObject coor = new JSONObject();
@@ -109,6 +109,15 @@ public class MongoAdmin {
         if (description != null) jsonBody.put("description", description);
         if (imagePath != null) jsonBody.put("image",imagePath);
         jsonPostRequest(jsonBody,url,params);
+    }
+
+    /*---------------------------------- SPECIFIC GETS -----------------------------------*/
+    /*Gets específicos a cada colleción. Estos no se pueden repetir con otras colecciones.*/
+
+    public void getSitesByName(ServerCallback callback, CollectionName coll, String name) {
+        String url = Config.CONNECTION_STRING+CollectionName.SITE+"?filter={name:\""+ name +"\"}";
+        Map<String, String> params = getDefaultParams();
+        jsonGetRequest(url,params,callback);
     }
 
 
