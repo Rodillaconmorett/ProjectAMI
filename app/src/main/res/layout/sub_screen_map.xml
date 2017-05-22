@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="250dp" android:layout_height="250dp">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="1"
+        android:rowCount="4"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_row="0"
+        android:columnCount="2"
+        android:rowCount="1"
+        >
+
+        <TextView
+            android:id="@+id/siteName"
+            android:layout_width="175dp"
+            android:layout_height="match_parent"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:fontFamily="sans-serif"
+            android:gravity="left|center"
+            android:text="Nombre"
+            android:textColor="@color/temaLifeFinder"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/siteScore"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:fontFamily="sans-serif"
+            android:gravity="right|center"
+            android:text="i:#"
+            android:textColor="@color/especiesColor"
+            android:textSize="18sp" />
+
+        </GridLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="3dp"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_row="1"
+            android:gravity="center"
+            app:srcCompat="@color/temaLifeFinder" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_column="0"
+            android:layout_row="2"
+            >
+
+            <GridLayout
+                android:layout_width="83dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:columnCount="1"
+                android:rowCount="2"
+                android:layout_row="0"
+                android:layout_column="0"
+                >
+                
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:layout_alignParentBottom="false"
+                    android:layout_centerVertical="false"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/default_image" />
+
+                <TextView
+                    android:id="@+id/textHghQualBugs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_column="0"
+                    android:layout_row="1"
+                    android:fontFamily="sans-serif"
+                    android:layout_gravity="top|center"
+                    android:text="+#"
+                    android:textColor="@color/hghQualColor"
+                    />
+
+            </GridLayout>
+
+            <GridLayout
+                android:layout_width="83dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:columnCount="1"
+                android:rowCount="2"
+                android:layout_row="0"
+                android:layout_column="1"
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:layout_alignParentBottom="false"
+                    android:layout_centerVertical="false"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/default_image" />
+
+                <TextView
+                    android:id="@+id/textMedQualBugs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_column="0"
+                    android:layout_row="1"
+                    android:fontFamily="sans-serif"
+                    android:layout_gravity="top|center"
+                    android:text="+#"
+                    android:textColor="@color/medQualColor"
+                    />
+            </GridLayout>
+
+            <GridLayout
+                android:layout_width="83dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:columnCount="1"
+                android:rowCount="2"
+                android:layout_row="0"
+                android:layout_column="2"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:layout_alignParentBottom="false"
+                    android:layout_centerVertical="false"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/default_image" />
+
+                <TextView
+                    android:id="@+id/textLowQualBugs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_column="0"
+                    android:layout_row="1"
+                    android:fontFamily="sans-serif"
+                    android:layout_gravity="top|center"
+                    android:text="+#"
+                    android:textColor="@color/lowQualColor"
+                    />
+            </GridLayout>
+
+
+
+        </GridLayout>
+
+
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="77dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:columnCount="2"
+            android:rowCount="1"
+            android:layout_row="3"
+            android:layout_column="0"
+            >
+
+            <RelativeLayout
+                android:layout_width="125dp"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_row="0"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="false"
+                    android:layout_centerVertical="false"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/info" />
+
+                <Button
+                    android:id="@+id/buttonInfo"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAllCaps="false"
+                    android:text="Información"
+                    android:gravity="bottom|center"
+                    android:textColor="@color/temaLifeFinder"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="125dp"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_row="0"
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="false"
+                    android:layout_centerVertical="false"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/add_bug" />
+
+                <Button
+                    android:id="@+id/buttonRegister"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAllCaps="false"
+                    android:text="Registrar"
+                    android:gravity="bottom|center"
+                    android:textColor="@color/temaLifeFinder"
+                    />
+
+            </RelativeLayout>
+
+
+        </GridLayout>
+
+
+
+    </GridLayout>
+</RelativeLayout>

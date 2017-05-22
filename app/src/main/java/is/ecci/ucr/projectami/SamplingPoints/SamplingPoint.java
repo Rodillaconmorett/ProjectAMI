@@ -1,9 +1,12 @@
 package is.ecci.ucr.projectami.SamplingPoints;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 import is.ecci.ucr.projectami.BDAdministrator;
 import is.ecci.ucr.projectami.Bugs.Bug;
+import is.ecci.ucr.projectami.DBConnectors.DBAdmin;
 
 /**
  * Created by Daniel on 5/10/2017.
@@ -14,41 +17,47 @@ public class SamplingPoint {
     private int lowQualBug;
     private int medQualBug;
     private int hghQualBug;
-    private BDAdministrator administrator;
-    /*
-    * Cambiar String por la clase bicho, no solo aqui sino tambien en getBugList y en el constructor
-    * */
+    private DBAdmin dbAdmin;
     private LinkedList<Bug> bugList;
     private Site site;
 
-    public SamplingPoint(Site site, BDAdministrator administrator) {
+    public SamplingPoint(Site site, DBAdmin dbAdmin) {
         score = 0;
         lowQualBug = 0;
         medQualBug = 0;
         hghQualBug = 0;
-        bugList = new LinkedList<Bug>();
+        bugList = new LinkedList<>();
         this.site = site;
-        this.administrator = administrator;
+        this.dbAdmin = dbAdmin;
     }
 
-    public void updateScore(){
-
-    }
-
-    public void updateLowQualBug(){
-
-    }
-
-    public void updateMedQualBug(){
-
-    }
-
-    public void updateHghQualBug(){
-
+    public void updateScoreAndQualBug(){
+        score = 0;
+        lowQualBug = 0;
+        medQualBug = 0;
+        hghQualBug = 0;
+        ListIterator<Bug> iterator = bugList.listIterator();
+        while(iterator.hasNext()){
+            double bugScore = iterator.next().getScore();
+            if(bugScore < 3){
+                lowQualBug++;
+            }
+            else if (bugScore < 7){
+                medQualBug++;
+            }
+            else{
+                hghQualBug++;
+            }
+            score += bugScore;
+        }
     }
 
     public void updateBugList(){
-
+        bugList.clear();
+        LinkedList<Bug> paraQueCompile = new LinkedList<>();
+        for(Bug it : paraQueCompile){
+            bugList.add(it);
+        }
     }
 
     public double getScore(){
