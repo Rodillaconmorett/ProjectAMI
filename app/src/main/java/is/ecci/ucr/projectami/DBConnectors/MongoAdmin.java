@@ -29,12 +29,14 @@ public class MongoAdmin {
     //RESTHEART api
     //Para conocer más, ingresen al siguiente enlace: http://restheart.org
     private RequestQueue queue;
+    private Context context;
 
     public MongoAdmin(Context  context) {
         Log.d("CREATION","START");
         //Inicializamos la cola de consulta con el contexto de la aplicación
         //Nota: El contexto, es el entorno donde se está ejecutando la aplicación,...
         //.. osea, el main en donde se crea el DB admin.
+        this.context = context;
         queue = Volley.newRequestQueue(context);
     }
 
@@ -200,4 +202,23 @@ public class MongoAdmin {
         queue.add(jsonRequest);
     }
 
+    /*--------------- KEYS UPDATE ----------------*/
+    /*Actualizamos el archivo CSV con las llaves.*/
+
+
+    public void updateKeys() {
+        this.getColl(new ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                CSVExporter csvExporter = new CSVExporter(context);
+                csvExporter.exportJsonToCSVWithHeaders(result,Config.CSV_KEYS);
+                return null;
+            }
+
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                return null;
+            }
+        },CollectionName.KEYS);
+    }
 }
