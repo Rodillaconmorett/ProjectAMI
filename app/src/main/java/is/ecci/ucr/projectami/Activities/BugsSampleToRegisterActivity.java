@@ -1,7 +1,9 @@
-package is.ecci.ucr.projectami;
+package is.ecci.ucr.projectami.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import is.ecci.ucr.projectami.R;
 
 public class BugsSampleToRegisterActivity extends AppCompatActivity {
 

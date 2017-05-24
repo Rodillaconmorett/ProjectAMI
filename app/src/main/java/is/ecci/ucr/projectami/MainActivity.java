@@ -1,10 +1,8 @@
 package is.ecci.ucr.projectami;
 
-import android.app.FragmentTransaction;
 import android.content.ComponentCallbacks2;
-import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -12,18 +10,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-import org.json.JSONObject;
-
+import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -31,16 +25,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugAdater;
 import is.ecci.ucr.projectami.DBConnectors.DBAdmin;
+import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
+import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 import static is.ecci.ucr.projectami.R.id.map;
 
@@ -61,12 +58,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Button getSites;
     MongoAdmin db;
 
+    private LinkedList<Site> sites;
+    private LinkedList<SamplingPoint> samplingPoints;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        samplingPoints = new LinkedList<>();
+        /*
+        * Aqui debe ir la vara de obtener de la base de datos
+        *
+        *
+        * */
+
+        Iterator<Site> iterator = sites.listIterator();
+        while(iterator.hasNext()){
+            samplingPoints.add(new SamplingPoint(iterator.next()));
+        }
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -103,8 +117,42 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //lvAnimals.setOnItemClickListener(this);
     }
 
+    private void fillSitesList() {
+        sites = new LinkedList<>();
+        Site currentSite;
+        double latitud = 0;
+        double longitud = 0;
 
+        currentSite = new Site("Cascada Azul", latitud, longitud, "");
+        sites.add(currentSite);
 
+        currentSite = new Site("Estadio", latitud, longitud, "");
+        sites.add(currentSite);
+
+        currentSite = new Site("Ranchito", latitud, longitud, "");
+        sites.add(currentSite);
+
+        currentSite = new Site("Mallorca", latitud, longitud, "");
+        sites.add(currentSite);
+
+        currentSite = new Site("Horti Fruti", latitud, longitud, "");
+        sites.add(currentSite);
+
+        currentSite = new Site("Tacaco", latitud, longitud, "");
+        sites.add(currentSite);
+
+        currentSite = new Site("Pío", latitud, longitud, "");
+        sites.add(currentSite);
+
+        currentSite = new Site("Pinares", latitud, longitud, "");
+        sites.add(currentSite);
+
+        currentSite = new Site("Monteran", latitud, longitud, "");
+        sites.add(currentSite);
+
+        currentSite = new Site("Montesacro", latitud, longitud, "");
+        sites.add(currentSite);
+    }
 
     private void fillArrayList() {
         //this filll would be  with the bugs that are in the DB
@@ -131,24 +179,38 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
          LatLng pt = new LatLng(9.86, -84.20);
          map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
-         putMarket(map,9.86,-84.20);
+         putMarkets(map);
         map.setOnMarkerClickListener(this);
         map.setOnInfoWindowClickListener(this);
 
 
     }
 
-
-     public void putMarket( GoogleMap map ,double lat, double lon){
-         LatLng pt = new LatLng(lat, lon);
-         map.addMarker(new MarkerOptions().position(pt).title("Nombre Río").snippet("ver información"));
+     public void putMarkets(GoogleMap map){
+         Iterator<SamplingPoint> iterator = samplingPoints.listIterator();
+         while(iterator.hasNext()){
+             SamplingPoint currentSamplePoint = iterator.next();
+             LatLng latLng = new LatLng(currentSamplePoint.getSite().getLatitude(),currentSamplePoint.getSite().getLongitude());
+             map.addMarker(new MarkerOptions().position(latLng).title(currentSamplePoint.getSite().getSiteName()).snippet(currentSamplePoint.getSite().getSiteName()));
+         }
      }
 
+     public SamplingPoint getSamplingPoint(String name){
+         Iterator<SamplingPoint> iterator = samplingPoints.listIterator();
+         SamplingPoint currentSamplePoint;
+         while (iterator.hasNext()){
+             currentSamplePoint = iterator.next();
+             if(currentSamplePoint.getSite().getSiteName().contentEquals(name)){
+                 return currentSamplePoint;
+             }
+         }
+         return null;
+     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        String title=marker.getTitle();
-        Log.d("Prueba ","Imprimiendo seleccionado "+ title);
+        startActivity(new Intent(MainActivity.this,SubScreenMap.class));
+
         return false;
     }
 
