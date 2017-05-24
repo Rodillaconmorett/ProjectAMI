@@ -1,5 +1,6 @@
 package is.ecci.ucr.projectami.Activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -18,14 +19,12 @@ import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 
 public class SamplePointInfoActivity extends AppCompatActivity {
 
-    private SamplingPoint samplingPoint;
-/*
-    public SamplePointInfoActivity(SamplingPoint samplingPoint){
-        this.samplingPoint = samplingPoint;
-    }*/
+    private SamplingPoint samplingPoint ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*
         String pathSamplePointImage = "path";
         File imgFile = new File(pathSamplePointImage);
         if(imgFile.exists()){
@@ -33,6 +32,7 @@ public class SamplePointInfoActivity extends AppCompatActivity {
             ImageView myImage = (ImageView) findViewById(R.id.siteImage);
             myImage.setImageBitmap(myBitmap);
         }
+        */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_sample_point);
         TextView textView;
