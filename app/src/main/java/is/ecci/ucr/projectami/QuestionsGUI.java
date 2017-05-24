@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
 
+import is.ecci.ucr.projectami.DecisionTree.AnswerException;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 
 import java.util.LinkedHashSet;
@@ -95,7 +96,12 @@ public class QuestionsGUI extends AppCompatActivity {
             if (textB.equals("Retroceder")) {
                 treeControl.goBack();
             } else {
-                treeControl.reply(textB);
+                try {
+                    treeControl.reply(textB);
+                }catch (AnswerException e){
+
+                }
+
             }
         }
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
