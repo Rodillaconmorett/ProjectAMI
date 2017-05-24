@@ -44,6 +44,7 @@ public class DBAdmin {
 
     public void addSite(String name, Double latitude, Double longitude, String description, String imagePath) throws JSONException {
         Log.d("ADD SITE","STARTING");
+
         String url =FINAL_URL+"/Site";
         Map<String, String> params = new HashMap<>();
         String key = "Authorization";

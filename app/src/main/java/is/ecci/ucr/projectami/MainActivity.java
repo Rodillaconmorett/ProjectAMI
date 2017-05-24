@@ -3,16 +3,19 @@ package is.ecci.ucr.projectami;
 import android.app.FragmentTransaction;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -36,6 +39,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
@@ -45,7 +51,7 @@ import is.ecci.ucr.projectami.DBConnectors.DBAdmin;
 import static is.ecci.ucr.projectami.R.id.map;
 
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener{
 
     private ArrayList<Bug> bugs;
     BugAdater adapter;
@@ -60,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView textView;
     Button getSites;
     MongoAdmin db;
+
+    GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +91,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
+        //set map
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
+
+        //set navegation
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         /*
         Context context;
@@ -102,9 +115,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //lvAnimals.setAdapter(adapter);
         //lvAnimals.setOnItemClickListener(this);
     }
-
-
-
 
     private void fillArrayList() {
         //this filll would be  with the bugs that are in the DB
@@ -126,29 +136,78 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         bugs.add(new Bug("vaca", R.drawable.vaca));
     }
 
+    public void loadMarks(){
+        try{
+            InputStream inputStream= getResources().openRawResource(R.raw.data);
+            BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while((line=bufferedReader.readLine())!=null){
+                String data[]=line.split(",");
+                double lat=Double.parseDouble(data[0]);
+                double lon=Double.parseDouble( data[1]);
+                String name= data[2];
+                String info= data[3];
+                putMarket(mMap,lat,lon,name,info);
+            }
+
+        }catch (Exception e){
+
+
+        }
+
+    }
     @Override
     public void onMapReady(GoogleMap map) {
+        mMap=map;
 
-         LatLng pt = new LatLng(9.86, -84.20);
-         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
-         putMarket(map,9.86,-84.20);
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            // Use default InfoWindow frame
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            // Defines the contents of the InfoWindow
+            @Override
+            public View getInfoContents(Marker arg0) {
+
+                // Getting view from the layout file info_window_layout
+                View v = getLayoutInflater().inflate(R.layout.sub_screen_map, null);
+
+                // Getting the position from the marker
+                LatLng latLng = arg0.getPosition();
+
+
+
+
+                // Returning the view containing InfoWindow contents
+                return v;
+
+            }
+        });
+        LatLng pt = new LatLng(9.86, -84.20);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
+        //putMarket(map,9.86,-84.20,"hola","mundo");
         map.setOnMarkerClickListener(this);
         map.setOnInfoWindowClickListener(this);
-
+        loadMarks();
 
     }
 
 
-     public void putMarket( GoogleMap map ,double lat, double lon){
-         LatLng pt = new LatLng(lat, lon);
-         map.addMarker(new MarkerOptions().position(pt).title("Nombre Río").snippet("ver información"));
-     }
+    public void putMarket( GoogleMap map ,double lat, double lon, String name, String info){
+        LatLng pt = new LatLng(lat, lon);
+        map.addMarker(new MarkerOptions().position(pt).title(name).snippet(info));
+    }
 
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        String title=marker.getTitle();
-        Log.d("Prueba ","Imprimiendo seleccionado "+ title);
+
+
+
         return false;
     }
 
@@ -158,4 +217,42 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this, "Info window clicked",
                 Toast.LENGTH_SHORT).show();
     }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        Button Siguiente;
+        if (id == R.id.nav_camera) {
+            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+            startActivity(Prueba);
+            // Handle the camera action
+
+        } else if (id == R.id.nav_gallery) {
+            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+            startActivity(Prueba);
+        } else if (id == R.id.nav_slideshow) {
+            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+            startActivity(Prueba);
+        } else if (id == R.id.nav_manage) {
+            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+            startActivity(Prueba);
+        } else if (id == R.id.nav_share) {
+            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+            startActivity(Prueba);
+        } else if (id == R.id.nav_send) {
+            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+            startActivity(Prueba);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+
+
 }
