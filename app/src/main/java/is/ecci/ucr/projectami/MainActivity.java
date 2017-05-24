@@ -1,11 +1,9 @@
 package is.ecci.ucr.projectami;
 
-import android.app.FragmentTransaction;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -21,12 +19,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-import org.json.JSONObject;
-
+import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -34,7 +29,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -43,10 +37,14 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugAdater;
 import is.ecci.ucr.projectami.DBConnectors.DBAdmin;
+import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
+import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 import static is.ecci.ucr.projectami.R.id.map;
 
@@ -69,12 +67,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     GoogleMap mMap;
 
+    private LinkedList<Site> sites;
+    private LinkedList<SamplingPoint> samplingPoints;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        samplingPoints = new LinkedList<>();
+        /*
+        * Aqui debe ir la vara de obtener de la base de datos
+        *
+        *
+        * */
+
+        Iterator<Site> iterator = sites.listIterator();
+        while(iterator.hasNext()){
+            samplingPoints.add(new SamplingPoint(iterator.next()));
+        }
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-
                 // Returning the view containing InfoWindow contents
                 return v;
 
@@ -202,11 +216,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.addMarker(new MarkerOptions().position(pt).title(name).snippet(info));
     }
 
+     public void putMarkets(GoogleMap map){
+         Iterator<SamplingPoint> iterator = samplingPoints.listIterator();
+         while(iterator.hasNext()){
+             SamplingPoint currentSamplePoint = iterator.next();
+             LatLng latLng = new LatLng(currentSamplePoint.getSite().getLatitude(),currentSamplePoint.getSite().getLongitude());
+             map.addMarker(new MarkerOptions().position(latLng).title(currentSamplePoint.getSite().getSiteName()).snippet(currentSamplePoint.getSite().getSiteName()));
+         }
+     }
+
+     public SamplingPoint getSamplingPoint(String name){
+         Iterator<SamplingPoint> iterator = samplingPoints.listIterator();
+         SamplingPoint currentSamplePoint;
+         while (iterator.hasNext()){
+             currentSamplePoint = iterator.next();
+             if(currentSamplePoint.getSite().getSiteName().contentEquals(name)){
+                 return currentSamplePoint;
+             }
+         }
+         return null;
+     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
-
+        startActivity(new Intent(MainActivity.this,SubScreenMap.class));
 
         return false;
     }

@@ -22,7 +22,7 @@ public class Matrix {
 	ArrayList< String > m_attr_name;
 	ArrayList< TreeMap<String, Integer> > m_str_to_enum;
 	ArrayList< TreeMap<Integer, String> > m_enum_to_str;
-	
+
 	private ArrayList<Integer> whichRowsToCopy;
 
 	static double MISSING = Double.MAX_VALUE; // representation of missing values in the dataset
@@ -50,7 +50,7 @@ public class Matrix {
 			m_enum_to_str.add(that.m_enum_to_str.get(colStart + i));
 		}
 	}
-	
+
 	// Custom constructor
 	public Matrix (Matrix that, int attribute, int value, int r, int c, ArrayList<Integer> whichToCopy) {
 		whichRowsToCopy = new ArrayList<Integer>();
@@ -87,7 +87,7 @@ public class Matrix {
 			m_enum_to_str.add(that.m_enum_to_str.get(i));
 		}
 	}
-	
+
 	public ArrayList<Integer> getWhichRowsToCopy () {
 		return whichRowsToCopy;
 	}
@@ -138,14 +138,14 @@ public class Matrix {
 			String line = s.nextLine().trim();
 			if (line.length() > 0 && line.charAt(0) != '%') {
 				if (!READDATA) {
-					
+
 					Scanner t = new Scanner(line);
 					String firstToken = t.next().toUpperCase();
-					
+
 					if (firstToken.equals("@RELATION")) {
 						String datasetName = t.nextLine();
 					}
-					
+
 					if (firstToken.equals("@ATTRIBUTE")) {
 						TreeMap<String, Integer> ste = new TreeMap<String, Integer>();
 						m_str_to_enum.add(ste);
@@ -201,7 +201,7 @@ public class Matrix {
 							if (textValue.length() > 0) {
 								double doubleValue;
 								int vals = m_enum_to_str.get(curPos).size();
-								
+
 								//Missing instances appear in the dataset as a double defined as MISSING
 								if (textValue.equals("?")) {
 									doubleValue = MISSING;
@@ -210,7 +210,7 @@ public class Matrix {
 								else if (vals == 0) {
 									doubleValue = Double.parseDouble(textValue);
 								}
-								// Discrete values appear as an index to the "name" 
+								// Discrete values appear as an index to the "name"
 								// of that value in the "attributeValue" structure
 								else {
 									doubleValue = m_str_to_enum.get(curPos).get(textValue);
@@ -218,7 +218,7 @@ public class Matrix {
 										throw new Exception("Error parsing the value '" + textValue + "' on line: " + line);
 									}
 								}
-								
+
 								newrow[curPos] = doubleValue;
 								curPos++;
 							}
@@ -232,6 +232,12 @@ public class Matrix {
 			}
 		}
 	}
+	/*
+	public void addAttribute(String attri){
+        m_attr_name.add(attri);
+    }*/
+
+
 
 	// Returns the number of rows in the matrix
 	public int rows() { return m_data.size(); }
@@ -248,6 +254,13 @@ public class Matrix {
 	// Sets the value at the specified row and column
 	public void set(int r, int c, double v) { row(r)[c] = v; }
 
+	public void addValueToString(int col, TreeMap<Integer, String> map){
+		m_enum_to_str.add(col, map);
+	}
+
+	public void addStringToValue(int col, TreeMap<String,Integer> map){
+		m_str_to_enum.add(col,map);
+	}
 	// Returns the name of the specified attribute
 	public String attrName(int col) { return m_attr_name.get(col); }
 
@@ -342,7 +355,8 @@ public class Matrix {
 		}
 		return val;
 	}
-	
+
+	public void setValueToString(int value, String valueStr){ }
 	public double mostCommonValueMissingData(int col, double classification) {
 		TreeMap<Double, Integer> tm = new TreeMap<Double, Integer>();
 		for(int i = 0; i < rows(); i++) {

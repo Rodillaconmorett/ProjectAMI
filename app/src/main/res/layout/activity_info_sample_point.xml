@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SamplePointInfoActivity">
+    tools:context=".Activities.SamplePointInfoActivity">
 
     <GridLayout
         android:layout_width="match_parent"
@@ -39,11 +39,14 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:background="@color/temaLifeFinder"
             android:columnCount="3"
             android:rowCount="1">
 
-            <Spinner
-                android:id="@+id/spinner"
+
+            <ListView
+                android:id="@+id/datesList"
+
                 android:layout_width="155dp"
                 android:layout_height="match_parent"
                 android:layout_column="1"
@@ -118,12 +121,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_column="0"
-                android:layout_row="0"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:text="#"
-                android:textColor="#8DC63F"
+                android:textColor="@color/especiesColor"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -154,7 +155,7 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:text="#"
-                android:textColor="#F7941E"
+                android:textColor="@color/puntajeColor"
                 android:textSize="36sp"
                 android:textStyle="bold"
                 />

@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="especiesColor">#8dc63f</color>
     <color name="puntajeColor">#f7941e</color>
+    <color name="temaLifeFinder">#4487ed</color>
+    <color name="hghQualColor">#8dc63f</color>
+    <color name="medQualColor">#f7941e</color>
+    <color name="lowQualColor">#ED1B24</color>
 </resources>
