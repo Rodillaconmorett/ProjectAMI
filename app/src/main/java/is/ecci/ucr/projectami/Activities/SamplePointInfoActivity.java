@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -21,6 +22,11 @@ public class SamplePointInfoActivity extends AppCompatActivity {
 
     private SamplingPoint samplingPoint ;
 
+    TextView siteName;
+    TextView siteDescription;
+    TextView textTotSpecies;
+    TextView textTotScore;
+    ListView datesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +41,19 @@ public class SamplePointInfoActivity extends AppCompatActivity {
         */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_sample_point);
-        TextView textView;
-        // Definir nombre del sitio
-        textView = (TextView) findViewById(R.id.siteName);
-        textView.setText(samplingPoint.getSite().getSiteName());
-        // Definir descripcion
-        textView = (TextView) findViewById(R.id.siteDescription);
-        textView.setText(samplingPoint.getSite().getDescription());
-        // Definir puntaje total
-        textView = (TextView) findViewById(R.id.textTotScore);
-        textView.setText(String.valueOf(samplingPoint.getScore()));
-        // Definir total de especies
-        textView = (TextView) findViewById(R.id.textTotSpecies);
-        textView.setText(String.valueOf(samplingPoint.getBugList().size()));
+
+        Intent intent = getIntent();
+        samplingPoint = intent.getParcelableExtra("samplingPoint");
+
+        siteName = (TextView) findViewById(R.id.siteName);
+        siteName.setText(samplingPoint.getSite().getSiteName());
+        siteDescription = (TextView) findViewById(R.id.siteDescription);
+        siteDescription.setText(samplingPoint.getSite().getDescription());
+        textTotScore = (TextView) findViewById(R.id.textTotScore);
+        textTotScore.setText(String.valueOf(samplingPoint.getScore()));
+        textTotSpecies = (TextView) findViewById(R.id.textTotSpecies);
+        textTotSpecies.setText(String.valueOf(samplingPoint.getBugList().size()));
+
+
     }
 }
