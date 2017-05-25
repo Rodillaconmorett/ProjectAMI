@@ -129,8 +129,25 @@ public class MongoAdmin {
     /*---------------------------------- SPECIFIC GETS -----------------------------------*/
     /*Gets específicos a cada colleción. Estos no se pueden repetir con otras colecciones.*/
 
-    public void getSitesByName(ServerCallback callback, CollectionName coll, String name) {
+    public void getSitesByName(ServerCallback callback, String name) {
         String url = Config.CONNECTION_STRING+CollectionName.SITE+"?filter={name:\""+ name +"\"}";
+        Map<String, String> params = getDefaultParams();
+        jsonGetRequest(url,params,callback);
+    }
+
+    public void getSamplesBySiteID(ServerCallback callback, String id) {
+        String url = Config.CONNECTION_STRING+CollectionName.SAMPLE+"?filter={site_id:{\"$oid\":\""+ id +"\"}}";
+        Log.d("URL:",url);
+        Map<String, String> params = getDefaultParams();
+        jsonGetRequest(url,params,callback);
+    }
+
+    //Las fechas son inclusivas (mayor o igual y menor o igual)
+    //Formato de las fechas "YYYY-MM-DD"
+    public void getSamplesBySiteID(ServerCallback callback, String id, String initDate, String finalDate) {
+        String connectionString = Config.CONNECTION_STRING+CollectionName.SAMPLE;
+        String url = connectionString+"?filter={site_id:{\"$oid\":\""+ id +"\"},date:{\"$gte\":{\"$date\":\""+initDate+"\"},\"$lte\":{\"$date\":\"" + finalDate + "\"}}}";
+        Log.d("URL:",url);
         Map<String, String> params = getDefaultParams();
         jsonGetRequest(url,params,callback);
     }
