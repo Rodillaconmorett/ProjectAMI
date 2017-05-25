@@ -4,6 +4,7 @@ import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -83,12 +84,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         *
         *
         * */
-
+/*
         Iterator<Site> iterator = sites.listIterator();
         while(iterator.hasNext()){
             samplingPoints.add(new SamplingPoint(iterator.next()));
         }
-
+*/
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -115,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         /*
         Context context;
         mMapFragment = MapFragment.newInstance();
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         bugs.add(new Bug("orca", R.drawable.orca));
         bugs.add(new Bug("perro", R.drawable.perro));
         bugs.add(new Bug("vaca", R.drawable.vaca));
-    }
+    };
 
     public void loadMarks(){
         try{
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap map) {
         mMap=map;
 
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
             // Use default InfoWindow frame
             @Override
@@ -194,8 +194,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Getting the position from the marker
                 LatLng latLng = arg0.getPosition();
 
-
-
                 // Returning the view containing InfoWindow contents
                 return v;
 
@@ -207,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.setOnMarkerClickListener(this);
         map.setOnInfoWindowClickListener(this);
         loadMarks();
-
     }
 
 
@@ -239,8 +236,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        startActivity(new Intent(MainActivity.this,SubScreenMap.class));
-
+        
         return false;
     }
 
@@ -256,8 +252,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        Button Siguiente;
         if (id == R.id.nav_camera) {
             Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
             startActivity(Prueba);
