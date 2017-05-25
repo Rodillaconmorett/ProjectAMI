@@ -1,8 +1,10 @@
-package is.ecci.ucr.projectami;
+package is.ecci.ucr.projectami.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+
+import is.ecci.ucr.projectami.R;
 
 /**
  * Created by Daniel on 5/20/2017.

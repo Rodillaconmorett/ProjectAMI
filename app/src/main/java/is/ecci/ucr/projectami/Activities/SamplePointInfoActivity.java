@@ -1,4 +1,4 @@
-package is.ecci.ucr.projectami;
+package is.ecci.ucr.projectami.Activities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.io.File;
 
+import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 
 /**

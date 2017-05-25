@@ -1,4 +1,4 @@
-package is.ecci.ucr.projectami;
+package is.ecci.ucr.projectami.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
+import is.ecci.ucr.projectami.R;
 
 import java.util.LinkedHashSet;
 
