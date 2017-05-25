@@ -41,6 +41,7 @@ public class SubScreenMap extends Activity {
 
         getWindow().setLayout(250, 250);
 
+
         siteName = (TextView) findViewById(R.id.siteName);
         siteName.setText(samplingPoint.getSite().getSiteName());
         siteScore = (TextView) findViewById(R.id.siteScore);
