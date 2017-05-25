@@ -39,6 +39,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:background="@color/temaLifeFinder"
             android:columnCount="3"
             android:rowCount="1">
 

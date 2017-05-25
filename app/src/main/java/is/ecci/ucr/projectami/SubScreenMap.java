@@ -15,12 +15,10 @@ public class SubScreenMap extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
+        getWindow().setLayout(250, 250);
 
-        getWindow().setLayout(width,height);
     }
 }

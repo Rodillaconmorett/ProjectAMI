@@ -17,18 +17,16 @@ public class SamplingPoint {
     private int lowQualBug;
     private int medQualBug;
     private int hghQualBug;
-    private DBAdmin dbAdmin;
     private LinkedList<Bug> bugList;
     private Site site;
 
-    public SamplingPoint(Site site, DBAdmin dbAdmin) {
+    public SamplingPoint(Site site) {
         score = 0;
         lowQualBug = 0;
         medQualBug = 0;
         hghQualBug = 0;
         bugList = new LinkedList<>();
         this.site = site;
-        this.dbAdmin = dbAdmin;
     }
 
     public void updateScoreAndQualBug(){
