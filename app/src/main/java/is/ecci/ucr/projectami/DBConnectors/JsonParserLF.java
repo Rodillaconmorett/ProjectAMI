@@ -58,6 +58,23 @@ public class JsonParserLF {
         return  bugs;
     }
 
+    public static ArrayList<Bug> parseBugsArray(JSONObject response) {
+        ArrayList<Bug> bugs = new ArrayList<>();
+        try {
+            if (response.has("_embedded")) {
+                JSONArray jsonArray = response.getJSONArray("_embedded");
+                for (int i = 0; i<jsonArray.length(); i++) {
+                    JSONObject docJson = jsonArray.getJSONObject(i);
+                    bugs.add(readBug(docJson));
+                }
+            } else {
+                bugs.add(readBug(response));
+            }} catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  bugs;
+    }
+
     public static ArrayList<String> parseSampleBugList(JSONObject response) {
         ArrayList<String> bugs = new ArrayList<>();
         try {

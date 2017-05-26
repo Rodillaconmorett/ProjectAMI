@@ -5,6 +5,7 @@ import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
 import is.ecci.ucr.projectami.R;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +19,6 @@ import java.util.LinkedHashSet;
 
 
 public class QuestionsGUI extends AppCompatActivity {
-    View linearLayout;
     TreeController treeControl;
     LinkedHashSet<String> currentInfo;
     String currentQuestion;
@@ -27,14 +27,15 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
-        linearLayout = findViewById(R.id.answers);
-        Matrix matrix = new Matrix();
-        try {
-            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
-        } catch (Exception e) {
-            //File not found
-        }
-        treeControl = new TreeController(matrix);
+        Intent parameters = getIntent();
+        treeControl = parameters.getParcelableExtra("QuestionsGUI");
+//        Matrix matrix = new Matrix();
+//        try {
+//            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
+//        } catch (Exception e) {
+//            //File not found
+//        }
+//        treeControl = new TreeController(matrix);
         currentQuestion = "";
         this.initialize();
     }
@@ -73,7 +74,7 @@ public class QuestionsGUI extends AppCompatActivity {
     *   @param: String[] questionsAndOptions
     */
     protected void displayOnScreen(String[] questionsAndOptions) {
-        this.clearAnswerLayout();
+        ((LinearLayout)findViewById(R.id.dynamicAnswers)).removeAllViews();
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
@@ -82,25 +83,23 @@ public class QuestionsGUI extends AppCompatActivity {
             LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
             for (int i = 1; i < arraySize; i++) {
-                if (!questionsAndOptions[i].equals("NA")) {
-                    Button button = new Button(this);
-                    button.setText(questionsAndOptions[i]);
-                    button.setLayoutParams(new LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Button pressed = (Button) v;
-                            try {
-                                catchAction(pressed);
-                            } catch (Exception e) {
-                                //Capturar la exceptión
-                            }
+                Button button = new Button(this);
+                button.setText(questionsAndOptions[i]);
+                button.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Button pressed = (Button) v;
+                        try {
+                            catchAction(pressed);
+                        } catch (Exception e) {
+                            //Capturar la exceptión
                         }
-                    });
-                    answerContainer.addView(button, 0);
-                }
+                    }
+                });
+                answerContainer.addView(button, 0);
             }
         }
     }
@@ -111,13 +110,17 @@ public class QuestionsGUI extends AppCompatActivity {
     public void catchAction(Button button) throws AnswerException {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
-            EditText answerBox = (EditText) findViewById(R.id.dynamicAnswers);
+            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.VISIBLE);
+        }else if(textB.equals("Continuar")){
+            ((LinearLayout)findViewById(R.id.dynamicAnswers)).removeAllViews();
+            EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
-            if(userAnswer.equals("")){
-                treeControl.reply("NA",userAnswer);
-            }else{
+            if (userAnswer.equals("")) {
+                treeControl.reply("NA", userAnswer);
+            } else {
                 treeControl.reply("NA");
             }
+            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.INVISIBLE);
         } else {
             if (textB.equals("Retroceder")) {
                 treeControl.goBack();
@@ -128,17 +131,4 @@ public class QuestionsGUI extends AppCompatActivity {
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
     }
 
-    protected void clearAnswerLayout(){
-
-
-    }
-
-    public void test() {
-        for (int i = 0; i < 4; i++) {
-            TextView a = new TextView(this);
-            String text = "Button " + i;
-            a.setText(text);
-            ((LinearLayout) linearLayout).addView(a);
-        }
-    }
 }
