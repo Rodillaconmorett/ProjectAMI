@@ -310,7 +310,7 @@ public class TreeController implements Serializable {
     public void goBack(){
         if (_questionsCounter > 0){
             _actualNode = _realizedQuestions.getLast().first;
-            _realizedQuestions.pop();
+            _realizedQuestions.removeLast();
             _questionsCounter--;
         }
 
