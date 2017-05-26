@@ -25,12 +25,14 @@ import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 
 public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
+
     QuestionsGUI questions;
     private ArrayList<Bug> _bugsListToRegister;
     SamplingPoint samplePoint;
 
     TreeController treeControl;
     LinkedHashSet<String> currentInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUI.class);
-                intent.putExtra("SamplePointInfoActivity", (Parcelable) questions);
+                intent.putExtra("QuestionsGUI", (Parcelable) treeControl);
                 startActivity(intent);
             }
         });
