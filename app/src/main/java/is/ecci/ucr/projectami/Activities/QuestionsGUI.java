@@ -1,14 +1,20 @@
 package is.ecci.ucr.projectami.Activities;
 
+import is.ecci.ucr.projectami.DBConnectors.CollectionName;
+import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
+import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.DecisionTree.Matrix;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
+import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.R;
+import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 import android.content.Intent;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -16,17 +22,23 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 
 public class QuestionsGUI extends AppCompatActivity {
     static TreeController treeControl;
-    static HashMap<String,String> questions;
+    static HashMap<String, String> questions;
+
     static boolean openedBefore = false;
     String currentQuestion;
     boolean extraQuestion = false;
     int currentExtraQuestions;
+    static MongoAdmin db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +46,8 @@ public class QuestionsGUI extends AppCompatActivity {
         setContentView(R.layout.activity_questions_gui);
         if (!openedBefore) {
             Matrix matrix = new Matrix();
+            db = new MongoAdmin(this.getApplicationContext());//creación del objeto
+            questions = new HashMap<String, String>();
             try {
                 matrix.loadArff(getResources().openRawResource(R.raw.dataset));
                 this.loadQuestions();
@@ -89,7 +103,7 @@ public class QuestionsGUI extends AppCompatActivity {
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
-            currentQuestion = questionsAndOptions[0];
+            currentQuestion = questions.get(questionsAndOptions[0]);
             question.setText(currentQuestion);
             LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
@@ -114,7 +128,7 @@ public class QuestionsGUI extends AppCompatActivity {
             }
         } else {
             Intent parameters = getIntent();
-            //(LinkedHashSet)parameters.getExtras().getSerializable("feedbackArray") = treeControl.getFeedbackMatrix();
+            (LinkedHashSet)parameters.getExtras().getSerializable("feedbackArray") = treeControl.getFeedbackMatrix();
         }
     }
 
@@ -124,9 +138,9 @@ public class QuestionsGUI extends AppCompatActivity {
     public void catchAction(Button button) throws AnswerException {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
+            ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
             ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.VISIBLE);
         } else if (textB.equals("Continuar")) {
-            ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
             if (userAnswer.equals("")) {
@@ -145,8 +159,28 @@ public class QuestionsGUI extends AppCompatActivity {
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
     }
 
-    public void loadQuestions()throws  Exception{
+    public void loadQuestions() throws Exception {
+        db.getColl(new MongoAdmin.ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                ArrayList<Questions> questionsArray = JsonParserLF.parseQuestionsList(result);
+                int totalQuestions = questionsArray.size();
+                for (int i = 0; i < totalQuestions; i++) {
+                    questions.put(questionsArray.get(i).getIdentificador().trim(), questionsArray.get(i).getQuestion());
+                    Log.v("R:",questionsArray.get(i).getIdentificador().trim() + " " + questionsArray.get(i).getQuestion());
+                }
+                return null;
+
+            }
+
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                System.out.println("Error descargando de BD");
+                return null;
+            }
+        }, CollectionName.QUESTIONS);
+
 
     }
-
 }
+
