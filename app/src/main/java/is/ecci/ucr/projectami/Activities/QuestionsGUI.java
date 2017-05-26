@@ -5,6 +5,8 @@ import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
 import is.ecci.ucr.projectami.R;
 
+import android.content.Intent;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,14 +16,17 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 
 public class QuestionsGUI extends AppCompatActivity {
     static TreeController treeControl;
+    static HashMap<String,String> questions;
     static boolean openedBefore = false;
-    LinkedHashSet<String> currentInfo;
     String currentQuestion;
+    boolean extraQuestion = false;
+    int currentExtraQuestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,7 @@ public class QuestionsGUI extends AppCompatActivity {
             Matrix matrix = new Matrix();
             try {
                 matrix.loadArff(getResources().openRawResource(R.raw.dataset));
+                this.loadQuestions();
             } catch (Exception e) {
                 //File not found
             }
@@ -38,8 +44,6 @@ public class QuestionsGUI extends AppCompatActivity {
             openedBefore = true;
         }
 
-        Intent parameters = getIntent();
-        currentInfo = parameters.getParcelableExtra("QuestionsGUI");
         currentQuestion = "";
         this.initialize();
     }
@@ -49,17 +53,19 @@ public class QuestionsGUI extends AppCompatActivity {
     }
 
     protected void setCurrentQuestion() {
-        if (!treeControl.isLeaf()) {
-            displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
+
+        if (extraQuestion) {
+            if (currentExtraQuestions < 3) {
+                displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
+                currentExtraQuestions--;
+            }
         } else {
-
-
-            //Se termina la clasificación y le envía al administrador de clasificacion el insecto encontrado actualmente
-            //y un array de string con los posibles alores obtenidos de retroalimentación
-            String found = hashLinkedToArray(treeControl.getQuestionAndOptions())[0];
-            //this.endClass(found,currentInfo);
+            if (!treeControl.isLeaf()) {
+                displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
+            } else {
+                extraQuestion = true;
+            }
         }
-
     }
 
     /*
@@ -105,6 +111,9 @@ public class QuestionsGUI extends AppCompatActivity {
                 });
                 answerContainer.addView(button, 0);
             }
+        } else {
+            Intent parameters = getIntent();
+            //(LinkedHashSet)parameters.getExtras().getSerializable("feedbackArray") = treeControl.getFeedbackMatrix();
         }
     }
 
@@ -133,6 +142,10 @@ public class QuestionsGUI extends AppCompatActivity {
             }
         }
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
+    }
+
+    public void loadQuestions()throws  Exception{
+
     }
 
 }
