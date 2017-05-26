@@ -1,11 +1,11 @@
 @RELATION DatasetClave
 
 @ATTRIBUTE familia {Amphipoda,Annelida,Blattodea,Branchiopoda:Cladocera,Branchiopoda:Conchostraca,Callembola,Chelicerata,Chelicerata(Larva),Coleoptera,Coleoptera(Larva),Copepoda,Decapoda,Ephemeroptera,Hemiptera,Hexapoda:Diptera,Isopoda,Lepidoptera,Megaloptera:Corydalidae,Megaloptera:Sialidae,Mollusca:Bivalvia,Mollusca:Gastropoda,Nematoda,Nematomorpha,Neuroptera,Odonata:Anistoptera,Odonata:Zygoptera,Ostracoda,Platyhelminthes,Plecoptera,Trichoptera}
-@ATTRIBUTE cant.conchas {0,1,2}
+@ATTRIBUTE cantidadconchas {0,1,2}
 @ATTRIBUTE antenasopatas {FALSE,NA,TRUE}
 @ATTRIBUTE cabezaexpuesta {FALSE,NA,TRUE}
 @ATTRIBUTE caparazónsinlíneas {FALSE,NA,TRUE}
-@ATTRIBUTE cant.patassegmentadas {NA,0,6,8,10,14}
+@ATTRIBUTE cantidadpatassegmentadas {NA,0,6,8,10,14}
 @ATTRIBUTE cuerposegmentado {FALSE,NA,TRUE}
 @ATTRIBUTE cabezabiendefinidaoreducidaapiezasbucales {FALSE,NA,TRUE}
 @ATTRIBUTE cuerpocilíndricoyaplanado {Aplanado,Cilíndrico,NA}
@@ -15,12 +15,12 @@
 @ATTRIBUTE cabezaconunpicodirigidahaciaabajo {FALSE,NA,TRUE}
 @ATTRIBUTE puntadelabdomenconproyeccionescortasolargas {Cortas,Largas,NA}
 @ATTRIBUTE proyeccionesfilamentosas {FALSE,NA,TRUE}
-@ATTRIBUTE cant.proyeccionesenelabdomen {NA,2,3,5}
+@ATTRIBUTE cantidadproyeccionesenelabdomen {NA,2,3,5}
 @ATTRIBUTE cabezaconestiletefino {FALSE,NA,TRUE}
 @ATTRIBUTE cuerporobusto {FALSE,NA,TRUE}
-@ATTRIBUTE cant.propatasdelabdomen {NA,0,2,10}
+@ATTRIBUTE cantidadpropatasdelabdomen {NA,0,2,10}
 @ATTRIBUTE filamentoterminal {FALSE,NA,TRUE}
-@ATTRIBUTE cant.uñasporpropata {NA,0,1,2}
+@ATTRIBUTE cantidaduñasporpropata {NA,0,1,2}
 @ATTRIBUTE puntabifurcadaabdomen {FALSE,NA,TRUE}
 @ATTRIBUTE cuerpocomprimidolateralmente {FALSE,NA,TRUE}
 
