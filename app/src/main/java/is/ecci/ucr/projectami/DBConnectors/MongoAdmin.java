@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
 import com.android.volley.Request;
 import com.android.volley.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,19 +24,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import is.ecci.ucr.projectami.Bugs.Bug;
 
 public class MongoAdmin {
 
     //RESTHEART api
     //Para conocer más, ingresen al siguiente enlace: http://restheart.org
     private RequestQueue queue;
+    private Context context;
 
     public MongoAdmin(Context  context) {
         Log.d("CREATION","START");
         //Inicializamos la cola de consulta con el contexto de la aplicación
         //Nota: El contexto, es el entorno donde se está ejecutando la aplicación,...
         //.. osea, el main en donde se crea el DB admin.
+        this.context = context;
         queue = Volley.newRequestQueue(context);
     }
 
@@ -76,41 +78,94 @@ public class MongoAdmin {
         jsonGetRequest(getURL,params,callback);
     }
 
-//    public ArrayList<Bug> getBugs() {
-//        ArrayList<Bug> bugs = new ArrayList<Bug>();
-//        return bugs;
-//    }
-//
-//    public ArrayList<Bug> getBugs(String[] ids) {
-//        ArrayList<Bug> bugs = new ArrayList<Bug>();
-//        return bugs;
-//    }
+    /*-------------------------- INSERT SECTION -------------------------*/
+    /*Métodos que utilizamos para insertar documentos a la base de datos.*/
 
     public void insertSampling(String bugId, String siteId, int quantity, String userId) {
 
     }
 
-    private void insertBug(String family, Double score, String[] imagesPaths) {
-
-    }
-
-    public void insertSite(String name, Double latitude, Double longitude, String description, String imagePath) throws JSONException {
-        Log.d("ADD SITE","STARTING");
-        String url = Config.CONNECTION_STRING+"/Site";
+    private void insertBug(String family, String desc, Double score, String[] imagesPaths) {
+        String url = Config.CONNECTION_STRING+CollectionName.BUGS;
         Map<String, String> params = getDefaultParams();
         //Necesitamos incluir los parametros de datos
-        JSONObject coor = new JSONObject();
-        coor.put("lat",latitude);
-        coor.put("long",longitude);
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("name",name);
-        jsonBody.put("coordinates",coor);
-        Log.d("JSON",jsonBody.toString());
-        if (description != null) jsonBody.put("description", description);
-        if (imagePath != null) jsonBody.put("image",imagePath);
+        try {
+            jsonBody.put("family",family);
+            jsonBody.put("score",score);
+            if (imagesPaths != null) {
+                JSONArray imageArray = new JSONArray();
+                for (int i = 0; i<imagesPaths.length; i++) {
+                    imageArray.put(imagesPaths[i]);
+                }
+                jsonBody.put("images",imageArray);
+            }
+            if (desc != null) jsonBody.put("desc",desc);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         jsonPostRequest(jsonBody,url,params);
     }
 
+    public void insertSite(String name, Double latitude, Double longitude, String description, String imagePath) {
+        String url = Config.CONNECTION_STRING+CollectionName.SITE;
+        Map<String, String> params = getDefaultParams();
+        //Necesitamos incluir los parametros de datos
+        JSONObject jsonBody = new JSONObject();
+        JSONObject coor = new JSONObject();
+        try {
+            coor.put("lat", latitude);
+            coor.put("long", longitude);
+            jsonBody.put("name", name);
+            jsonBody.put("coordinates", coor);
+            Log.d("JSON", jsonBody.toString());
+            if (description != null) jsonBody.put("description", description);
+            if (imagePath != null) jsonBody.put("image", imagePath);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonPostRequest(jsonBody,url,params);
+    }
+
+    /*---------------------------------- SPECIFIC GETS -----------------------------------*/
+    /*Gets específicos a cada colleción. Estos no se pueden repetir con otras colecciones.*/
+
+    public void getSitesByName(ServerCallback callback, String name) {
+        String url = Config.CONNECTION_STRING+CollectionName.SITE+"?filter={name:\""+ name +"\"}";
+        Map<String, String> params = getDefaultParams();
+        jsonGetRequest(url,params,callback);
+    }
+
+    public void getBugsByIdRange(ServerCallback callback, ArrayList<String> bugs){
+        String connectionString = Config.CONNECTION_STRING+CollectionName.BUGS;
+        String filter = "?filter={_id:{\"$in\":[";
+        for (int i = 0; i<bugs.size(); i++) {
+            filter += "\""+bugs.get(i).toString()+"\"";
+            if (i != bugs.size()-1) {
+                filter += ",";
+            }
+        }
+        filter += "]}}";
+        String url = connectionString + filter;
+        jsonGetRequest(url,getDefaultParams(),callback);
+    }
+
+    public void getSamplesBySiteID(ServerCallback callback, String id) {
+        String url = Config.CONNECTION_STRING+CollectionName.SAMPLE+"?filter={site_id:{\"$oid\":\""+ id +"\"}}";
+        Log.d("URL:",url);
+        Map<String, String> params = getDefaultParams();
+        jsonGetRequest(url,params,callback);
+    }
+
+    //Las fechas son inclusivas (mayor o igual y menor o igual)
+    //Formato de las fechas "YYYY-MM-DD"
+    public void getSamplesBySiteID(ServerCallback callback, String id, String initDate, String finalDate) {
+        String connectionString = Config.CONNECTION_STRING+CollectionName.SAMPLE;
+        String url = connectionString+"?filter={site_id:{\"$oid\":\""+ id +"\"},date:{\"$gte\":{\"$date\":\""+initDate+"\"},\"$lte\":{\"$date\":\"" + finalDate + "\"}}}";
+        Log.d("URL:",url);
+        Map<String, String> params = getDefaultParams();
+        jsonGetRequest(url,params,callback);
+    }
 
     /*------------------------- REQUEST SECTION -------------------------*/
     /*Código que útilizamos para realizar las consultas HTTP al servidor.*/
@@ -178,4 +233,55 @@ public class MongoAdmin {
         queue.add(jsonRequest);
     }
 
+    /*--------------- KEYS UPDATE ----------------*/
+    /*Actualizamos el archivo CSV con las llaves.*/
+
+
+    public void updateKeys() {
+        this.getColl(new ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                CSVExporter csvExporter = new CSVExporter(context);
+                csvExporter.exportJsonToCSVWithHeaders(result,Config.CSV_KEYS);
+                return null;
+            }
+
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                return null;
+            }
+        },CollectionName.KEYS);
+    }
 }
+
+
+/*--------------- Ejemplos ------------------*/
+
+// ------- Ejm#1: Buscamos todos los bichos encontrados en un sitio dado en un rango de fechas
+
+//db = new MongoAdmin(this.getApplicationContext());
+//        //Recibimos el server callback, el id del sitio y las fechas (las fecha son opcionales)
+//        //Nota: Existe el mismo método, pero sin parametros de fechas
+//        db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+//            @Override
+//            public JSONObject onSuccess(JSONObject result) {
+//                ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
+//                db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+//                    @Override
+//                    public JSONObject onSuccess(JSONObject result) {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public JSONObject onFailure(JSONObject result) {
+//                        return null;
+//                    }
+//                },bugs);
+//                return null;
+//            }
+//
+//            @Override
+//            public JSONObject onFailure(JSONObject result) {
+//                return null;
+//            }
+//        },"591c832d409c8f2661424e99","2017-05-20","2018-01-01");
