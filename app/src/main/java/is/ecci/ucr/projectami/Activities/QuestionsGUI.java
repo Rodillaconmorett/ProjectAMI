@@ -8,10 +8,9 @@ import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
 import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.R;
-import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 import android.content.Intent;
-import android.support.v4.util.Pair;
+import android.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 
 
 public class QuestionsGUI extends AppCompatActivity {
@@ -49,16 +49,6 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
-        Intent parameters = getIntent();
-        currentInfo = (LinkedHashSet<String>) parameters.getExtras().getSerializable("treeCont");
-
-//        Matrix matrix = new Matrix();
-//        try {
-//            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
-//        } catch (Exception e) {
-//            //File not found
-//        }
-//        treeControl = new TreeController(matrix);
         if (!openedBefore) {
             Matrix matrix = new Matrix();
             db = new MongoAdmin(this.getApplicationContext());//creación del objeto
@@ -95,6 +85,15 @@ public class QuestionsGUI extends AppCompatActivity {
             if (currentExtraQuestions < 3) {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
                 currentExtraQuestions--;
+            }else{
+                Intent parameters = getIntent();
+                LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>)parameters.getExtras().getSerializable("feedbackArray");
+                currentInfo = treeControl.getQuestionsRealized();
+                try{
+                    this.finalize();
+                }catch (Throwable e){
+                    //
+                }
             }
         } else {
             if (!treeControl.isLeaf()) {
@@ -151,7 +150,13 @@ public class QuestionsGUI extends AppCompatActivity {
             }
         } else {
             Intent parameters = getIntent();
-            (LinkedHashSet)parameters.getExtras().getSerializable("feedbackArray") = treeControl.getFeedbackMatrix();
+            LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>)parameters.getExtras().getSerializable("feedbackArray");
+            currentInfo = treeControl.getQuestionsRealized();
+            try{
+                this.finalize();
+            }catch (Throwable e){
+                //
+            }
         }
     }
 
@@ -193,7 +198,6 @@ public class QuestionsGUI extends AppCompatActivity {
                     Log.v("R:",questionsArray.get(i).getIdentificador().trim() + " " + questionsArray.get(i).getQuestion());
                 }
                 return null;
-
             }
 
             @Override
