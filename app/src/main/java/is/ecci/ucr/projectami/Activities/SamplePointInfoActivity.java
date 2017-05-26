@@ -67,11 +67,24 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_info_sample_point);
         Intent intent = getIntent();
         site = (Site) intent.getSerializableExtra("site");
+        Calendar today = Calendar.getInstance();
+        initialDate = String.valueOf(today.get(Calendar.YEAR));
+        initialDate += "-";
+        int month = today.get(Calendar.MONTH);
+        if(month < 10){
+            initialDate += "0";
+        }
+        initialDate += String.valueOf(today.get(Calendar.MONTH));
+        initialDate += "-";
+        int day = today.get(Calendar.DAY_OF_MONTH);
+        if(day < 10){
+            initialDate += "0";
+        }
+        initialDate += String.valueOf(today.get(Calendar.DAY_OF_MONTH));
+        finalDate = initialDate;
         setSamplingPoint();
         setTextViews();
         datePicker = (DatePicker) findViewById(R.id.datePicker);
-        Calendar today = Calendar.getInstance();
-        setInitialDate();
         db= new MongoAdmin(this.getApplicationContext());
 
         btnBack = (Button) findViewById(R.id.btnBack);
