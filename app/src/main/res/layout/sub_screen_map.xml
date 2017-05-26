@@ -11,7 +11,9 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:id="@+id/container_all"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
     <GridLayout
         android:layout_width="match_parent"
@@ -47,7 +49,7 @@
             android:gravity="left|center"
             android:text="Nombre"
             android:textColor="@color/temaLifeFinder"
-            android:textSize="18sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/siteScore"
@@ -59,7 +61,7 @@
             android:gravity="right|center"
             android:text="i:#"
             android:textColor="@color/especiesColor"
-            android:textSize="18sp" />
+            android:textSize="22sp" />
 
         </GridLayout>
 
@@ -114,6 +116,7 @@
                     android:layout_column="0"
                     android:layout_row="1"
                     android:fontFamily="sans-serif"
+                    android:textSize="18dp"
                     android:layout_gravity="top|center"
                     android:text="+#"
                     android:textColor="@color/hghQualColor"
@@ -155,6 +158,7 @@
                     android:layout_column="0"
                     android:layout_row="1"
                     android:fontFamily="sans-serif"
+                    android:textSize="18dp"
                     android:layout_gravity="top|center"
                     android:text="+#"
                     android:textColor="@color/medQualColor"
@@ -194,6 +198,7 @@
                     android:layout_column="0"
                     android:layout_row="1"
                     android:fontFamily="sans-serif"
+                    android:textSize="18dp"
                     android:layout_gravity="top|center"
                     android:text="+#"
                     android:textColor="@color/lowQualColor"
