@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
+import is.ecci.ucr.projectami.MainActivity;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
@@ -42,7 +43,9 @@ public class SubScreenMap extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
+        site = MainActivity._actualSite;
         Intent intent = getIntent();
+
         site = (Site)intent.getExtras().getSerializable("site");
 
         db= new MongoAdmin(this.getApplicationContext());
@@ -64,7 +67,6 @@ public class SubScreenMap extends Activity {
                 db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                     @Override
                     public JSONObject onSuccess(JSONObject result) {
-                        samplingPoint = new SamplingPoint(site);
                         samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                         samplingPoint.updateScoreAndQualBug();
                         siteName = (TextView) findViewById(R.id.siteName);
@@ -112,7 +114,9 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
+
             intent.putExtra("samplingPoint", samplingPoint);
+          
             startActivity(intent);
         }
     };

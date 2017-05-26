@@ -15,6 +15,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,7 +34,7 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
  * Created by Daniel on 5/16/2017.
  */
 
-public class SamplePointInfoActivity extends AppCompatActivity implements View.OnClickListener {
+public class SamplePointInfoActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
 
     private SamplingPoint samplingPoint ;
     private String siteId;

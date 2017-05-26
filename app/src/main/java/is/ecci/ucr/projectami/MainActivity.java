@@ -58,7 +58,7 @@ import static is.ecci.ucr.projectami.R.id.map;
 import static is.ecci.ucr.projectami.R.id.pruebaText;
 
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener, Serializable{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener{
 
     private ArrayList<Bug> bugs;
 
@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     MongoAdmin db;
 
     GoogleMap mMap;
+
+    public static Site _actualSite;
 
     private ArrayList<Site> sites;
     private LinkedList<SamplingPoint> samplingPoints;
@@ -99,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             samplingPoints.add(new SamplingPoint(iterator.next()));
         }
 */
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -249,8 +250,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         int mid=marker.getSnippet().indexOf(",");
         String objId=marker.getSnippet().substring(0,mid);
         String info=marker.getSnippet().substring(mid,marker.getSnippet().length());
+
         Site site=new Site(objId,name,lat,lon,info);
         Prueba.putExtra("site", site);
+
         startActivity(Prueba);
         return false;
     }
