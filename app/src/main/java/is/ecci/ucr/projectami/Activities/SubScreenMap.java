@@ -11,10 +11,8 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.R;
@@ -25,10 +23,9 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
  * Created by Daniel on 5/20/2017.
  */
 
-public class SubScreenMap extends Activity implements Serializable {
+public class SubScreenMap extends Activity {
     SamplingPoint samplingPoint;
     Site site;
-    String siteId;
 
     Button buttonInfo;
     Button buttonRegister;
@@ -102,37 +99,10 @@ public class SubScreenMap extends Activity implements Serializable {
         );
     }
 
-    private void findSite(){
-        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
-        mongoAdmin.getColl(new MongoAdmin.ServerCallback() {
-            @Override
-            public JSONObject onSuccess(JSONObject result) {
-                ArrayList<Site> sites= JsonParserLF.parseSites(result);
-                int i = 0;
-                boolean found = false;
-                while(!found) {
-                    if(sites.get(i).getObjID() == siteId){
-                        found = true;
-                    }
-                    else{
-                        i++;
-                    }
-                }
-                site = sites.get(i);
-                return null;
-            }
-
-            @Override
-            public JSONObject onFailure(JSONObject result) {
-                return null;
-            }
-        }, CollectionName.SITE);
-    }
-
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, SamplePointInfoActivity.class);
-            intent.putExtra("siteid", siteId);
+            intent.putExtra("site", site);
             startActivity(intent);
         }
     };
@@ -140,7 +110,7 @@ public class SubScreenMap extends Activity implements Serializable {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
-            intent.putExtra("siteid", siteId);
+            intent.putExtra("samplingPoint", samplingPoint);
             startActivity(intent);
         }
     };
