@@ -10,7 +10,7 @@ import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.R;
 
 import android.content.Intent;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -102,7 +102,7 @@ public class QuestionsGUI extends AppCompatActivity {
                 LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>)parameters.getExtras().getSerializable("feedbackArray");
                 currentInfo = treeControl.getQuestionsRealized();
                 try{
-                    this.finalize();
+                    finish();
                 }catch (Throwable e){
                     //
                 }
