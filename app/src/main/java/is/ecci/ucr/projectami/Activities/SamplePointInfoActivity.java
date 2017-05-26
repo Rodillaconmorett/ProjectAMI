@@ -39,7 +39,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
     private String initialDate;
     private String finalDate;
-
+    MongoAdmin db;
     private TextView siteName;
     private TextView siteDescription;
     private TextView textTotSpecies;
@@ -78,17 +78,17 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
         datePicker = (DatePicker) findViewById(R.id.datePicker);
 
-
+        db= new MongoAdmin(this.getApplicationContext());
     }
 
     private void setSamplingPoint(){
-        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
 
-        mongoAdmin.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+
+        db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
               @Override
               public JSONObject onSuccess(JSONObject result) {
                   ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
-                  mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+                  db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                       @Override
                       public JSONObject onSuccess(JSONObject result) {
                           samplingPoint = new SamplingPoint(site);

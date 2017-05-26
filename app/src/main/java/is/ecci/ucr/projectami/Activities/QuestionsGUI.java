@@ -32,6 +32,16 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
+        Intent parameters = getIntent();
+        currentInfo = (LinkedHashSet<String>) parameters.getExtras().getSerializable("treeCont");
+
+//        Matrix matrix = new Matrix();
+//        try {
+//            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
+//        } catch (Exception e) {
+//            //File not found
+//        }
+//        treeControl = new TreeController(matrix);
         if (!openedBefore) {
             Matrix matrix = new Matrix();
             try {
@@ -46,6 +56,18 @@ public class QuestionsGUI extends AppCompatActivity {
 
         currentQuestion = "";
         this.initialize();
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     }
 
     protected void initialize() {
