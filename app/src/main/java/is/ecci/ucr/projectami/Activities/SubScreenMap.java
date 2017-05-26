@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
+import is.ecci.ucr.projectami.MainActivity;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
@@ -42,11 +43,11 @@ public class SubScreenMap extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
         /*
         samplingPoint = intent.getParcelableExtra("samplingPoint");
         */
-        site = intent.getParcelableExtra("site");
+        site = MainActivity._actualSite;
         setSamplingPoint();
 
         siteName = (TextView) findViewById(R.id.siteName);
