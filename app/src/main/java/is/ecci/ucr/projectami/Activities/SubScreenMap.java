@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
@@ -23,7 +24,7 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
  * Created by Daniel on 5/20/2017.
  */
 
-public class SubScreenMap extends Activity {
+public class SubScreenMap extends Activity implements Serializable {
     SamplingPoint samplingPoint;
     Site site;
 
