@@ -1,0 +1,57 @@
+@RELATION DatasetClave
+
+@ATTRIBUTE familia {Amphipoda,Annelida,Blattodea,Branchiopoda:Cladocera,Branchiopoda:Conchostraca,Callembola,Chelicerata,Chelicerata(Larva),Coleoptera,Coleoptera(Larva),Copepoda,Decapoda,Ephemeroptera,Hemiptera,Hexapoda:Diptera,Isopoda,Lepidoptera,Megaloptera:Corydalidae,Megaloptera:Sialidae,Mollusca:Bivalvia,Mollusca:Gastropoda,Nematoda,Nematomorpha,Neuroptera,Odonata:Anistoptera,Odonata:Zygoptera,Ostracoda,Platyhelminthes,Plecoptera,Trichoptera}
+@ATTRIBUTE cant.conchas {0,1,2}
+@ATTRIBUTE antenasopatas {FALSE,NA,TRUE}
+@ATTRIBUTE cabezaexpuesta {FALSE,NA,TRUE}
+@ATTRIBUTE caparazónsinlíneas {FALSE,NA,TRUE}
+@ATTRIBUTE cant.patassegmentadas {NA,0,6,8,10,14}
+@ATTRIBUTE cuerposegmentado {FALSE,NA,TRUE}
+@ATTRIBUTE cabezabiendefinidaoreducidaapiezasbucales {FALSE,NA,TRUE}
+@ATTRIBUTE cuerpocilíndricoyaplanado {Aplanado,Cilíndrico,NA}
+@ATTRIBUTE tamaño {<2cm,>2cm,NA}
+@ATTRIBUTE ojocompuestoconvariasfacetasacadaladodelacabeza {FALSE,NA,TRUE}
+@ATTRIBUTE alasanterioresdurasquetapanlasalasposteriores {FALSE,NA,TRUE}
+@ATTRIBUTE cabezaconunpicodirigidahaciaabajo {FALSE,NA,TRUE}
+@ATTRIBUTE puntadelabdomenconproyeccionescortasolargas {Cortas,Largas,NA}
+@ATTRIBUTE proyeccionesfilamentosas {FALSE,NA,TRUE}
+@ATTRIBUTE cant.proyeccionesenelabdomen {NA,2,3,5}
+@ATTRIBUTE cabezaconestiletefino {FALSE,NA,TRUE}
+@ATTRIBUTE cuerporobusto {FALSE,NA,TRUE}
+@ATTRIBUTE cant.propatasdelabdomen {NA,0,2,10}
+@ATTRIBUTE filamentoterminal {FALSE,NA,TRUE}
+@ATTRIBUTE cant.uñasporpropata {NA,0,1,2}
+@ATTRIBUTE puntabifurcadaabdomen {FALSE,NA,TRUE}
+@ATTRIBUTE cuerpocomprimidolateralmente {FALSE,NA,TRUE}
+
+@DATA
+Mollusca:Gastropoda,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Branchiopoda:Cladocera,2,TRUE,TRUE,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Ostracoda,2,TRUE,FALSE,TRUE,6,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Branchiopoda:Conchostraca,2,TRUE,FALSE,FALSE,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Mollusca:Bivalvia,2,FALSE,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Hexapoda:Diptera,0,TRUE,NA,NA,0,TRUE,TRUE,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Annelida,0,NA,NA,NA,0,TRUE,FALSE,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Nematomorpha,0,NA,NA,NA,0,FALSE,NA,Cilíndrico,<2cm,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Nematoda,0,NA,NA,NA,0,FALSE,NA,Cilíndrico,>2cm,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Platyhelminthes,0,NA,NA,NA,0,FALSE,NA,Aplanado,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Plecoptera,0,TRUE,NA,NA,6,NA,NA,NA,NA,TRUE,FALSE,FALSE,Largas,FALSE,2,NA,NA,NA,NA,NA,NA,NA
+Odonata:Zygoptera,0,TRUE,NA,NA,6,NA,NA,NA,NA,TRUE,FALSE,FALSE,Largas,FALSE,3,NA,NA,NA,NA,NA,NA,NA
+Ephemeroptera,0,TRUE,NA,NA,6,NA,NA,NA,NA,TRUE,FALSE,FALSE,Largas,TRUE,NA,NA,NA,NA,NA,NA,NA,NA
+Blattodea,0,TRUE,NA,NA,6,NA,NA,NA,NA,TRUE,FALSE,FALSE,Cortas,NA,2,NA,NA,NA,NA,NA,NA,NA
+Odonata:Anistoptera,0,TRUE,NA,NA,6,NA,NA,NA,NA,TRUE,FALSE,FALSE,Cortas,NA,5,NA,NA,NA,NA,NA,NA,NA
+Hemiptera,0,TRUE,NA,NA,6,NA,NA,NA,NA,TRUE,FALSE,TRUE,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Coleoptera,0,TRUE,NA,NA,6,NA,NA,NA,NA,TRUE,TRUE,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Neuroptera,0,TRUE,NA,NA,6,NA,NA,NA,NA,FALSE,NA,NA,NA,NA,NA,TRUE,NA,NA,NA,NA,NA,NA
+Callembola,0,TRUE,NA,NA,6,NA,NA,NA,NA,FALSE,NA,NA,NA,NA,NA,FALSE,TRUE,NA,NA,NA,NA,NA
+Megaloptera:Sialidae,0,TRUE,NA,NA,6,NA,NA,NA,NA,FALSE,NA,NA,NA,NA,NA,FALSE,FALSE,0,TRUE,0,NA,NA
+Coleoptera(Larva),0,TRUE,NA,NA,6,NA,NA,NA,NA,FALSE,NA,NA,NA,NA,NA,FALSE,FALSE,0,FALSE,0,NA,NA
+Trichoptera,0,TRUE,NA,NA,6,NA,NA,NA,NA,FALSE,NA,NA,NA,NA,NA,FALSE,FALSE,2,NA,1,NA,NA
+Megaloptera:Corydalidae,0,TRUE,NA,NA,6,NA,NA,NA,NA,FALSE,NA,NA,NA,NA,NA,FALSE,FALSE,2,NA,2,NA,NA
+Lepidoptera,0,TRUE,NA,NA,6,NA,NA,NA,NA,FALSE,NA,NA,NA,NA,NA,FALSE,FALSE,10,NA,NA,NA,NA
+Chelicerata(Larva),0,FALSE,NA,NA,6,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Chelicerata,0,FALSE,NA,NA,8,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Copepoda,0,NA,NA,NA,10,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,TRUE,NA
+Decapoda,0,NA,NA,NA,10,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,FALSE,NA
+Amphipoda,0,NA,NA,NA,14,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,TRUE
+Isopoda,0,NA,NA,NA,14,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,FALSE
