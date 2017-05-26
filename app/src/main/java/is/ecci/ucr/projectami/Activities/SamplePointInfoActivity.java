@@ -17,7 +17,9 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
+import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.MainActivity;
@@ -33,6 +35,7 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
 public class SamplePointInfoActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
 
     private SamplingPoint samplingPoint ;
+    private String siteId;
     private Site site;
 
     private String initialDate;
@@ -60,7 +63,9 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_info_sample_point);
 
         Intent intent = getIntent();
-        site = (Site) intent.getSerializableExtra("site");
+        siteId = intent.getStringExtra("siteid");
+
+        findSite();
         setSamplingPoint();
 
         siteName = (TextView) findViewById(R.id.siteName);
@@ -107,6 +112,33 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
               }
           },site.getObjID(),initialDate,finalDate
         );
+    }
+
+    private void findSite(){
+        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
+        mongoAdmin.getColl(new MongoAdmin.ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                ArrayList<Site> sites= JsonParserLF.parseSites(result);
+                int i = 0;
+                boolean found = false;
+                while(!found) {
+                    if(sites.get(i).getObjID() == siteId){
+                        found = true;
+                    }
+                    else{
+                        i++;
+                    }
+                }
+                site = sites.get(i);
+                return null;
+            }
+
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                return null;
+            }
+        }, CollectionName.SITE);
     }
 
     @Override

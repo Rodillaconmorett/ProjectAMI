@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.MainActivity;
@@ -27,6 +28,7 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
 public class SubScreenMap extends Activity {
     SamplingPoint samplingPoint;
     Site site;
+    String siteId;
 
     Button buttonInfo;
     Button buttonRegister;
@@ -43,11 +45,9 @@ public class SubScreenMap extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
-        //Intent intent = getIntent();
-        /*
-        samplingPoint = intent.getParcelableExtra("samplingPoint");
-        */
         site = MainActivity._actualSite;
+        Intent intent = getIntent();
+        siteId = intent.getStringExtra("siteid");
         setSamplingPoint();
 
         siteName = (TextView) findViewById(R.id.siteName);
@@ -100,10 +100,37 @@ public class SubScreenMap extends Activity {
         );
     }
 
+    private void findSite(){
+        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
+        mongoAdmin.getColl(new MongoAdmin.ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                ArrayList<Site> sites= JsonParserLF.parseSites(result);
+                int i = 0;
+                boolean found = false;
+                while(!found) {
+                    if(sites.get(i).getObjID() == siteId){
+                        found = true;
+                    }
+                    else{
+                        i++;
+                    }
+                }
+                site = sites.get(i);
+                return null;
+            }
+
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                return null;
+            }
+        }, CollectionName.SITE);
+    }
+
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, SamplePointInfoActivity.class);
-            intent.putExtra("site", (Parcelable) site);
+            intent.putExtra("siteid", siteId);
             startActivity(intent);
         }
     };
@@ -112,6 +139,7 @@ public class SubScreenMap extends Activity {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
             intent.putExtra("samplingPoint", (Parcelable) samplingPoint);
+            intent.putExtra("siteid", siteId);
             startActivity(intent);
         }
     };
