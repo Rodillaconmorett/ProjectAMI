@@ -21,8 +21,12 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+
+import is.ecci.ucr.projectami.Bugs.Bug;
 
 
 public class MongoAdmin {
@@ -81,8 +85,26 @@ public class MongoAdmin {
     /*-------------------------- INSERT SECTION -------------------------*/
     /*Métodos que utilizamos para insertar documentos a la base de datos.*/
 
-    public void insertSampling(String bugId, String siteId, int quantity, String userId) {
-
+    public void insertSampling(LinkedList<Bug> bugs, String siteId, String userId) {
+        String url = Config.CONNECTION_STRING+CollectionName.SAMPLE;
+        Map<String, String> params = getDefaultParams();
+        JSONArray arrayObject = new JSONArray();
+        Calendar cal = Calendar.getInstance();
+        int date = cal.get(Calendar.SECOND);
+        Log.v("Date:", String.valueOf(date));
+//        for(int i = 0; i<bugs.size(); i++) {
+//            JSONObject jsonBody = new JSONObject();
+//            try {
+//                jsonBody.put("site_id",siteId);
+//                jsonBody.put("user_id",userId);
+//                jsonBody.put("date","");
+//                JSONObject results = new JSONObject();
+//                results.put("bug_id",bugs.get(i));
+//                results.put("qty",1);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     private void insertBug(String family, String desc, Double score, String[] imagesPaths) {
