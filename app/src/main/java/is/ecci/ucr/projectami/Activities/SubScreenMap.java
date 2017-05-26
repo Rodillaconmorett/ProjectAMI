@@ -43,10 +43,7 @@ public class SubScreenMap extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
         Intent intent = getIntent();
-        /*
-        samplingPoint = intent.getParcelableExtra("samplingPoint");
-        */
-        site = intent.getParcelableExtra("site");
+        site = (Site) intent.getSerializableExtra("site");
         setSamplingPoint();
 
         siteName = (TextView) findViewById(R.id.siteName);
@@ -78,6 +75,7 @@ public class SubScreenMap extends Activity {
                 mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                     @Override
                     public JSONObject onSuccess(JSONObject result) {
+                        samplingPoint = new SamplingPoint(site);
                         samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                         samplingPoint.updateScoreAndQualBug();
                         return null;
@@ -102,7 +100,7 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, SamplePointInfoActivity.class);
-            intent.putExtra("site", (Parcelable) site);
+            intent.putExtra("site", site);
             startActivity(intent);
         }
     };
@@ -110,7 +108,7 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
-            intent.putExtra("samplingPoint", (Parcelable) samplingPoint);
+            intent.putExtra("samplingPoint", samplingPoint);
             startActivity(intent);
         }
     };

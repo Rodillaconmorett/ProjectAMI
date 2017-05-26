@@ -1,5 +1,6 @@
 package is.ecci.ucr.projectami.SamplingPoints;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -9,7 +10,7 @@ import is.ecci.ucr.projectami.Bugs.Bug;
  * Created by Daniel on 5/10/2017.
  */
 
-public class SamplingPoint {
+public class SamplingPoint implements Serializable {
     private double score;
     private int lowQualBug;
     private int medQualBug;
