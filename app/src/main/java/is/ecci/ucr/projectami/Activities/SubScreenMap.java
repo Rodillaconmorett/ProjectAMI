@@ -77,7 +77,7 @@ public class SubScreenMap extends Activity {
 
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
-            Intent intent = new Intent(SubScreenMap.this, QuestionsGUI.class);
+            Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
             intent.putExtra("SamplePointInfoActivity", (Parcelable) samplingPoint);
             startActivity(intent);
         }
