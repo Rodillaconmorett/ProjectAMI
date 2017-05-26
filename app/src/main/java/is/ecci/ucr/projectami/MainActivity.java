@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 
+import is.ecci.ucr.projectami.Activities.QuestionsGUI;
+import is.ecci.ucr.projectami.Activities.SamplePointInfoActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
@@ -84,14 +86,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         *
         *
         * */
+
 /*
         Iterator<Site> iterator = sites.listIterator();
         while(iterator.hasNext()){
             samplingPoints.add(new SamplingPoint(iterator.next()));
         }
 */
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,7 +237,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        
+        Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+        startActivity(Prueba);
         return false;
     }
 
@@ -252,13 +254,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if (id == R.id.nav_camera) {
-            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+        if (id == R.id.frame_map) {
+            Intent Prueba = new Intent(MainActivity.this, SamplePointInfoActivity.class);
             startActivity(Prueba);
-            // Handle the camera action
-
         } else if (id == R.id.nav_gallery) {
-            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+            Intent Prueba = new Intent(MainActivity.this, QuestionsGUI.class);
             startActivity(Prueba);
         } else if (id == R.id.nav_slideshow) {
             Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);

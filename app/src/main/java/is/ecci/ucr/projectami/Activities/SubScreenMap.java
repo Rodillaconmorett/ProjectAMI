@@ -32,14 +32,12 @@ public class SubScreenMap extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
-
         Intent intent = getIntent();
         samplingPoint = intent.getParcelableExtra("samplingPoint");
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        getWindow().setLayout(250, 250);
+        getWindow().setLayout(1000,1000);
 
 
         siteName = (TextView) findViewById(R.id.siteName);

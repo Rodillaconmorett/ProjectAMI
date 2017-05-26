@@ -18,7 +18,7 @@ import android.widget.EditText;
 
 
 public class QuestionsGUI extends AppCompatActivity {
-    final View linearLayout = findViewById(R.id.answers);
+    View linearLayout;
     TreeController treeControl;
     LinkedHashSet<String> currentInfo;
     String currentQuestion;
@@ -27,8 +27,8 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
-        treeControl = new TreeController();
-        currentQuestion = "";
+        //treeControl = new TreeController();
+        //currentQuestion = "";
         //initializeTree();
     }
 
