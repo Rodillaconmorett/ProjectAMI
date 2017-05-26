@@ -98,22 +98,22 @@
 
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="4dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/bar_gray"
-        android:backgroundTint="@drawable/bar_gray"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/backButton"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userAnswerLayout"
-        app:layout_constraintVertical_bias="0.883">
+    <!--<FrameLayout-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="4dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:background="@drawable/bar_gray"-->
+        <!--android:backgroundTint="@drawable/bar_gray"-->
+        <!--android:visibility="visible"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/backButton"-->
+        <!--app:layout_constraintHorizontal_bias="1.0"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/userAnswerLayout"-->
+        <!--app:layout_constraintVertical_bias="0.883">-->
 
-    </FrameLayout>
+    <!--</FrameLayout>-->
 
     <Button
         android:id="@+id/backButton"

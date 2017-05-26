@@ -18,7 +18,8 @@ import java.util.LinkedHashSet;
 
 
 public class QuestionsGUI extends AppCompatActivity {
-    TreeController treeControl;
+    static TreeController treeControl;
+    static boolean openedBefore = false;
     LinkedHashSet<String> currentInfo;
     String currentQuestion;
 
@@ -26,13 +27,17 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
-        Matrix matrix = new Matrix();
-        try {
-            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
-        } catch (Exception e) {
-            //File not found
+        if (!openedBefore) {
+            Matrix matrix = new Matrix();
+            try {
+                matrix.loadArff(getResources().openRawResource(R.raw.dataset));
+            } catch (Exception e) {
+                //File not found
+            }
+            treeControl = new TreeController(matrix);
+            openedBefore = true;
         }
-        treeControl = new TreeController(matrix);
+
         currentQuestion = "";
         this.initialize();
     }
@@ -42,7 +47,7 @@ public class QuestionsGUI extends AppCompatActivity {
     }
 
     protected void setCurrentQuestion() {
-        if (!treeControl.isLeaf()) {
+        if (!treeControl.isLeaf()){
             displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
         } else {
 
@@ -71,7 +76,7 @@ public class QuestionsGUI extends AppCompatActivity {
     *   @param: String[] questionsAndOptions
     */
     protected void displayOnScreen(String[] questionsAndOptions) {
-        ((LinearLayout)findViewById(R.id.dynamicAnswers)).removeAllViews();
+        ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
@@ -108,8 +113,8 @@ public class QuestionsGUI extends AppCompatActivity {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.VISIBLE);
-        }else if(textB.equals("Continuar")){
-            ((LinearLayout)findViewById(R.id.dynamicAnswers)).removeAllViews();
+        } else if (textB.equals("Continuar")) {
+            ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
             if (userAnswer.equals("")) {
