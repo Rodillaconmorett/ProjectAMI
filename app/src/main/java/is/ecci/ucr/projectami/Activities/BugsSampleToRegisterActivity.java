@@ -25,6 +25,7 @@ import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SampleBugsAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
+import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
@@ -32,7 +33,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     QuestionsGUI questions;
     private ArrayList<Bug> _bugsListToRegister;
     Button floatingActionButton;
-    SamplingPoint samplePoint;
+    Site site;
 
     TreeController treeControl;
     LinkedList<Pair<String, String>> currentInfo;
@@ -44,7 +45,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bugs_sample_to_register);
 
         Intent intent = this.getIntent();
-        samplePoint = intent.getParcelableExtra("");                    // Nombre de intent variable
+        site = (Site) intent.getExtras().getSerializable("site");                    // Nombre de intent variable
 
         Matrix matrix = new Matrix();
         try {
