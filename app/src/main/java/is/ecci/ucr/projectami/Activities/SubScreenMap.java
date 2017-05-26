@@ -38,7 +38,7 @@ public class SubScreenMap extends Activity implements Serializable {
     TextView textHghQualBugs;
     TextView textMedQualBugs;
     TextView textLowQualBugs;
-
+    MongoAdmin db;
     RelativeLayout container_all;
 
     @Override
@@ -46,9 +46,9 @@ public class SubScreenMap extends Activity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
         Intent intent = getIntent();
-        siteId = intent.getStringExtra("siteid");
+        site = (Site)intent.getExtras().getSerializable("site");
 
-
+        db= new MongoAdmin(this.getApplicationContext());
         setSamplingPoint();
 
         siteName = (TextView) findViewById(R.id.siteName);
@@ -71,13 +71,13 @@ public class SubScreenMap extends Activity implements Serializable {
     }
 
     private void setSamplingPoint(){
-        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
 
-        mongoAdmin.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+
+        db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
                 ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
-                mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+                db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                     @Override
                     public JSONObject onSuccess(JSONObject result) {
                         samplingPoint = new SamplingPoint(site);

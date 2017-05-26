@@ -31,7 +31,8 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     Button floatingActionButton;
     SamplingPoint samplePoint;
 
-    public static LinkedHashSet<String> currentInfo;
+    TreeController treeControl;
+    LinkedHashSet<String> currentInfo;
 
 
     @Override
@@ -49,7 +50,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         } catch (Exception e) {
             //File not found
         }
-        //treeControl = new TreeController(matrix);
+        treeControl = new TreeController(matrix);
 
         ListView list = (ListView) findViewById(R.id.lstBugList);
 
@@ -99,7 +100,5 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     public void addBugToBasket(Bug inBug){
         _bugsListToRegister.add(inBug);
     }
-
-
 
 }
