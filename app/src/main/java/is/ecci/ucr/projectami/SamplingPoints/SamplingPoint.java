@@ -1,12 +1,9 @@
 package is.ecci.ucr.projectami.SamplingPoints;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-import is.ecci.ucr.projectami.BDAdministrator;
 import is.ecci.ucr.projectami.Bugs.Bug;
-import is.ecci.ucr.projectami.DBConnectors.DBAdmin;
 
 /**
  * Created by Daniel on 5/10/2017.
