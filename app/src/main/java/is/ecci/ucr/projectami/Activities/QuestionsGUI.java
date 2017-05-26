@@ -5,6 +5,7 @@ import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
 import is.ecci.ucr.projectami.R;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,13 +27,15 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
-        Matrix matrix = new Matrix();
-        try {
-            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
-        } catch (Exception e) {
-            //File not found
-        }
-        treeControl = new TreeController(matrix);
+        Intent parameters = getIntent();
+        treeControl = parameters.getParcelableExtra("QuestionsGUI");
+//        Matrix matrix = new Matrix();
+//        try {
+//            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
+//        } catch (Exception e) {
+//            //File not found
+//        }
+//        treeControl = new TreeController(matrix);
         currentQuestion = "";
         this.initialize();
     }
