@@ -38,13 +38,6 @@ public class SubScreenMap extends Activity {
         Intent intent = getIntent();
         samplingPoint = intent.getParcelableExtra("samplingPoint");
 
-        container_all = (RelativeLayout) findViewById(R.id.container_all);
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        getWindow().setLayout(container_all.getWidth(),container_all.getHeight());
-
         siteName = (TextView) findViewById(R.id.siteName);
         /*
         siteName.setText(samplingPoint.getSite().getSiteName());
@@ -89,4 +82,11 @@ public class SubScreenMap extends Activity {
             startActivity(intent);
         }
     };
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        container_all = (RelativeLayout) findViewById(R.id.container_all);
+        getWindow().setLayout(container_all.getWidth(),container_all.getHeight());
+    }
 }

@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:id="@+id/container_of_all"
+        android:id="@+id/container_all"
         >
 
     <GridLayout
