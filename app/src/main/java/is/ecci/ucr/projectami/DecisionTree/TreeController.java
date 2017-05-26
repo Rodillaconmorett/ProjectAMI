@@ -366,6 +366,17 @@ public class TreeController implements Serializable {
         return matrix;
     }
 
+    public LinkedList<Pair< String, String >> getQuestionsRealized(){
+        LinkedList<Pair<String, String>> result = new LinkedList< Pair<String, String>>();
+
+        for (Pair<Node, String> pair : _realizedQuestions){
+            if (pair.first.getLabel().getValue() == -1)
+            result.add(new Pair(pair.first.getAttribute().getName(),pair.second));
+            else result.add(new Pair(pair.first.getLabel().getStrValue(), pair.second));
+        }
+        return result;
+    }
+
     /* E: -
     *  S: Retorna TRUE si el nodo actual es un nodo hoja.
     *  R: -
