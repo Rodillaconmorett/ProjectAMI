@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,6 +136,20 @@ public class MongoAdmin {
         jsonGetRequest(url,params,callback);
     }
 
+    public void getBugsByIdRange(ServerCallback callback, ArrayList<String> bugs){
+        String connectionString = Config.CONNECTION_STRING+CollectionName.BUGS;
+        String filter = "?filter={_id:{\"$in\":[";
+        for (int i = 0; i<bugs.size(); i++) {
+            filter += "\""+bugs.get(i).toString()+"\"";
+            if (i != bugs.size()-1) {
+                filter += ",";
+            }
+        }
+        filter += "]}}";
+        String url = connectionString + filter;
+        jsonGetRequest(url,getDefaultParams(),callback);
+    }
+
     public void getSamplesBySiteID(ServerCallback callback, String id) {
         String url = Config.CONNECTION_STRING+CollectionName.SAMPLE+"?filter={site_id:{\"$oid\":\""+ id +"\"}}";
         Log.d("URL:",url);
@@ -151,7 +166,6 @@ public class MongoAdmin {
         Map<String, String> params = getDefaultParams();
         jsonGetRequest(url,params,callback);
     }
-
 
     /*------------------------- REQUEST SECTION -------------------------*/
     /*Código que útilizamos para realizar las consultas HTTP al servidor.*/
@@ -239,3 +253,35 @@ public class MongoAdmin {
         },CollectionName.KEYS);
     }
 }
+
+
+/*--------------- Ejemplos ------------------*/
+
+// ------- Ejm#1: Buscamos todos los bichos encontrados en un sitio dado en un rango de fechas
+
+//db = new MongoAdmin(this.getApplicationContext());
+//        //Recibimos el server callback, el id del sitio y las fechas (las fecha son opcionales)
+//        //Nota: Existe el mismo método, pero sin parametros de fechas
+//        db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+//            @Override
+//            public JSONObject onSuccess(JSONObject result) {
+//                ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
+//                db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+//                    @Override
+//                    public JSONObject onSuccess(JSONObject result) {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public JSONObject onFailure(JSONObject result) {
+//                        return null;
+//                    }
+//                },bugs);
+//                return null;
+//            }
+//
+//            @Override
+//            public JSONObject onFailure(JSONObject result) {
+//                return null;
+//            }
+//        },"591c832d409c8f2661424e99","2017-05-20","2018-01-01");

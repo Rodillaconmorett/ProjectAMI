@@ -7,10 +7,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
-import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 /**
@@ -55,6 +54,23 @@ public class JsonParserLF {
         return  bugs;
     }
 
+    public static ArrayList<String> parseSampleBugList(JSONObject response) {
+        ArrayList<String> bugs = new ArrayList<>();
+        try {
+            if (response.has("_embedded")) {
+                JSONArray jsonArray = response.getJSONArray("_embedded");
+                for (int i = 0; i<jsonArray.length(); i++) {
+                    JSONObject docJson = jsonArray.getJSONObject(i);
+                    bugs.add(readBugID(docJson));
+                }
+            } else {
+                bugs.add(readBugID(response));
+            }} catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return bugs;
+    }
+
     //Readers
 
     private static Site readSite(JSONObject siteDoc) throws JSONException {
@@ -82,6 +98,12 @@ public class JsonParserLF {
             desc = "N/A";
         }
         return new Bug(objID,score,desc);
+    }
+
+    private static String readBugID(JSONObject sampleDoc) throws  JSONException {
+        JSONObject jsonObject = sampleDoc.getJSONObject("results");
+        String bugID = jsonObject.getString("bug_id");
+        return bugID;
     }
 
 }
