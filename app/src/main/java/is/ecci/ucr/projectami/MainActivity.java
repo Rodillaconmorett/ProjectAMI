@@ -1,7 +1,6 @@
 package is.ecci.ucr.projectami;
 
 import android.content.ComponentCallbacks2;
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,7 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,8 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 
-import is.ecci.ucr.projectami.Activities.QuestionsGUI;
-import is.ecci.ucr.projectami.Activities.SamplePointInfoActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
@@ -45,7 +41,6 @@ import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugAdater;
-import is.ecci.ucr.projectami.DBConnectors.DBAdmin;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
@@ -59,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     ListView lvAnimals;
     ImageView imagen;
     TextView nombre;
-    DBAdmin dbAdmin;
     Fragment f;
     MapFragment mMapFragment;
     CameraUpdate cameraUpdate;
@@ -131,26 +125,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //lvAnimals.setAdapter(adapter);
         //lvAnimals.setOnItemClickListener(this);
     }
-
-    private void fillArrayList() {
-        //this filll would be  with the bugs that are in the DB
-        bugs = new ArrayList<>();
-        bugs.add(new Bug("aguila", R.drawable.aguila));
-        bugs.add(new Bug("ballena", R.drawable.ballena));
-        bugs.add(new Bug("caballo", R.drawable.caballo));
-        bugs.add(new Bug("camaleon", R.drawable.camaleon));
-        bugs.add(new Bug("canario", R.drawable.canario));
-        bugs.add(new Bug("cerdo", R.drawable.cerdo));
-        bugs.add(new Bug("delfin", R.drawable.delfin));
-        bugs.add(new Bug("gato", R.drawable.gato));
-        bugs.add(new Bug("iguana", R.drawable.iguana));
-        bugs.add(new Bug("lince", R.drawable.lince));
-        bugs.add(new Bug("lobo", R.drawable.lobo_9));
-        bugs.add(new Bug("morena", R.drawable.morena));
-        bugs.add(new Bug("orca", R.drawable.orca));
-        bugs.add(new Bug("perro", R.drawable.perro));
-        bugs.add(new Bug("vaca", R.drawable.vaca));
-    };
 
     public void loadMarks(){
         try{
