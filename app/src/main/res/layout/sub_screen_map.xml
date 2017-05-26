@@ -258,7 +258,7 @@
                     android:layout_centerVertical="false"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/add_bug" />
+                    android:src="@drawable/add_bug_apptheme" />
 
                 <Button
                     android:id="@+id/buttonRegister"

@@ -37,6 +37,7 @@ public class SubScreenMap extends Activity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
+        getWindow().setLayout(1000, 1000);
         getWindow().setLayout(1000,1000);
 
 

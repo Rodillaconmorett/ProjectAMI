@@ -56,6 +56,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         //textTotScore.setText(String.valueOf(samplingPoint.getScore()));
         textTotSpecies = (TextView) findViewById(R.id.textTotSpecies);
         //textTotSpecies.setText(String.valueOf(samplingPoint.getBugList().size()));
+        datesList = (ListView) findViewById(R.id.datesList);
 
 
     }
