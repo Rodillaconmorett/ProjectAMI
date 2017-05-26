@@ -56,15 +56,6 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*
-        String pathSamplePointImage = "path";
-        File imgFile = new File(pathSamplePointImage);
-        if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            ImageView myImage = (ImageView) findViewById(R.id.siteImage);
-            myImage.setImageBitmap(myBitmap);
-        }
-        */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_sample_point);
         Intent intent = getIntent();
