@@ -24,4 +24,6 @@ public class Config {
     public static String KEYS_DIR = "KeysData";
     //CSV file with the keys
     public static String CSV_KEYS = "keys.csv";
+    //Dummy user object id
+    public static String DUMMY_USER_ID = "ObjectId(\"59208b3c382ad7c174d91ec7\")";
 }

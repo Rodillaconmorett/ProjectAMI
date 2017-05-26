@@ -4,14 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
+import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
+import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 /**
  * Created by Daniel on 5/20/2017.
@@ -19,6 +25,7 @@ import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 
 public class SubScreenMap extends Activity {
     SamplingPoint samplingPoint;
+    Site site;
 
     Button buttonInfo;
     Button buttonRegister;
@@ -36,41 +43,66 @@ public class SubScreenMap extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
         Intent intent = getIntent();
+        /*
         samplingPoint = intent.getParcelableExtra("samplingPoint");
+        */
+        site = intent.getParcelableExtra("site");
+        setSamplingPoint();
 
         siteName = (TextView) findViewById(R.id.siteName);
-        /*
         siteName.setText(samplingPoint.getSite().getSiteName());
-        */
         siteScore = (TextView) findViewById(R.id.siteScore);
-        /*
         siteScore.setText(String.valueOf(samplingPoint.getScore()));
-        */
         textHghQualBugs = (TextView) findViewById(R.id.textHghQualBugs);
-        /*
         textHghQualBugs.setText(samplingPoint.getHghQualBug());
-        */
         textMedQualBugs = (TextView) findViewById(R.id.textMedQualBugs);
-        /*
         textMedQualBugs.setText(samplingPoint.getMedQualBug());
-        */
         textLowQualBugs = (TextView) findViewById(R.id.textLowQualBugs);
-        /*
         textLowQualBugs.setText(samplingPoint.getLowQualBug());
-        */
+
         buttonInfo = (Button) findViewById(R.id.buttonInfo);
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
 
         buttonInfo.setOnClickListener(btnInfoHandler);
         buttonRegister.setOnClickListener(btnRegstrHandler);
 
+    }
 
+    private void setSamplingPoint(){
+        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
+
+        mongoAdmin.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
+                mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+                    @Override
+                    public JSONObject onSuccess(JSONObject result) {
+                        samplingPoint.setBugList(JsonParserLF.parseBugs(result));
+                        samplingPoint.updateScoreAndQualBug();
+                        return null;
+                    }
+
+                    @Override
+                    public JSONObject onFailure(JSONObject result) {
+                        return null;
+                    }
+                },bugs);
+                return null;
+            }
+
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                return null;
+            }
+        },site.getObjID()
+        );
     }
 
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, SamplePointInfoActivity.class);
-            intent.putExtra("SamplePointInfoActivity", (Parcelable) samplingPoint);
+            intent.putExtra("site", (Parcelable) site);
             startActivity(intent);
         }
     };
@@ -78,7 +110,7 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
-            intent.putExtra("SamplePointInfoActivity", (Parcelable) samplingPoint);
+            intent.putExtra("samplingPoint", (Parcelable) samplingPoint);
             startActivity(intent);
         }
     };
