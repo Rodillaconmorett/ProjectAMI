@@ -10,14 +10,17 @@
         android:id="@+id/imageView6"
         android:layout_width="309dp"
         android:layout_height="159dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:contentDescription="LifeFinder Logo"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_lifefinder"
-        app:layout_constraintHorizontal_bias="0.503" />
+        app:srcCompat="@drawable/logo_lifefinder" />
 
     <TextView
         android:id="@+id/questionID"
@@ -35,21 +38,26 @@
 
     <LinearLayout
         android:id="@+id/dynamicAnswers"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_weight="0.52"
+        android:fadeScrollbars="false"
         android:gravity="center_vertical|center"
+        android:isScrollContainer="false"
         android:orientation="vertical"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/userAnswerLayout"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/questionID"
-        app:layout_constraintVertical_bias="0.502"></LinearLayout>
+        app:layout_constraintVertical_bias="0.559"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/userAnswerLayout"
@@ -62,7 +70,9 @@
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
         <EditText
             android:id="@+id/userAnswer"
@@ -71,9 +81,10 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Escriba su propia respuesta"
+            android:textStyle="bold"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="0dp"
+            tools:text="Escriba su propia respuesta" />
 
         <Button
             android:id="@+id/naButton"
@@ -87,10 +98,27 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/bar_gray"
+        android:backgroundTint="@drawable/bar_gray"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/backButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userAnswerLayout"
+        app:layout_constraintVertical_bias="0.883">
+
+    </FrameLayout>
+
     <Button
         android:id="@+id/backButton"
         android:layout_width="265dp"
-        android:layout_height="47dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -100,6 +128,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="565dp" />
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
 </android.support.constraint.ConstraintLayout>
