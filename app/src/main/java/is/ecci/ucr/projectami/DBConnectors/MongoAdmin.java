@@ -86,7 +86,7 @@ public class MongoAdmin {
     /*-------------------------- INSERT SECTION -------------------------*/
     /*Métodos que utilizamos para insertar documentos a la base de datos.*/
 
-    public void insertSampling(LinkedList<Bug> bugs, String siteId, String userId) {
+    public void insertSampling(LinkedList<Bug> bugs, String siteId, String userId, ServerCallback callback) {
         String url = Config.CONNECTION_STRING+CollectionName.SAMPLE;
         Map<String, String> params = getDefaultParams();
         JSONArray arrayObject = new JSONArray();
@@ -96,23 +96,26 @@ public class MongoAdmin {
         try {
             for(int i = 0; i<bugs.size(); i++) {
                 JSONObject jsonBody = new JSONObject();
-
-                jsonBody.put("site_id", siteId);
-                jsonBody.put("user_id", userId);
+                JSONObject objIDSite = new JSONObject();
+                JSONObject objIDUser = new JSONObject();
+                objIDSite.put("$oid",siteId);
+                jsonBody.put("site_id", objIDSite);
+                objIDUser.put("$oid",userId);
+                jsonBody.put("user_id", objIDUser);
                 jsonBody.put("date", formattedDate);
                 JSONObject results = new JSONObject();
-                results.put("bug_id", bugs.get(i));
+                results.put("bug_id", bugs.get(i).getFamily());
                 results.put("qty", 1);
                 jsonBody.put("results", results);
                 arrayObject.put(jsonBody);
             }
-            jsonPostRequest(arrayObject,url,params);
+            jsonPostRequest(arrayObject,url,params, callback);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void insertBug(String family, String desc, Double score, String[] imagesPaths) {
+    private void insertBug(String family, String desc, Double score, String[] imagesPaths, ServerCallback callback) {
         String url = Config.CONNECTION_STRING+CollectionName.BUGS;
         Map<String, String> params = getDefaultParams();
         //Necesitamos incluir los parametros de datos
@@ -131,10 +134,10 @@ public class MongoAdmin {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        jsonPostRequest(jsonBody,url,params);
+        jsonPostRequest(jsonBody,url,params, callback);
     }
 
-    public void insertSite(String name, Double latitude, Double longitude, String description, String imagePath) {
+    public void insertSite(String name, Double latitude, Double longitude, String description, String imagePath, ServerCallback callback) {
         String url = Config.CONNECTION_STRING+CollectionName.SITE;
         Map<String, String> params = getDefaultParams();
         //Necesitamos incluir los parametros de datos
@@ -151,7 +154,7 @@ public class MongoAdmin {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        jsonPostRequest(jsonBody,url,params);
+        jsonPostRequest(jsonBody,url,params, callback);
     }
 
     /*---------------------------------- SPECIFIC GETS -----------------------------------*/
@@ -227,7 +230,7 @@ public class MongoAdmin {
     }
 
     //POST Request
-    private void jsonPostRequest(JSONObject jsonBody, String url, Map<String, String> params) {
+    private void jsonPostRequest(JSONObject jsonBody, String url, Map<String, String> params, final ServerCallback callback) {
         final String requestBody = jsonBody.toString();
         Custom_Volly_Request jsonRequest;
         jsonRequest = new Custom_Volly_Request(Request.Method.POST, url, params,
@@ -235,6 +238,7 @@ public class MongoAdmin {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Response: ", response.toString());
+                        callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -242,6 +246,13 @@ public class MongoAdmin {
                     public void onErrorResponse(VolleyError response)
                     {
                         Log.d("Response: Error", response.toString());
+                        JSONObject jsonFailed = new JSONObject();
+                        try {
+                            jsonFailed.put("failed","true");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        callback.onFailure(jsonFailed);
                     }
                 }) {
             @Override
@@ -261,7 +272,7 @@ public class MongoAdmin {
     }
 
 
-    private void jsonPostRequest(JSONArray jsonBody, String url, Map<String, String> params) {
+    private void jsonPostRequest(JSONArray jsonBody, String url, Map<String, String> params, final ServerCallback callback) {
         final String requestBody = jsonBody.toString();
         Custom_Volly_Request jsonRequest;
         jsonRequest = new Custom_Volly_Request(Request.Method.POST, url, params,
@@ -269,6 +280,7 @@ public class MongoAdmin {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Response: ", response.toString());
+                        callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -276,6 +288,13 @@ public class MongoAdmin {
                     public void onErrorResponse(VolleyError response)
                     {
                         Log.d("Response: Error", response.toString());
+                        JSONObject jsonFailed = new JSONObject();
+                        try {
+                            jsonFailed.put("failed","true");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        callback.onFailure(jsonFailed);
                     }
                 }) {
             @Override
