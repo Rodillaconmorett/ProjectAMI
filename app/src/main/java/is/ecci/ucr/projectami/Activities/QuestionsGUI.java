@@ -68,7 +68,7 @@ public class QuestionsGUI extends AppCompatActivity {
         }
     }
 
-    
+
     /*
     *   Convert a LikedHashSet to an array of strings
     *   @param: LinkedHashSet<String> array
