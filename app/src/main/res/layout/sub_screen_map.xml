@@ -99,7 +99,7 @@
                     android:layout_row="0"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/default_image" />
+                    android:src="@drawable/lifefinder_icon_green" />
 
                 <TextView
                     android:id="@+id/textHghQualBugs"
@@ -140,7 +140,7 @@
                     android:layout_row="0"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/default_image" />
+                    android:src="@drawable/lifefinder_icon_orange" />
 
                 <TextView
                     android:id="@+id/textMedQualBugs"
@@ -179,7 +179,7 @@
                     android:layout_row="0"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/default_image" />
+                    android:src="@drawable/lifefinder_icon_red" />
 
                 <TextView
                     android:id="@+id/textLowQualBugs"
