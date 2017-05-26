@@ -28,6 +28,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
     QuestionsGUI questions;
     private ArrayList<Bug> _bugsListToRegister;
+    Button floatingActionButton;
     SamplingPoint samplePoint;
 
     TreeController treeControl;
@@ -59,7 +60,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUI.class);
-                intent.putExtra("QuestionsGUI", (Parcelable) treeControl);
+               // intent.putExtra("QuestionsGUI", (Parcelable) treeControl);
                 startActivity(intent);
             }
         });
@@ -83,6 +84,15 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
         SampleBugsAdapter adapter = new SampleBugsAdapter(this, _bugsListToRegister);
         list.setAdapter(adapter);
+        //floatingActionButton = (Button) findViewById(R.id.floatingActionButton);
+/*
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent Prueba = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUI.class);
+                startActivity(Prueba);
+            }
+        });
+*/
     }
 
     public void addBugToBasket(Bug inBug){

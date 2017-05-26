@@ -31,6 +31,8 @@
             android:label="SubScreenMap"
             android:theme="@style/AppTheme.PopUpTheme"
             />
+        <activity android:name=".Activities.QuestionsGUI"
+            android:label="QuestionsGUI"/>
         <!--<activity android:name=".Activities.BugsSampleToRegisterActivity"></activity>-->
     </application>
 
