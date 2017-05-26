@@ -1,5 +1,10 @@
 package is.ecci.ucr.projectami.Activities;
 
+import is.ecci.ucr.projectami.DecisionTree.Matrix;
+import is.ecci.ucr.projectami.DecisionTree.TreeController;
+import is.ecci.ucr.projectami.DecisionTree.AnswerException;
+import is.ecci.ucr.projectami.R;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,18 +12,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
-
-import is.ecci.ucr.projectami.DecisionTree.AnswerException;
-import is.ecci.ucr.projectami.DecisionTree.TreeController;
-import is.ecci.ucr.projectami.R;
+import android.widget.EditText;
 
 import java.util.LinkedHashSet;
 
-import android.widget.EditText;
-
 
 public class QuestionsGUI extends AppCompatActivity {
-    final View linearLayout = findViewById(R.id.answers);
+    View linearLayout;
     TreeController treeControl;
     LinkedHashSet<String> currentInfo;
     String currentQuestion;
@@ -27,16 +27,29 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
-        treeControl = new TreeController();
+        linearLayout = findViewById(R.id.answers);
+        Matrix matrix = new Matrix();
+        try {
+            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
+        } catch (Exception e) {
+            //File not found
+        }
+        treeControl = new TreeController(matrix);
         currentQuestion = "";
-        //initializeTree();
+        this.initialize();
+    }
+
+    protected void initialize() {
+        this.setCurrentQuestion();
     }
 
     protected void setCurrentQuestion() {
         if (!treeControl.isLeaf()) {
             displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
         } else {
-            //Se termina la clasificción y le envía al administrador de clasificacion el insecto encontrado actualmente
+
+
+            //Se termina la clasificación y le envía al administrador de clasificacion el insecto encontrado actualmente
             //y un array de string con los posibles alores obtenidos de retroalimentación
             String found = hashLinkedToArray(treeControl.getQuestionAndOptions())[0];
             //this.endClass(found,currentInfo);
@@ -60,27 +73,34 @@ public class QuestionsGUI extends AppCompatActivity {
     *   @param: String[] questionsAndOptions
     */
     protected void displayOnScreen(String[] questionsAndOptions) {
+        this.clearAnswerLayout();
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
             currentQuestion = questionsAndOptions[0];
             question.setText(currentQuestion);
-            LinearLayout answerContainer = (LinearLayout) findViewById(R.id.answers);
+            LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
             for (int i = 1; i < arraySize; i++) {
-                Button button = new Button(this);
-                button.setText(questionsAndOptions[i]);
-                button.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Button pressed = (Button) v;
-                        catchAction(pressed);
-                    }
-                });
-                answerContainer.addView(button, 0);
+                if (!questionsAndOptions[i].equals("NA")) {
+                    Button button = new Button(this);
+                    button.setText(questionsAndOptions[i]);
+                    button.setLayoutParams(new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Button pressed = (Button) v;
+                            try {
+                                catchAction(pressed);
+                            } catch (Exception e) {
+                                //Capturar la exceptión
+                            }
+                        }
+                    });
+                    answerContainer.addView(button, 0);
+                }
             }
         }
     }
@@ -88,30 +108,36 @@ public class QuestionsGUI extends AppCompatActivity {
     /*
     *   This method reacts to the button action
      */
-    public void catchAction(Button button) {
+    public void catchAction(Button button) throws AnswerException {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
-            EditText userAnswer = (EditText) findViewById(R.id.userAnswer);
-            currentInfo.add(currentQuestion + ":" + userAnswer.getText());
+            EditText answerBox = (EditText) findViewById(R.id.dynamicAnswers);
+            String userAnswer = answerBox.getText().toString();
+            if(userAnswer.equals("")){
+                treeControl.reply("NA",userAnswer);
+            }else{
+                treeControl.reply("NA");
+            }
         } else {
             if (textB.equals("Retroceder")) {
                 treeControl.goBack();
             } else {
-                try {
-                    treeControl.reply(textB);
-                }catch (AnswerException e){
-
-                }
-
+                treeControl.reply(textB);
             }
         }
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
     }
 
+    protected void clearAnswerLayout(){
+
+
+    }
+
     public void test() {
         for (int i = 0; i < 4; i++) {
             TextView a = new TextView(this);
-            a.setText("Hola");
+            String text = "Button " + i;
+            a.setText(text);
             ((LinearLayout) linearLayout).addView(a);
         }
     }

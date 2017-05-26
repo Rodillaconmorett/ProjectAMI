@@ -9,32 +9,14 @@ public class Bug {
 
     private String family;
     private double score;
-    private String[] imageDir;
-    private int totalImages;
+    private String description;
 
-    public Bug(String family, double score){
+    public Bug(String family, double score, String description){
         this.family = family;
         this.score = score;
-        //this.imageDir[0] = imageDir;
-        totalImages = 1;
+        this.description = description;
     }
 
-    public Bug(String family, double score, String imageDir1, String imageDir2){
-        this.family = family;
-        this.score = score;
-        this.imageDir[0] = imageDir1;
-        this.imageDir[1] = imageDir2;
-        totalImages = 2;
-    }
-
-    public Bug(String family, double score, String imageDir1, String imageDir2, String imageDir3){
-        this.family = family;
-        this.score = score;
-        this.imageDir[0] = imageDir1;
-        this.imageDir[1] = imageDir2;
-        this.imageDir[2] = imageDir3;
-        totalImages = 3;
-    }
 
     public String getFamily() {
         return family;
@@ -44,12 +26,11 @@ public class Bug {
         return score;
     }
 
-    public String getImageDir(int imgNumb) {
-        if(imgNumb >= 0 && imgNumb < totalImages){
-            return imageDir[imgNumb];
-        }
-        else{
-            return imageDir[0];
-        }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
