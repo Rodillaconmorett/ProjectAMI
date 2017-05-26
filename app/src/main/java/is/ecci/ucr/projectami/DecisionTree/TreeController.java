@@ -1,7 +1,7 @@
 package is.ecci.ucr.projectami.DecisionTree;
 
 
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import java.io.Serializable;
 import java.util.Iterator;

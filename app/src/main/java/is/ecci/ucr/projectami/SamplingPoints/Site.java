@@ -40,6 +40,6 @@ public class Site implements Serializable {
         return description;
     }
 
-    public String toString() { return "_id:"+ objID + ", name:" + siteName + ", lat:" + latitude + ", long:" + longitude;}
+    //public String toString() { return "_id:"+ objID + ", name:" + siteName + ", lat:" + latitude + ", long:" + longitude;}
 
 }
