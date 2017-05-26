@@ -44,6 +44,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -57,7 +58,7 @@ import static is.ecci.ucr.projectami.R.id.map;
 import static is.ecci.ucr.projectami.R.id.pruebaText;
 
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener, Serializable{
 
     private ArrayList<Bug> bugs;
 
@@ -249,10 +250,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String objId=marker.getSnippet().substring(0,mid);
         String info=marker.getSnippet().substring(mid,marker.getSnippet().length());
         Site site=new Site(objId,name,lat,lon,info);
-        Prueba.putExtra("site",(Parcelable) site);
+        Prueba.putExtra("site",(Serializable) site);
         startActivity(Prueba);
         return false;
     }
+
+
+
 
     @Override
     public void onInfoWindowClick(Marker marker) {
