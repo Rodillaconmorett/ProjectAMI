@@ -182,29 +182,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap map) {
         mMap=map;
 
-        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            // Use default InfoWindow frame
-            @Override
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-
-            // Defines the contents of the InfoWindow
-            @Override
-            public View getInfoContents(Marker arg0) {
-
-                // Getting view from the layout file info_window_layout
-                View v = getLayoutInflater().inflate(R.layout.sub_screen_map, null);
-
-                // Getting the position from the marker
-                LatLng latLng = arg0.getPosition();
-
-                // Returning the view containing InfoWindow contents
-                return v;
-
-            }
-        });
         LatLng pt = new LatLng(9.86, -84.20);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
         //putMarket(map,9.86,-84.20,"hola","mundo");

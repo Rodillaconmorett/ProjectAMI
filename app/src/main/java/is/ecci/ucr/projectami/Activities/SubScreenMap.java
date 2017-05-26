@@ -50,6 +50,11 @@ public class SubScreenMap extends Activity {
 
         db= new MongoAdmin(this.getApplicationContext());
         setSamplingPoint();
+        buttonInfo = (Button) findViewById(R.id.buttonInfo);
+        buttonRegister = (Button) findViewById(R.id.buttonRegister);
+
+        buttonInfo.setOnClickListener(btnInfoHandler);
+        buttonRegister.setOnClickListener(btnRegstrHandler);
 
 
 
@@ -58,8 +63,6 @@ public class SubScreenMap extends Activity {
     }
 
     private void setSamplingPoint(){
-
-        //siteId = site.getObjID();
         db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
@@ -69,6 +72,7 @@ public class SubScreenMap extends Activity {
                     public JSONObject onSuccess(JSONObject result) {
                         samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                         samplingPoint.updateScoreAndQualBug();
+
                         siteName = (TextView) findViewById(R.id.siteName);
                         siteName.setText(samplingPoint.getSite().getSiteName());
                         siteScore = (TextView) findViewById(R.id.siteScore);
@@ -79,11 +83,7 @@ public class SubScreenMap extends Activity {
                         textMedQualBugs.setText(samplingPoint.getMedQualBug());
                         textLowQualBugs = (TextView) findViewById(R.id.textLowQualBugs);
                         textLowQualBugs.setText(samplingPoint.getLowQualBug());
-                        buttonInfo = (Button) findViewById(R.id.buttonInfo);
-                        buttonRegister = (Button) findViewById(R.id.buttonRegister);
 
-                        buttonInfo.setOnClickListener(btnInfoHandler);
-                        buttonRegister.setOnClickListener(btnRegstrHandler);
                         return null;
                     }
 

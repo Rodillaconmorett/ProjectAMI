@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -37,7 +38,6 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
 public class SamplePointInfoActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
 
     private SamplingPoint samplingPoint ;
-    private String siteId;
     private Site site;
 
     private String initialDate;
@@ -49,6 +49,8 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
     private TextView textTotScore;
 
     private DatePicker datePicker;
+
+    private Button btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,41 +65,36 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_sample_point);
-
         Intent intent = getIntent();
-        siteId = intent.getStringExtra("siteid");
-
-        findSite();
+        site = (Site) intent.getSerializableExtra("site");
         setSamplingPoint();
-
         setTextViews();
-
         datePicker = (DatePicker) findViewById(R.id.datePicker);
-
         Calendar today = Calendar.getInstance();
-
         setInitialDate();
-
         db= new MongoAdmin(this.getApplicationContext());
-      
+
+        btnBack = (Button) findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(btnBackHandler);
+
         datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
-                new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        initialDate = String.valueOf(year);
-                        initialDate += "-";
-                        if(monthOfYear < 10){
-                            initialDate += "0";
-                        }
-                        initialDate += String.valueOf(monthOfYear);
-                        initialDate += "-";
-                        if(dayOfMonth < 10){
-                            initialDate += "0";
-                        }
-                        initialDate += String.valueOf(dayOfMonth);
-                        setSamplingPoint();
-                    }
+            new DatePicker.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                initialDate = String.valueOf(year);
+                initialDate += "-";
+                if(monthOfYear < 10){
+                    initialDate += "0";
                 }
+                initialDate += String.valueOf(monthOfYear);
+                initialDate += "-";
+                if(dayOfMonth < 10){
+                    initialDate += "0";
+                }
+                initialDate += String.valueOf(dayOfMonth);
+                setSamplingPoint();
+                }
+            }
         );
 
     }
@@ -133,8 +130,6 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
     }
 
     private void setSamplingPoint(){
-
-
         db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
               @Override
               public JSONObject onSuccess(JSONObject result) {
@@ -164,32 +159,11 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         );
     }
 
-    private void findSite(){
-        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
-        mongoAdmin.getColl(new MongoAdmin.ServerCallback() {
-            @Override
-            public JSONObject onSuccess(JSONObject result) {
-                ArrayList<Site> sites= JsonParserLF.parseSites(result);
-                int i = 0;
-                boolean found = false;
-                while(!found) {
-                    if(sites.get(i).getObjID() == siteId){
-                        found = true;
-                    }
-                    else{
-                        i++;
-                    }
-                }
-                site = sites.get(i);
-                return null;
-            }
-
-            @Override
-            public JSONObject onFailure(JSONObject result) {
-                return null;
-            }
-        }, CollectionName.SITE);
-    }
+    View.OnClickListener btnBackHandler = new View.OnClickListener() {
+        public void onClick(View v){
+            finish();
+        }
+    };
 
     @Override
     public void onClick(View v) {
