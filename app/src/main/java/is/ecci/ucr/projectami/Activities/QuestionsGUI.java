@@ -6,6 +6,7 @@ import is.ecci.ucr.projectami.DecisionTree.AnswerException;
 import is.ecci.ucr.projectami.R;
 
 import android.content.Intent;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,20 +16,25 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 
 public class QuestionsGUI extends AppCompatActivity {
-    TreeController treeControl;
-    LinkedHashSet<String> currentInfo;
+    static TreeController treeControl;
+    static HashMap<String,String> questions;
+    static boolean openedBefore = false;
     String currentQuestion;
+    boolean extraQuestion = false;
+    int currentExtraQuestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
         Intent parameters = getIntent();
-        treeControl = parameters.getParcelableExtra("QuestionsGUI");
+        currentInfo = (LinkedHashSet<String>) parameters.getExtras().getSerializable("treeCont");
+
 //        Matrix matrix = new Matrix();
 //        try {
 //            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
@@ -36,8 +42,32 @@ public class QuestionsGUI extends AppCompatActivity {
 //            //File not found
 //        }
 //        treeControl = new TreeController(matrix);
+        if (!openedBefore) {
+            Matrix matrix = new Matrix();
+            try {
+                matrix.loadArff(getResources().openRawResource(R.raw.dataset));
+                this.loadQuestions();
+            } catch (Exception e) {
+                //File not found
+            }
+            treeControl = new TreeController(matrix);
+            openedBefore = true;
+        }
+
         currentQuestion = "";
-        //this.initialize();
+        this.initialize();
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     }
 
     protected void initialize() {
@@ -45,18 +75,21 @@ public class QuestionsGUI extends AppCompatActivity {
     }
 
     protected void setCurrentQuestion() {
-        if (!treeControl.isLeaf()) {
-            displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
+
+        if (extraQuestion) {
+            if (currentExtraQuestions < 3) {
+                displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
+                currentExtraQuestions--;
+            }
         } else {
-
-
-            //Se termina la clasificación y le envía al administrador de clasificacion el insecto encontrado actualmente
-            //y un array de string con los posibles alores obtenidos de retroalimentación
-            String found = hashLinkedToArray(treeControl.getQuestionAndOptions())[0];
-            //this.endClass(found,currentInfo);
+            if (!treeControl.isLeaf()) {
+                displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
+            } else {
+                extraQuestion = true;
+            }
         }
-
     }
+
 
     /*
     *   Convert a LikedHashSet to an array of strings
@@ -74,7 +107,7 @@ public class QuestionsGUI extends AppCompatActivity {
     *   @param: String[] questionsAndOptions
     */
     protected void displayOnScreen(String[] questionsAndOptions) {
-        ((LinearLayout)findViewById(R.id.dynamicAnswers)).removeAllViews();
+        ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
@@ -101,6 +134,9 @@ public class QuestionsGUI extends AppCompatActivity {
                 });
                 answerContainer.addView(button, 0);
             }
+        } else {
+            Intent parameters = getIntent();
+            //(LinkedHashSet)parameters.getExtras().getSerializable("feedbackArray") = treeControl.getFeedbackMatrix();
         }
     }
 
@@ -111,8 +147,8 @@ public class QuestionsGUI extends AppCompatActivity {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.VISIBLE);
-        }else if(textB.equals("Continuar")){
-            ((LinearLayout)findViewById(R.id.dynamicAnswers)).removeAllViews();
+        } else if (textB.equals("Continuar")) {
+            ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
             if (userAnswer.equals("")) {
@@ -129,6 +165,10 @@ public class QuestionsGUI extends AppCompatActivity {
             }
         }
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
+    }
+
+    public void loadQuestions()throws  Exception{
+
     }
 
 }
