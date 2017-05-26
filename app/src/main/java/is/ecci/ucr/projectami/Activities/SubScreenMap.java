@@ -43,28 +43,23 @@ public class SubScreenMap extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
         Intent intent = getIntent();
+        /*
         samplingPoint = intent.getParcelableExtra("samplingPoint");
+        */
+        site = intent.getParcelableExtra("site");
+        setSamplingPoint();
 
         siteName = (TextView) findViewById(R.id.siteName);
-        /*
         siteName.setText(samplingPoint.getSite().getSiteName());
-        */
         siteScore = (TextView) findViewById(R.id.siteScore);
-        /*
         siteScore.setText(String.valueOf(samplingPoint.getScore()));
-        */
         textHghQualBugs = (TextView) findViewById(R.id.textHghQualBugs);
-        /*
         textHghQualBugs.setText(samplingPoint.getHghQualBug());
-        */
         textMedQualBugs = (TextView) findViewById(R.id.textMedQualBugs);
-        /*
         textMedQualBugs.setText(samplingPoint.getMedQualBug());
-        */
         textLowQualBugs = (TextView) findViewById(R.id.textLowQualBugs);
-        /*
         textLowQualBugs.setText(samplingPoint.getLowQualBug());
-        */
+
         buttonInfo = (Button) findViewById(R.id.buttonInfo);
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
 
@@ -84,6 +79,7 @@ public class SubScreenMap extends Activity {
                     @Override
                     public JSONObject onSuccess(JSONObject result) {
                         samplingPoint.setBugList(JsonParserLF.parseBugs(result));
+                        samplingPoint.updateScoreAndQualBug();
                         return null;
                     }
 
@@ -106,7 +102,7 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, SamplePointInfoActivity.class);
-            intent.putExtra("SamplePointInfoActivity", (Parcelable) samplingPoint);
+            intent.putExtra("site", (Parcelable) site);
             startActivity(intent);
         }
     };
@@ -114,7 +110,7 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, QuestionsGUI.class);
-            intent.putExtra("SamplePointInfoActivity", (Parcelable) samplingPoint);
+            intent.putExtra("samplingPoint", (Parcelable) samplingPoint);
             startActivity(intent);
         }
     };

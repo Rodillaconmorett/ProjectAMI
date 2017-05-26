@@ -44,8 +44,8 @@
             android:rowCount="1">
 
 
-            <ListView
-                android:id="@+id/datesList"
+            <DatePicker
+                android:id="@+id/datePicker"
                 android:layout_width="155dp"
                 android:layout_height="match_parent"
                 android:layout_column="1"
