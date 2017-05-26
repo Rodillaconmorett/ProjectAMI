@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
+import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 /**
@@ -19,6 +20,9 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
 public class JsonParserLF {
 
     //Parsers
+    private JsonParserLF() {
+
+    }
 
     public static ArrayList<Site> parseSites(JSONObject response) {
         ArrayList<Site> sites = new ArrayList<>();
@@ -37,8 +41,8 @@ public class JsonParserLF {
         return  sites;
     }
 
-    public static ArrayList<Bug> parseBugs(JSONObject response) {
-        ArrayList<Bug> bugs = new ArrayList<>();
+    public static LinkedList<Bug> parseBugs(JSONObject response) {
+        LinkedList<Bug> bugs = new LinkedList<>();
         try {
             if (response.has("_embedded")) {
                 JSONArray jsonArray = response.getJSONArray("_embedded");
@@ -71,6 +75,23 @@ public class JsonParserLF {
         return bugs;
     }
 
+    public static ArrayList<Questions> parseQuestionsList(JSONObject response) {
+        ArrayList<Questions> questions = new ArrayList<>();
+        try {
+            if (response.has("_embedded")) {
+                JSONArray jsonArray = response.getJSONArray("_embedded");
+                for (int i = 0; i<jsonArray.length(); i++) {
+                    JSONObject docJson = jsonArray.getJSONObject(i);
+                    questions.add(readQuestion(docJson));
+                }
+            } else {
+                questions.add(readQuestion(response));
+            }} catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return questions;
+    }
+
     //Readers
 
     private static Site readSite(JSONObject siteDoc) throws JSONException {
@@ -86,6 +107,12 @@ public class JsonParserLF {
             desc = "N/A";
         }
         return new Site(objID,name,latitude,longitude,desc);
+    }
+
+    private static Questions readQuestion(JSONObject questionDoc) throws  JSONException {
+        String question = questionDoc.getString("Pregunta");
+        String identifier = questionDoc.getString("identificador");
+        return new Questions(question,identifier);
     }
 
     private static Bug readBug(JSONObject bugDoc) throws JSONException {

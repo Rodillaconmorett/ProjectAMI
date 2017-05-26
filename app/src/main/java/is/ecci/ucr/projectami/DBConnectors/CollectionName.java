@@ -10,7 +10,8 @@ public enum CollectionName {
     BUGS("/Bugs",1),
     SAMPLE("/Sample",2),
     USERS("/Users",3),
-    KEYS("/ClassKey",4);
+    KEYS("/ClassKey",4),
+    QUESTIONS("/Questions",5);
 
     private String stringValue;
     private int intValue;
