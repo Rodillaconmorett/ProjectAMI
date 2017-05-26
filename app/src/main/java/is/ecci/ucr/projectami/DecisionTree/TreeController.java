@@ -3,6 +3,7 @@ package is.ecci.ucr.projectami.DecisionTree;
 
 import android.util.Pair;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -13,7 +14,7 @@ import java.util.TreeMap;
  * Created by Milton and Oscar on 17-May-17.
  */
 
-public class TreeController {
+public class TreeController implements Serializable {
 
     private enum InductionState {
         FOUND_COMMITED, FOUND_NOT_COMMITED, POSSIBLE_TO_FIND, IMPOSSIBLE_TO_FIND,
@@ -309,7 +310,7 @@ public class TreeController {
     public void goBack(){
         if (_questionsCounter > 0){
             _actualNode = _realizedQuestions.getLast().first;
-            _realizedQuestions.pop();
+            _realizedQuestions.removeLast();
             _questionsCounter--;
         }
 
@@ -363,6 +364,17 @@ public class TreeController {
             i++;
         }
         return matrix;
+    }
+
+    public LinkedList<Pair< String, String >> getQuestionsRealized(){
+        LinkedList<Pair<String, String>> result = new LinkedList< Pair<String, String>>();
+
+        for (Pair<Node, String> pair : _realizedQuestions){
+            if (pair.first.getLabel().getValue() == -1)
+            result.add(new Pair(pair.first.getAttribute().getName(),pair.second));
+            else result.add(new Pair(pair.first.getLabel().getStrValue(), pair.second));
+        }
+        return result;
     }
 
     /* E: -

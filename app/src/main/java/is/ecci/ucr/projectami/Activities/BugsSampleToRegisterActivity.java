@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import com.google.android.gms.games.quest.Quest;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
 
@@ -32,7 +34,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     SamplingPoint samplePoint;
 
     TreeController treeControl;
-    LinkedHashSet<String> currentInfo;
+    LinkedList<Pair<String, String>> currentInfo;
 
 
     @Override
@@ -41,7 +43,6 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bugs_sample_to_register);
 
         Intent intent = this.getIntent();
-
         samplePoint = intent.getParcelableExtra("");                    // Nombre de intent variable
 
         Matrix matrix = new Matrix();
@@ -60,6 +61,8 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUI.class);
+                intent.putExtra("feedbackArray", currentInfo);
+
                // intent.putExtra("QuestionsGUI", (Parcelable) treeControl);
                 startActivity(intent);
             }

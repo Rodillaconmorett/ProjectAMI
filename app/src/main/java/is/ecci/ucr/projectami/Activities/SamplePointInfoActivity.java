@@ -10,12 +10,14 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -40,7 +42,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
     private String initialDate;
     private String finalDate;
-
+    MongoAdmin db;
     private TextView siteName;
     private TextView siteDescription;
     private TextView textTotSpecies;
@@ -68,6 +70,58 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         findSite();
         setSamplingPoint();
 
+        setTextViews();
+
+        datePicker = (DatePicker) findViewById(R.id.datePicker);
+
+        Calendar today = Calendar.getInstance();
+
+        setInitialDate();
+
+        db= new MongoAdmin(this.getApplicationContext());
+      
+        datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        initialDate = String.valueOf(year);
+                        initialDate += "-";
+                        if(monthOfYear < 10){
+                            initialDate += "0";
+                        }
+                        initialDate += String.valueOf(monthOfYear);
+                        initialDate += "-";
+                        if(dayOfMonth < 10){
+                            initialDate += "0";
+                        }
+                        initialDate += String.valueOf(dayOfMonth);
+                        setSamplingPoint();
+                    }
+                }
+        );
+
+    }
+
+    private void setInitialDate(){
+        Calendar today = Calendar.getInstance();
+        initialDate = String.valueOf(today.get(Calendar.YEAR));
+        initialDate += "-";
+        int month = today.get(Calendar.MONTH);
+        if(month < 10){
+            initialDate += "0";
+        }
+        initialDate += String.valueOf(today.get(Calendar.MONTH));
+        initialDate += "-";
+        int day = today.get(Calendar.DAY_OF_MONTH);
+        if(day < 10){
+            initialDate += "0";
+        }
+        initialDate += String.valueOf(today.get(Calendar.DAY_OF_MONTH));
+        finalDate = initialDate;
+        setTextViews();
+    }
+
+    private void setTextViews(){
         siteName = (TextView) findViewById(R.id.siteName);
         siteName.setText(samplingPoint.getSite().getSiteName());
         siteDescription = (TextView) findViewById(R.id.siteDescription);
@@ -76,20 +130,16 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         textTotScore.setText(String.valueOf(samplingPoint.getScore()));
         textTotSpecies = (TextView) findViewById(R.id.textTotSpecies);
         textTotSpecies.setText(String.valueOf(samplingPoint.getBugList().size()));
-
-        datePicker = (DatePicker) findViewById(R.id.datePicker);
-
-
     }
 
     private void setSamplingPoint(){
-        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
 
-        mongoAdmin.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+
+        db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
               @Override
               public JSONObject onSuccess(JSONObject result) {
                   ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
-                  mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+                  db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                       @Override
                       public JSONObject onSuccess(JSONObject result) {
                           samplingPoint = new SamplingPoint(site);

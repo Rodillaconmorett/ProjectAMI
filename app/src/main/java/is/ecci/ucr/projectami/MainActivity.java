@@ -250,8 +250,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         int mid=marker.getSnippet().indexOf(",");
         String objId=marker.getSnippet().substring(0,mid);
         String info=marker.getSnippet().substring(mid,marker.getSnippet().length());
-        _actualSite = new Site(objId,name,lat,lon,info);
-        Prueba.putExtra("siteid", objId);
+
+        Site site=new Site(objId,name,lat,lon,info);
+        Prueba.putExtra("site", site);
+
         startActivity(Prueba);
         return false;
     }
