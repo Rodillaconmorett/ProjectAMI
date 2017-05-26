@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 
+import is.ecci.ucr.projectami.Activities.BugsSampleToRegisterActivity;
 import is.ecci.ucr.projectami.Activities.QuestionsGUI;
 import is.ecci.ucr.projectami.Activities.SamplePointInfoActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
@@ -54,11 +55,12 @@ import is.ecci.ucr.projectami.Bugs.BugAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
+import static is.ecci.ucr.projectami.R.id.action_image;
 import static is.ecci.ucr.projectami.R.id.map;
 import static is.ecci.ucr.projectami.R.id.pruebaText;
 
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener, Serializable{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener{
 
     private ArrayList<Bug> bugs;
 
@@ -75,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     MongoAdmin db;
 
     GoogleMap mMap;
+
+    public static Site _actualSite;
 
     private ArrayList<Site> sites;
     private LinkedList<SamplingPoint> samplingPoints;
@@ -100,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 */
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -116,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
         /*
         Context context;
         mMapFragment = MapFragment.newInstance();
@@ -181,29 +186,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap map) {
         mMap=map;
 
-        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            // Use default InfoWindow frame
-            @Override
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-
-            // Defines the contents of the InfoWindow
-            @Override
-            public View getInfoContents(Marker arg0) {
-
-                // Getting view from the layout file info_window_layout
-                View v = getLayoutInflater().inflate(R.layout.sub_screen_map, null);
-
-                // Getting the position from the marker
-                LatLng latLng = arg0.getPosition();
-
-                // Returning the view containing InfoWindow contents
-                return v;
-
-            }
-        });
         LatLng pt = new LatLng(9.86, -84.20);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
         //putMarket(map,9.86,-84.20,"hola","mundo");
@@ -241,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+
         //mandar el site
         double lat=marker.getPosition().latitude;
         double lon=marker.getPosition().longitude;
@@ -249,8 +231,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         int mid=marker.getSnippet().indexOf(",");
         String objId=marker.getSnippet().substring(0,mid);
         String info=marker.getSnippet().substring(mid,marker.getSnippet().length());
+
         Site site=new Site(objId,name,lat,lon,info);
+
+        Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
         Prueba.putExtra("site", site);
+
         startActivity(Prueba);
         return false;
     }
@@ -274,6 +260,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.map_btn:
                 break;
             case R.id.add_bug_btn:
+                Intent activity = new Intent(MainActivity.this, BugsSampleToRegisterActivity.class);
+                startActivity(activity);
                 break;
             case R.id.catalog_btn:
                 break;

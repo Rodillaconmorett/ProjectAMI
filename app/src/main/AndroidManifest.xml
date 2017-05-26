@@ -33,7 +33,7 @@
             />
         <activity android:name=".Activities.QuestionsGUI"
             android:label="QuestionsGUI"/>
-        <!--<activity android:name=".Activities.BugsSampleToRegisterActivity"></activity>-->
+        <activity android:name=".Activities.BugsSampleToRegisterActivity"></activity>
     </application>
 
 </manifest>
