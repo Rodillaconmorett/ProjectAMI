@@ -4,6 +4,9 @@ package is.ecci.ucr.projectami.DecisionTree;
 // See http://creativecommons.org/publicdomain/zero/1.0/
 // ----------------------------------------------------------------
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -127,15 +130,16 @@ public class Matrix {
 	}
 
 	// Loads from an ARFF file
-	public void loadArff(String filename) throws Exception, FileNotFoundException {
+	public void loadArff(InputStream inputStream) throws Exception, FileNotFoundException {
 		m_data = new ArrayList<double[]>();
 		m_attr_name = new ArrayList<String>();
 		m_str_to_enum = new ArrayList< TreeMap<String, Integer> >();
 		m_enum_to_str = new ArrayList< TreeMap<Integer, String> >();
 		boolean READDATA = false;
-		Scanner s = new Scanner(new File(filename));
-		while (s.hasNext()) {
-			String line = s.nextLine().trim();
+		BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(inputStream));
+		String line;
+		while ((line=bufferedReader.readLine())!=null) {
+			 line = line.trim();
 			if (line.length() > 0 && line.charAt(0) != '%') {
 				if (!READDATA) {
 
