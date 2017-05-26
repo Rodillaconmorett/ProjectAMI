@@ -252,6 +252,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        switch(id){
+            case R.id.map_btn:
+                break;
+            case R.id.add_bug_btn:
+                break;
+            case R.id.catalog_btn:
+                break;
+            case R.id.settings_btn:
+                break;
+
+        }
+        /*
         if (id == R.id.nav_camera) {
             Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
             startActivity(Prueba);
@@ -273,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
             startActivity(Prueba);
         }
-
+        */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

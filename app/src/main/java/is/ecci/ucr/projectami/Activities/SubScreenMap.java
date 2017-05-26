@@ -39,7 +39,7 @@ public class SubScreenMap extends Activity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        getWindow().setLayout(250, 250);
+        getWindow().setLayout(1000, 1000);
 
 
         siteName = (TextView) findViewById(R.id.siteName);
