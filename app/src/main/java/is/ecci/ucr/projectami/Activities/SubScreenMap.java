@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import is.ecci.ucr.projectami.R;
@@ -28,18 +29,21 @@ public class SubScreenMap extends Activity {
     TextView textMedQualBugs;
     TextView textLowQualBugs;
 
+    RelativeLayout container_all;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
         Intent intent = getIntent();
         samplingPoint = intent.getParcelableExtra("samplingPoint");
+
+        container_all = (RelativeLayout) findViewById(R.id.container_all);
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        getWindow().setLayout(1000, 1000);
-        getWindow().setLayout(1000,1000);
-
+        getWindow().setLayout(container_all.getWidth(),container_all.getHeight());
 
         siteName = (TextView) findViewById(R.id.siteName);
         /*
@@ -63,6 +67,7 @@ public class SubScreenMap extends Activity {
         */
         buttonInfo = (Button) findViewById(R.id.buttonInfo);
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
+
         buttonInfo.setOnClickListener(btnInfoHandler);
         buttonRegister.setOnClickListener(btnRegstrHandler);
 
