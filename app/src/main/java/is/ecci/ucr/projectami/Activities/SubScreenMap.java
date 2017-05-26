@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
@@ -23,7 +24,7 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
  * Created by Daniel on 5/20/2017.
  */
 
-public class SubScreenMap extends Activity {
+public class SubScreenMap extends Activity implements Serializable {
     SamplingPoint samplingPoint;
     Site site;
 
@@ -43,10 +44,7 @@ public class SubScreenMap extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
         Intent intent = getIntent();
-        /*
-        samplingPoint = intent.getParcelableExtra("samplingPoint");
-        */
-        site = intent.getParcelableExtra("site");
+        site = (Site) intent.getSerializableExtra("site");
         setSamplingPoint();
 
         siteName = (TextView) findViewById(R.id.siteName);
@@ -78,6 +76,7 @@ public class SubScreenMap extends Activity {
                 mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                     @Override
                     public JSONObject onSuccess(JSONObject result) {
+                        samplingPoint = new SamplingPoint(site);
                         samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                         samplingPoint.updateScoreAndQualBug();
                         return null;
@@ -102,7 +101,7 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, SamplePointInfoActivity.class);
-            intent.putExtra("site", (Parcelable) site);
+            intent.putExtra("site", site);
             startActivity(intent);
         }
     };
@@ -110,7 +109,7 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
-            intent.putExtra("samplingPoint", (Parcelable) samplingPoint);
+            intent.putExtra("samplingPoint", samplingPoint);
             startActivity(intent);
         }
     };

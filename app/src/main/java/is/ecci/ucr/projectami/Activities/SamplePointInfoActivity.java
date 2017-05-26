@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
@@ -40,6 +42,8 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
     private TextView textTotSpecies;
     private TextView textTotScore;
 
+    private DatePicker datePicker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         /*
@@ -55,7 +59,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_info_sample_point);
 
         Intent intent = getIntent();
-        site = intent.getParcelableExtra("site");
+        site = (Site) intent.getSerializableExtra("site");
         setSamplingPoint();
 
         siteName = (TextView) findViewById(R.id.siteName);
@@ -67,8 +71,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         textTotSpecies = (TextView) findViewById(R.id.textTotSpecies);
         textTotSpecies.setText(String.valueOf(samplingPoint.getBugList().size()));
 
-        String initialDate;
-        String finalDate;
+        datePicker = (DatePicker) findViewById(R.id.datePicker);
 
 
     }
@@ -83,6 +86,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
                   mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                       @Override
                       public JSONObject onSuccess(JSONObject result) {
+                          samplingPoint = new SamplingPoint(site);
                           samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                           samplingPoint.updateScoreAndQualBug();
                           return null;
