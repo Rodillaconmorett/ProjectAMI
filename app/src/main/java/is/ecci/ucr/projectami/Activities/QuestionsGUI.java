@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 
 
 public class QuestionsGUI extends AppCompatActivity {
@@ -50,7 +51,7 @@ public class QuestionsGUI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
         Intent parameters = getIntent();
-        currentInfo = (LinkedHashSet<String>) parameters.getExtras().getSerializable("treeCont");
+        //currentInfo = (LinkedHashSet<String>) parameters.getExtras().getSerializable("treeCont");
 
 //        Matrix matrix = new Matrix();
 //        try {
@@ -151,7 +152,9 @@ public class QuestionsGUI extends AppCompatActivity {
             }
         } else {
             Intent parameters = getIntent();
-            (LinkedHashSet)parameters.getExtras().getSerializable("feedbackArray") = treeControl.getFeedbackMatrix();
+            LinkedList<Pair<String, String>> feedback = (LinkedList<Pair<String, String>>) parameters.getExtras().getSerializable("feedbackArray");
+            feedback = treeControl.getQuestionsRealized();
+            //(LinkedHashSet) parameters.getExtras().getSerializable("feedbackArray") = treeControl.getFeedbackMatrix();
         }
     }
 
