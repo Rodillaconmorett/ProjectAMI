@@ -47,14 +47,6 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         site = (Site) intent.getExtras().getSerializable("site");                    // Nombre de intent variable
 
-        Matrix matrix = new Matrix();
-        try {
-            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
-        } catch (Exception e) {
-            //File not found
-        }
-        treeControl = new TreeController(matrix);
-
         ListView list = (ListView) findViewById(R.id.lstBugList);
 
         FloatingActionButton btnAddBug = (FloatingActionButton) findViewById(R.id.floatingActionButton);
