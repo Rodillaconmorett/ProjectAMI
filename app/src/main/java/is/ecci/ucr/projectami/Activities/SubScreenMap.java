@@ -66,7 +66,6 @@ public class SubScreenMap extends Activity {
         buttonInfo.setOnClickListener(btnInfoHandler);
         buttonRegister.setOnClickListener(btnRegstrHandler);
 
-
     }
 
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
