@@ -11,10 +11,8 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.R;
@@ -25,10 +23,9 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
  * Created by Daniel on 5/20/2017.
  */
 
-public class SubScreenMap extends Activity implements Serializable {
+public class SubScreenMap extends Activity {
     SamplingPoint samplingPoint;
     Site site;
-    String siteId;
 
     Button buttonInfo;
     Button buttonRegister;
@@ -38,7 +35,7 @@ public class SubScreenMap extends Activity implements Serializable {
     TextView textHghQualBugs;
     TextView textMedQualBugs;
     TextView textLowQualBugs;
-
+    MongoAdmin db;
     RelativeLayout container_all;
 
     @Override
@@ -46,43 +43,45 @@ public class SubScreenMap extends Activity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
         Intent intent = getIntent();
-        siteId = intent.getStringExtra("siteid");
+        site = (Site)intent.getExtras().getSerializable("site");
 
-
+        db= new MongoAdmin(this.getApplicationContext());
         setSamplingPoint();
 
-        siteName = (TextView) findViewById(R.id.siteName);
-        siteName.setText(samplingPoint.getSite().getSiteName());
-        siteScore = (TextView) findViewById(R.id.siteScore);
-        siteScore.setText(String.valueOf(samplingPoint.getScore()));
-        textHghQualBugs = (TextView) findViewById(R.id.textHghQualBugs);
-        textHghQualBugs.setText(samplingPoint.getHghQualBug());
-        textMedQualBugs = (TextView) findViewById(R.id.textMedQualBugs);
-        textMedQualBugs.setText(samplingPoint.getMedQualBug());
-        textLowQualBugs = (TextView) findViewById(R.id.textLowQualBugs);
-        textLowQualBugs.setText(samplingPoint.getLowQualBug());
 
-        buttonInfo = (Button) findViewById(R.id.buttonInfo);
-        buttonRegister = (Button) findViewById(R.id.buttonRegister);
 
-        buttonInfo.setOnClickListener(btnInfoHandler);
-        buttonRegister.setOnClickListener(btnRegstrHandler);
+
 
     }
 
     private void setSamplingPoint(){
-        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
 
-        mongoAdmin.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+        siteId = site.getObjID();
+        db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
                 ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
-                mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+                db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                     @Override
                     public JSONObject onSuccess(JSONObject result) {
                         samplingPoint = new SamplingPoint(site);
                         samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                         samplingPoint.updateScoreAndQualBug();
+                        siteName = (TextView) findViewById(R.id.siteName);
+                        siteName.setText(samplingPoint.getSite().getSiteName());
+                        siteScore = (TextView) findViewById(R.id.siteScore);
+                        siteScore.setText(String.valueOf(samplingPoint.getScore()));
+                        textHghQualBugs = (TextView) findViewById(R.id.textHghQualBugs);
+                        textHghQualBugs.setText(samplingPoint.getHghQualBug());
+                        textMedQualBugs = (TextView) findViewById(R.id.textMedQualBugs);
+                        textMedQualBugs.setText(samplingPoint.getMedQualBug());
+                        textLowQualBugs = (TextView) findViewById(R.id.textLowQualBugs);
+                        textLowQualBugs.setText(samplingPoint.getLowQualBug());
+                        buttonInfo = (Button) findViewById(R.id.buttonInfo);
+                        buttonRegister = (Button) findViewById(R.id.buttonRegister);
+
+                        buttonInfo.setOnClickListener(btnInfoHandler);
+                        buttonRegister.setOnClickListener(btnRegstrHandler);
                         return null;
                     }
 
@@ -102,37 +101,10 @@ public class SubScreenMap extends Activity implements Serializable {
         );
     }
 
-    private void findSite(){
-        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
-        mongoAdmin.getColl(new MongoAdmin.ServerCallback() {
-            @Override
-            public JSONObject onSuccess(JSONObject result) {
-                ArrayList<Site> sites= JsonParserLF.parseSites(result);
-                int i = 0;
-                boolean found = false;
-                while(!found) {
-                    if(sites.get(i).getObjID() == siteId){
-                        found = true;
-                    }
-                    else{
-                        i++;
-                    }
-                }
-                site = sites.get(i);
-                return null;
-            }
-
-            @Override
-            public JSONObject onFailure(JSONObject result) {
-                return null;
-            }
-        }, CollectionName.SITE);
-    }
-
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, SamplePointInfoActivity.class);
-            intent.putExtra("siteid", siteId);
+            intent.putExtra("site", site);
             startActivity(intent);
         }
     };
@@ -140,7 +112,7 @@ public class SubScreenMap extends Activity implements Serializable {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
-            intent.putExtra("siteid", siteId);
+            intent.putExtra("samplingPoint", samplingPoint);
             startActivity(intent);
         }
     };

@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
@@ -31,8 +32,12 @@ import java.util.LinkedHashSet;
 
 public class QuestionsGUI extends AppCompatActivity {
     static TreeController treeControl;
+
     static HashMap<String, String> questions;
 
+    //static HashMap<String,String> questions;
+    //LinkedHashSet<String> currentInfo;
+  
     static boolean openedBefore = false;
     String currentQuestion;
     boolean extraQuestion = false;
@@ -44,6 +49,16 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
+        Intent parameters = getIntent();
+        currentInfo = (LinkedHashSet<String>) parameters.getExtras().getSerializable("treeCont");
+
+//        Matrix matrix = new Matrix();
+//        try {
+//            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
+//        } catch (Exception e) {
+//            //File not found
+//        }
+//        treeControl = new TreeController(matrix);
         if (!openedBefore) {
             Matrix matrix = new Matrix();
             db = new MongoAdmin(this.getApplicationContext());//creación del objeto
@@ -58,8 +73,16 @@ public class QuestionsGUI extends AppCompatActivity {
             openedBefore = true;
         }
 
+        ImageView btnGoHome = (ImageView) findViewById(R.id.btnBack);
+        btnGoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         currentQuestion = "";
         this.initialize();
+
     }
 
     protected void initialize() {
