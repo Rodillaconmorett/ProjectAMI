@@ -37,11 +37,11 @@ public class QuestionsGUI extends AppCompatActivity {
 
     //static HashMap<String,String> questions;
     //LinkedHashSet<String> currentInfo;
-  
+
     static boolean openedBefore = false;
     String currentQuestion;
     boolean extraQuestion = false;
-    int currentExtraQuestions;
+    int currentExtraQuestions = 3;
     static MongoAdmin db;
 
 
@@ -61,7 +61,7 @@ public class QuestionsGUI extends AppCompatActivity {
             }
             treeControl = new TreeController(matrix);
             openedBefore = true;
-        }else{
+        } else {
             treeControl.reset();
         }
 
@@ -72,6 +72,33 @@ public class QuestionsGUI extends AppCompatActivity {
                 finish();
             }
         });
+
+        Button backB = (Button) (findViewById(R.id.backButton));
+        backB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button pressed = (Button) v;
+                try {
+                    catchAction(pressed);
+                } catch (Exception e) {
+                    //Capturar la exceptión
+                }
+            }
+        });
+
+        Button contB = (Button) (findViewById(R.id.naButton));
+        contB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button pressed = (Button) v;
+                try {
+                    catchAction(pressed);
+                } catch (Exception e) {
+                    //Capturar la exceptión
+                }
+            }
+        });
+
         currentQuestion = "";
         this.initialize();
 
@@ -84,21 +111,22 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void setCurrentQuestion() {
 
         if (extraQuestion) {
-            if (currentExtraQuestions < 3) {
+            if (currentExtraQuestions > 0) {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
                 currentExtraQuestions--;
-            }else{
+            } else {
                 Intent parameters = getIntent();
-                LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>)parameters.getExtras().getSerializable("feedbackArray");
+                LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>) parameters.getExtras().getSerializable("feedbackArray");
                 currentInfo = treeControl.getQuestionsRealized();
-                try{
+                try {
                     finish();
-                }catch (Throwable e){
+                } catch (Throwable e) {
                     //
                 }
             }
         } else {
-            if (!treeControl.isLeaf()) {
+            boolean j = treeControl.isLeaf();
+            if (!j) {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
             } else {
                 extraQuestion = true;
@@ -128,7 +156,7 @@ public class QuestionsGUI extends AppCompatActivity {
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
             String string = questions.get(questionsAndOptions[0]);
-            currentQuestion = (string == null)?questionsAndOptions[0]:string ;
+            currentQuestion = (string == null) ? questionsAndOptions[0] : string;
             question.setText(currentQuestion);
             LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
@@ -153,11 +181,11 @@ public class QuestionsGUI extends AppCompatActivity {
             }
         } else {
             Intent parameters = getIntent();
-            LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>)parameters.getExtras().getSerializable("feedbackArray");
+            LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>) parameters.getExtras().getSerializable("feedbackArray");
             currentInfo = treeControl.getQuestionsRealized();
-            try{
+            try {
                 finish();
-            }catch (Throwable e){
+            } catch (Throwable e) {
                 //
             }
         }
@@ -174,14 +202,14 @@ public class QuestionsGUI extends AppCompatActivity {
         } else if (textB.equals("Continuar")) {
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
-            if (userAnswer.equals("")) {
-                treeControl.reply("NA", userAnswer);
-            } else {
+            if (userAnswer.trim().equals("")) {
                 treeControl.reply("NA");
+            } else {
+                treeControl.reply("NA",userAnswer);
             }
             ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.INVISIBLE);
         } else {
-            if (textB.equals("Retroceder")) {
+            if (textB.equals("Volver a pregunta anterior")) {
                 treeControl.goBack();
             } else {
                 treeControl.reply(textB);
@@ -197,14 +225,13 @@ public class QuestionsGUI extends AppCompatActivity {
                 ArrayList<Questions> questionsArray = JsonParserLF.parseQuestionsList(result);
                 int totalQuestions = questionsArray.size();
                 for (int i = 0; i < totalQuestions; i++) {
-                    try{
+                    try {
                         questions.put(convert(questionsArray.get(i).getIdentificador().trim()), convert(questionsArray.get(i).getQuestion()));
-                        Log.v("R:",convert(questionsArray.get(i).getIdentificador().trim()) + " " + convert(questionsArray.get(i).getQuestion()));
+                        Log.v("R:", convert(questionsArray.get(i).getIdentificador().trim()) + " " + convert(questionsArray.get(i).getQuestion()));
 
-                    }catch (java.io.UnsupportedEncodingException e){
+                    } catch (java.io.UnsupportedEncodingException e) {
 
                     }
-
                 }
                 return null;
             }
@@ -220,10 +247,9 @@ public class QuestionsGUI extends AppCompatActivity {
     }
 
 
-    public String convert(String string) throws java.io.UnsupportedEncodingException{
+    public String convert(String string) throws java.io.UnsupportedEncodingException {
         byte[] bytes = string.getBytes("ISO-8859-1");
         return new String(bytes);
-
     }
 }
 
