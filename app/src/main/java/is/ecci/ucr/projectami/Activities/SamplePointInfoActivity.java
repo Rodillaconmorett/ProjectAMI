@@ -5,9 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,7 +52,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
     private DatePicker datePicker;
 
-    private Button btnBack;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,8 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_sample_point);
         Intent intent = getIntent();
-        site = (Site) intent.getSerializableExtra("site");
+        site = (Site) intent.getExtras().getSerializable("site");
+        db = new MongoAdmin(this.getApplicationContext());
         Calendar today = Calendar.getInstance();
         initialDate = String.valueOf(today.get(Calendar.YEAR));
         initialDate += "-";
@@ -82,12 +85,9 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         }
         initialDate += String.valueOf(today.get(Calendar.DAY_OF_MONTH));
         finalDate = initialDate;
-        setSamplingPoint();
-        setTextViews();
         datePicker = (DatePicker) findViewById(R.id.datePicker);
-        db= new MongoAdmin(this.getApplicationContext());
-
-        btnBack = (Button) findViewById(R.id.btnBack);
+        setSamplingPoint();
+        btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(btnBackHandler);
 
         datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
@@ -105,8 +105,9 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
                     initialDate += "0";
                 }
                 initialDate += String.valueOf(dayOfMonth);
-                setSamplingPoint();
+
                 }
+
             }
         );
 
@@ -143,6 +144,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
     }
 
     private void setSamplingPoint(){
+        Log.i("","");
         db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
               @Override
               public JSONObject onSuccess(JSONObject result) {
@@ -153,11 +155,13 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
                           samplingPoint = new SamplingPoint(site);
                           samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                           samplingPoint.updateScoreAndQualBug();
+                          setTextViews();
                           return null;
                       }
 
                       @Override
                       public JSONObject onFailure(JSONObject result) {
+                          Log.i("","");
                           return null;
                       }
                   },bugs);
@@ -166,15 +170,16 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
               @Override
               public JSONObject onFailure(JSONObject result) {
+
                   return null;
               }
-          },site.getObjID(),initialDate,finalDate
+          },site.getObjID()
         );
     }
 
     View.OnClickListener btnBackHandler = new View.OnClickListener() {
         public void onClick(View v){
-            finish();
+                finish();
         }
     };
 
