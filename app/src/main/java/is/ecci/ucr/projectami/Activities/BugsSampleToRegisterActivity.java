@@ -9,6 +9,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.android.gms.games.quest.Quest;
@@ -68,6 +69,13 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             }
         });
 
+        ImageView btnGoHome = (ImageView) findViewById(R.id.btnGoHome);
+        btnGoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         Button btnRegister = (Button) findViewById(R.id.btnRegistrar);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
