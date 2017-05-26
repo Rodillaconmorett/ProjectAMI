@@ -23,7 +23,6 @@ import java.util.LinkedHashSet;
 public class QuestionsGUI extends AppCompatActivity {
     static TreeController treeControl;
     static HashMap<String,String> questions;
-    LinkedHashSet<String> currentInfo;
     static boolean openedBefore = false;
     String currentQuestion;
     boolean extraQuestion = false;
@@ -33,7 +32,6 @@ public class QuestionsGUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
-
         Intent parameters = getIntent();
         currentInfo = (LinkedHashSet<String>) parameters.getExtras().getSerializable("treeCont");
 
@@ -58,6 +56,18 @@ public class QuestionsGUI extends AppCompatActivity {
 
         currentQuestion = "";
         this.initialize();
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     protected void initialize() {
@@ -78,8 +88,8 @@ public class QuestionsGUI extends AppCompatActivity {
                 extraQuestion = true;
             }
         }
-
     }
+
 
     /*
     *   Convert a LikedHashSet to an array of strings
