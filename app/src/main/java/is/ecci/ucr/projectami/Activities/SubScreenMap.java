@@ -71,7 +71,6 @@ public class SubScreenMap extends Activity {
         buttonInfo.setOnClickListener(btnInfoHandler);
         buttonRegister.setOnClickListener(btnRegstrHandler);
 
-
     }
 
     private void setSamplingPoint(){
