@@ -73,12 +73,13 @@ public class QuestionsGUI extends AppCompatActivity {
     *   @param: String[] questionsAndOptions
     */
     protected void displayOnScreen(String[] questionsAndOptions) {
+        this.clearAnswerLayout();
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
             currentQuestion = questionsAndOptions[0];
             question.setText(currentQuestion);
-            LinearLayout answerContainer = (LinearLayout) findViewById(R.id.answers);
+            LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
             for (int i = 1; i < arraySize; i++) {
                 if (!questionsAndOptions[i].equals("NA")) {
@@ -110,7 +111,7 @@ public class QuestionsGUI extends AppCompatActivity {
     public void catchAction(Button button) throws AnswerException {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
-            EditText answerBox = (EditText) findViewById(R.id.userAnswer);
+            EditText answerBox = (EditText) findViewById(R.id.dynamicAnswers);
             String userAnswer = answerBox.getText().toString();
             if(userAnswer.equals("")){
                 treeControl.reply("NA",userAnswer);
@@ -125,6 +126,11 @@ public class QuestionsGUI extends AppCompatActivity {
             }
         }
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
+    }
+
+    protected void clearAnswerLayout(){
+
+
     }
 
     public void test() {
