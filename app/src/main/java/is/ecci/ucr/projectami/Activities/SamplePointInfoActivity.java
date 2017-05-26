@@ -32,10 +32,13 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
     private SamplingPoint samplingPoint ;
     private Site site;
 
-    TextView siteName;
-    TextView siteDescription;
-    TextView textTotSpecies;
-    TextView textTotScore;
+    private String initialDate;
+    private String finalDate;
+
+    private TextView siteName;
+    private TextView siteDescription;
+    private TextView textTotSpecies;
+    private TextView textTotScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         String initialDate;
         String finalDate;
 
+
     }
 
     private void setSamplingPoint(){
@@ -96,7 +100,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
               public JSONObject onFailure(JSONObject result) {
                   return null;
               }
-          },site.getObjID()
+          },site.getObjID(),initialDate,finalDate
         );
     }
 
