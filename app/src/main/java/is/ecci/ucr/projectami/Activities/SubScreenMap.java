@@ -44,9 +44,6 @@ public class SubScreenMap extends Activity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_screen_map);
         Intent intent = getIntent();
-        /*
-        samplingPoint = intent.getParcelableExtra("samplingPoint");
-        */
         site = (Site) intent.getSerializableExtra("site");
         setSamplingPoint();
 
@@ -79,6 +76,7 @@ public class SubScreenMap extends Activity implements Serializable {
                 mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                     @Override
                     public JSONObject onSuccess(JSONObject result) {
+                        samplingPoint = new SamplingPoint(site);
                         samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                         samplingPoint.updateScoreAndQualBug();
                         return null;
@@ -103,7 +101,7 @@ public class SubScreenMap extends Activity implements Serializable {
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, SamplePointInfoActivity.class);
-            intent.putExtra("site", (Parcelable) site);
+            intent.putExtra("site", site);
             startActivity(intent);
         }
     };
@@ -111,7 +109,7 @@ public class SubScreenMap extends Activity implements Serializable {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
-            intent.putExtra("samplingPoint", (Parcelable) samplingPoint);
+            intent.putExtra("samplingPoint", samplingPoint);
             startActivity(intent);
         }
     };

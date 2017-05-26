@@ -1,14 +1,12 @@
 package is.ecci.ucr.projectami.SamplingPoints;
 
-import android.os.Bundle;
-
 import java.io.Serializable;
 
 /**
  * Created by Daniel on 5/10/2017.
  */
 
-public class Site implements Serializable{
+public class Site implements Serializable {
 
     private String objID;
     private String siteName;
