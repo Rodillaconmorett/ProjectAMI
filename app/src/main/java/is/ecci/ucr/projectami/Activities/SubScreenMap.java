@@ -48,28 +48,15 @@ public class SubScreenMap extends Activity {
         db= new MongoAdmin(this.getApplicationContext());
         setSamplingPoint();
 
-        siteName = (TextView) findViewById(R.id.siteName);
-        siteName.setText(samplingPoint.getSite().getSiteName());
-        siteScore = (TextView) findViewById(R.id.siteScore);
-        siteScore.setText(String.valueOf(samplingPoint.getScore()));
-        textHghQualBugs = (TextView) findViewById(R.id.textHghQualBugs);
-        textHghQualBugs.setText(samplingPoint.getHghQualBug());
-        textMedQualBugs = (TextView) findViewById(R.id.textMedQualBugs);
-        textMedQualBugs.setText(samplingPoint.getMedQualBug());
-        textLowQualBugs = (TextView) findViewById(R.id.textLowQualBugs);
-        textLowQualBugs.setText(samplingPoint.getLowQualBug());
 
-        buttonInfo = (Button) findViewById(R.id.buttonInfo);
-        buttonRegister = (Button) findViewById(R.id.buttonRegister);
 
-        buttonInfo.setOnClickListener(btnInfoHandler);
-        buttonRegister.setOnClickListener(btnRegstrHandler);
+
 
     }
 
     private void setSamplingPoint(){
 
-
+        siteId = site.getObjID();
         db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
@@ -80,6 +67,21 @@ public class SubScreenMap extends Activity {
                         samplingPoint = new SamplingPoint(site);
                         samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                         samplingPoint.updateScoreAndQualBug();
+                        siteName = (TextView) findViewById(R.id.siteName);
+                        siteName.setText(samplingPoint.getSite().getSiteName());
+                        siteScore = (TextView) findViewById(R.id.siteScore);
+                        siteScore.setText(String.valueOf(samplingPoint.getScore()));
+                        textHghQualBugs = (TextView) findViewById(R.id.textHghQualBugs);
+                        textHghQualBugs.setText(samplingPoint.getHghQualBug());
+                        textMedQualBugs = (TextView) findViewById(R.id.textMedQualBugs);
+                        textMedQualBugs.setText(samplingPoint.getMedQualBug());
+                        textLowQualBugs = (TextView) findViewById(R.id.textLowQualBugs);
+                        textLowQualBugs.setText(samplingPoint.getLowQualBug());
+                        buttonInfo = (Button) findViewById(R.id.buttonInfo);
+                        buttonRegister = (Button) findViewById(R.id.buttonRegister);
+
+                        buttonInfo.setOnClickListener(btnInfoHandler);
+                        buttonRegister.setOnClickListener(btnRegstrHandler);
                         return null;
                     }
 

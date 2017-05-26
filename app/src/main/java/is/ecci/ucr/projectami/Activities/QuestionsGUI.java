@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import java.util.LinkedHashSet;
 public class QuestionsGUI extends AppCompatActivity {
     static TreeController treeControl;
     static HashMap<String,String> questions;
+    LinkedHashSet<String> currentInfo;
     static boolean openedBefore = false;
     String currentQuestion;
     boolean extraQuestion = false;
@@ -54,20 +56,16 @@ public class QuestionsGUI extends AppCompatActivity {
             openedBefore = true;
         }
 
+        ImageView btnGoHome = (ImageView) findViewById(R.id.btnBack);
+        btnGoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         currentQuestion = "";
         this.initialize();
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     }
 
     protected void initialize() {
