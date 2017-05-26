@@ -61,6 +61,8 @@ public class QuestionsGUI extends AppCompatActivity {
             }
             treeControl = new TreeController(matrix);
             openedBefore = true;
+        }else{
+            treeControl.reset();
         }
 
         ImageView btnGoHome = (ImageView) findViewById(R.id.btnBack);
@@ -90,7 +92,7 @@ public class QuestionsGUI extends AppCompatActivity {
                 LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>)parameters.getExtras().getSerializable("feedbackArray");
                 currentInfo = treeControl.getQuestionsRealized();
                 try{
-                    this.finalize();
+                    finish();
                 }catch (Throwable e){
                     //
                 }
@@ -125,7 +127,8 @@ public class QuestionsGUI extends AppCompatActivity {
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
-            currentQuestion = questions.get(questionsAndOptions[0]);
+            String string = questions.get(questionsAndOptions[0]);
+            currentQuestion = (string == null)?questionsAndOptions[0]:string ;
             question.setText(currentQuestion);
             LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
@@ -153,7 +156,7 @@ public class QuestionsGUI extends AppCompatActivity {
             LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>)parameters.getExtras().getSerializable("feedbackArray");
             currentInfo = treeControl.getQuestionsRealized();
             try{
-                this.finalize();
+                finish();
             }catch (Throwable e){
                 //
             }
@@ -194,8 +197,14 @@ public class QuestionsGUI extends AppCompatActivity {
                 ArrayList<Questions> questionsArray = JsonParserLF.parseQuestionsList(result);
                 int totalQuestions = questionsArray.size();
                 for (int i = 0; i < totalQuestions; i++) {
-                    questions.put(questionsArray.get(i).getIdentificador().trim(), questionsArray.get(i).getQuestion());
-                    Log.v("R:",questionsArray.get(i).getIdentificador().trim() + " " + questionsArray.get(i).getQuestion());
+                    try{
+                        questions.put(convert(questionsArray.get(i).getIdentificador().trim()), convert(questionsArray.get(i).getQuestion()));
+                        Log.v("R:",convert(questionsArray.get(i).getIdentificador().trim()) + " " + convert(questionsArray.get(i).getQuestion()));
+
+                    }catch (java.io.UnsupportedEncodingException e){
+
+                    }
+
                 }
                 return null;
             }
@@ -207,6 +216,13 @@ public class QuestionsGUI extends AppCompatActivity {
             }
         }, CollectionName.QUESTIONS);
 
+
+    }
+
+
+    public String convert(String string) throws java.io.UnsupportedEncodingException{
+        byte[] bytes = string.getBytes("ISO-8859-1");
+        return new String(bytes);
 
     }
 }
