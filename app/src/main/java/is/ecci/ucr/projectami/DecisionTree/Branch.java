@@ -12,7 +12,6 @@ public class Branch<V, N> {
 	public V get_value() {
 		return _value;
 	}
-
 	public N get_node() {
 		return _node;
 	}
