@@ -37,7 +37,7 @@ public class QuestionsGUI extends AppCompatActivity {
 //        }
 //        treeControl = new TreeController(matrix);
         currentQuestion = "";
-        this.initialize();
+        //this.initialize();
     }
 
     protected void initialize() {
