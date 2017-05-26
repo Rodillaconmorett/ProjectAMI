@@ -28,7 +28,7 @@ public class QuestionsGUI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
         Intent parameters = getIntent();
-        treeControl = parameters.getParcelableExtra("QuestionsGUI");
+        currentInfo = (LinkedHashSet<String>) parameters.getExtras().getSerializable("treeControl");
 //        Matrix matrix = new Matrix();
 //        try {
 //            matrix.loadArff(getResources().openRawResource(R.raw.dataset));

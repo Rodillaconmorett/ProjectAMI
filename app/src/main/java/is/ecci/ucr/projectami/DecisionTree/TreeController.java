@@ -3,6 +3,7 @@ package is.ecci.ucr.projectami.DecisionTree;
 
 import android.util.Pair;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -13,7 +14,7 @@ import java.util.TreeMap;
  * Created by Milton and Oscar on 17-May-17.
  */
 
-public class TreeController {
+public class TreeController implements Serializable {
 
     private enum InductionState {
         FOUND_COMMITED, FOUND_NOT_COMMITED, POSSIBLE_TO_FIND, IMPOSSIBLE_TO_FIND,

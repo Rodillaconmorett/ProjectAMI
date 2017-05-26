@@ -59,6 +59,8 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUI.class);
+                intent.putExtra("treeControl", currentInfo);
+
                // intent.putExtra("QuestionsGUI", (Parcelable) treeControl);
                 startActivity(intent);
             }
