@@ -46,7 +46,6 @@
 
             <ListView
                 android:id="@+id/datesList"
-
                 android:layout_width="155dp"
                 android:layout_height="match_parent"
                 android:layout_column="1"

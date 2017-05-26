@@ -47,12 +47,8 @@ public class SamplingPoint {
         }
     }
 
-    public void updateBugList(){
-        bugList.clear();
-        LinkedList<Bug> paraQueCompile = new LinkedList<>();
-        for(Bug it : paraQueCompile){
-            bugList.add(it);
-        }
+    public void setBugList(LinkedList<Bug> bugList){
+        this.bugList = bugList;
     }
 
     public double getScore(){

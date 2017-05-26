@@ -4,14 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
+import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
+import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 /**
  * Created by Daniel on 5/20/2017.
@@ -19,6 +25,7 @@ import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 
 public class SubScreenMap extends Activity {
     SamplingPoint samplingPoint;
+    Site site;
 
     Button buttonInfo;
     Button buttonRegister;
@@ -65,6 +72,36 @@ public class SubScreenMap extends Activity {
         buttonRegister.setOnClickListener(btnRegstrHandler);
 
 
+    }
+
+    private void setSamplingPoint(){
+        final MongoAdmin mongoAdmin = new MongoAdmin(this.getApplicationContext());
+
+        mongoAdmin.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
+                mongoAdmin.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+                    @Override
+                    public JSONObject onSuccess(JSONObject result) {
+                        samplingPoint.setBugList(JsonParserLF.parseBugs(result));
+                        return null;
+                    }
+
+                    @Override
+                    public JSONObject onFailure(JSONObject result) {
+                        return null;
+                    }
+                },bugs);
+                return null;
+            }
+
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                return null;
+            }
+        },site.getObjID()
+        );
     }
 
     View.OnClickListener btnInfoHandler = new View.OnClickListener() {
