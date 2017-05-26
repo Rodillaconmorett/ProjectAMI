@@ -38,6 +38,8 @@ public class QuestionsGUI extends AppCompatActivity {
             openedBefore = true;
         }
 
+        Intent parameters = getIntent();
+        currentInfo = parameters.getParcelableExtra("QuestionsGUI");
         currentQuestion = "";
         this.initialize();
     }
@@ -47,7 +49,7 @@ public class QuestionsGUI extends AppCompatActivity {
     }
 
     protected void setCurrentQuestion() {
-        if (!treeControl.isLeaf()){
+        if (!treeControl.isLeaf()) {
             displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
         } else {
 

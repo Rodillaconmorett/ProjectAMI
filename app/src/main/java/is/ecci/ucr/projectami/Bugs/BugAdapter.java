@@ -15,13 +15,13 @@ import java.util.ArrayList;
  * Created by bjgd9 on 17/5/2017.
  */
 
-public class BugAdater extends ArrayAdapter {
+public class BugAdapter extends ArrayAdapter<Bug> {
     
     private Context context;
     private ArrayList<Bug> datos;
 
-    public BugAdater(Context context, ArrayList datos) {
-        super(context, R.layout.catalog_frame, datos);
+    public BugAdapter(Context context, ArrayList<Bug> datos) {
+        super(context, 0, datos);
         // Guardamos los parámetros en variables de clase.
         this.context = context;
         this.datos = datos;

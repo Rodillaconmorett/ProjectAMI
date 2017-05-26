@@ -20,7 +20,6 @@ import java.util.List;
 
 public class Catalog {
     private List<Bug> bugList;
-    BDAdministrator bdAdministrator;
     /* ENTRADAS:
     *  SALIDAS:
     *  RESTRICCIONES:

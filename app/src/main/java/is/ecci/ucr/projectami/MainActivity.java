@@ -3,6 +3,7 @@ package is.ecci.ucr.projectami;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -25,6 +26,8 @@ import android.widget.Button;
 import is.ecci.ucr.projectami.Activities.QuestionsGUI;
 import is.ecci.ucr.projectami.Activities.SamplePointInfoActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
+import is.ecci.ucr.projectami.DBConnectors.CollectionName;
+import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -36,30 +39,33 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
-import is.ecci.ucr.projectami.Bugs.BugAdater;
-import is.ecci.ucr.projectami.DBConnectors.DBAdmin;
+import is.ecci.ucr.projectami.Bugs.BugAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 import static is.ecci.ucr.projectami.R.id.map;
+import static is.ecci.ucr.projectami.R.id.pruebaText;
 
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener, Serializable{
 
     private ArrayList<Bug> bugs;
-    BugAdater adapter;
+
+    BugAdapter adapter;
     ListView lvAnimals;
     ImageView imagen;
     TextView nombre;
-    DBAdmin dbAdmin;
     Fragment f;
     MapFragment mMapFragment;
     CameraUpdate cameraUpdate;
@@ -70,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     GoogleMap mMap;
 
-    private LinkedList<Site> sites;
+    private ArrayList<Site> sites;
     private LinkedList<SamplingPoint> samplingPoints;
 
     @Override
@@ -79,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        db= new MongoAdmin(this.getApplicationContext());//creación del objeto
         samplingPoints = new LinkedList<>();
         /*
         * Aqui debe ir la vara de obtener de la base de datos
@@ -93,14 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             samplingPoints.add(new SamplingPoint(iterator.next()));
         }
 */
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void fillArrayList() {
         //this filll would be  with the bugs that are in the DB
-        bugs = new ArrayList<>();
+        /*bugs = new ArrayList<>();
         bugs.add(new Bug("aguila", R.drawable.aguila));
         bugs.add(new Bug("ballena", R.drawable.ballena));
         bugs.add(new Bug("caballo", R.drawable.caballo));
@@ -149,28 +148,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         bugs.add(new Bug("morena", R.drawable.morena));
         bugs.add(new Bug("orca", R.drawable.orca));
         bugs.add(new Bug("perro", R.drawable.perro));
-        bugs.add(new Bug("vaca", R.drawable.vaca));
+        bugs.add(new Bug("vaca", R.drawable.vaca));*/
     };
 
     public void loadMarks(){
-        try{
-            InputStream inputStream= getResources().openRawResource(R.raw.data);
-            BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(inputStream));
+        db.getColl(new MongoAdmin.ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                sites= JsonParserLF.parseSites(result);
 
-            String line;
-            while((line=bufferedReader.readLine())!=null){
-                String data[]=line.split(",");
-                double lat=Double.parseDouble(data[0]);
-                double lon=Double.parseDouble( data[1]);
-                String name= data[2];
-                String info= data[3];
-                putMarket(mMap,lat,lon,name,info);
+                for(int i=0; i< sites.size(); i++) {
+                    Site tempSite=sites.get(i);
+                    double lat = tempSite.getLatitude();
+                    double lon = tempSite.getLongitude();
+                    String name = tempSite.getSiteName();
+                    String info = tempSite.getObjID()+","+tempSite.getDescription();
+                    putMarket(mMap, lat, lon, name, info);
+                }
+
+                return null;
             }
 
-        }catch (Exception e){
-
-
-        }
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                //Mensaje de Fallo
+                return null;
+            }
+        }, CollectionName.SITE);
 
     }
     @Override
@@ -238,9 +242,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(Marker marker) {
         Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+        //mandar el site
+        double lat=marker.getPosition().latitude;
+        double lon=marker.getPosition().longitude;
+        String name=marker.getTitle();
+        int mid=marker.getSnippet().indexOf(",");
+        String objId=marker.getSnippet().substring(0,mid);
+        String info=marker.getSnippet().substring(mid,marker.getSnippet().length());
+        Site site=new Site(objId,name,lat,lon,info);
+        Prueba.putExtra("site",(Serializable) site);
         startActivity(Prueba);
         return false;
     }
+
+
+
 
     @Override
     public void onInfoWindowClick(Marker marker) {
@@ -254,6 +270,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        switch(id){
+            case R.id.map_btn:
+                break;
+            case R.id.add_bug_btn:
+                break;
+            case R.id.catalog_btn:
+                break;
+            case R.id.settings_btn:
+                break;
+
+        }
+        /*
+        if (id == R.id.nav_camera) {
+            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
         if (id == R.id.frame_map) {
             Intent Prueba = new Intent(MainActivity.this, SamplePointInfoActivity.class);
             startActivity(Prueba);
@@ -273,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
             startActivity(Prueba);
         }
-
+        */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

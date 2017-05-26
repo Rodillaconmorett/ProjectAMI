@@ -1,18 +1,16 @@
 package is.ecci.ucr.projectami.SamplingPoints;
 
-import java.util.HashMap;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-import is.ecci.ucr.projectami.BDAdministrator;
 import is.ecci.ucr.projectami.Bugs.Bug;
-import is.ecci.ucr.projectami.DBConnectors.DBAdmin;
 
 /**
  * Created by Daniel on 5/10/2017.
  */
 
-public class SamplingPoint {
+public class SamplingPoint implements Serializable {
     private double score;
     private int lowQualBug;
     private int medQualBug;
@@ -50,12 +48,8 @@ public class SamplingPoint {
         }
     }
 
-    public void updateBugList(){
-        bugList.clear();
-        LinkedList<Bug> paraQueCompile = new LinkedList<>();
-        for(Bug it : paraQueCompile){
-            bugList.add(it);
-        }
+    public void setBugList(LinkedList<Bug> bugList){
+        this.bugList = bugList;
     }
 
     public double getScore(){

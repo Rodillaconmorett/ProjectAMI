@@ -20,4 +20,10 @@ public class Config {
     public static String JSON_CONTENT_TYPE_KEY = "Content-Type";
     //Parametro JSON para definir que la consulta nos devolvera un valor de tipo JSON
     public static String JSON_CONTENT_TYPE = "application/json";
+    //External directory where the CSV file with the keys are stored
+    public static String KEYS_DIR = "KeysData";
+    //CSV file with the keys
+    public static String CSV_KEYS = "keys.csv";
+    //Dummy user object id
+    public static String DUMMY_USER_ID = "ObjectId(\"59208b3c382ad7c174d91ec7\")";
 }
