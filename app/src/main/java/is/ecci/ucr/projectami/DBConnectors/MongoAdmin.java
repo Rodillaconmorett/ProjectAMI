@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -90,21 +91,25 @@ public class MongoAdmin {
         Map<String, String> params = getDefaultParams();
         JSONArray arrayObject = new JSONArray();
         Calendar cal = Calendar.getInstance();
-        int date = cal.get(Calendar.SECOND);
-        Log.v("Date:", String.valueOf(date));
-//        for(int i = 0; i<bugs.size(); i++) {
-//            JSONObject jsonBody = new JSONObject();
-//            try {
-//                jsonBody.put("site_id",siteId);
-//                jsonBody.put("user_id",userId);
-//                jsonBody.put("date","");
-//                JSONObject results = new JSONObject();
-//                results.put("bug_id",bugs.get(i));
-//                results.put("qty",1);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = df.format(cal.getTime());
+        try {
+            for(int i = 0; i<bugs.size(); i++) {
+                JSONObject jsonBody = new JSONObject();
+
+                jsonBody.put("site_id", siteId);
+                jsonBody.put("user_id", userId);
+                jsonBody.put("date", formattedDate);
+                JSONObject results = new JSONObject();
+                results.put("bug_id", bugs.get(i));
+                results.put("qty", 1);
+                jsonBody.put("results", results);
+                arrayObject.put(jsonBody);
+            }
+            jsonPostRequest(arrayObject,url,params);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void insertBug(String family, String desc, Double score, String[] imagesPaths) {
@@ -223,6 +228,40 @@ public class MongoAdmin {
 
     //POST Request
     private void jsonPostRequest(JSONObject jsonBody, String url, Map<String, String> params) {
+        final String requestBody = jsonBody.toString();
+        Custom_Volly_Request jsonRequest;
+        jsonRequest = new Custom_Volly_Request(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Response: ", response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError response)
+                    {
+                        Log.d("Response: Error", response.toString());
+                    }
+                }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Encoding no valido de %s usando %s", requestBody, "utf-8");
+                    return null;
+                }
+            }};
+        queue.add(jsonRequest);
+    }
+
+
+    private void jsonPostRequest(JSONArray jsonBody, String url, Map<String, String> params) {
         final String requestBody = jsonBody.toString();
         Custom_Volly_Request jsonRequest;
         jsonRequest = new Custom_Volly_Request(Request.Method.POST, url, params,
