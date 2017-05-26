@@ -56,7 +56,7 @@ public class SubScreenMap extends Activity {
 
     private void setSamplingPoint(){
 
-        siteId = site.getObjID();
+        //siteId = site.getObjID();
         db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
