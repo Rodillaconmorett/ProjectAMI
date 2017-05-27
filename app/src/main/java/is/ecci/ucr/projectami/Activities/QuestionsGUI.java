@@ -31,37 +31,33 @@ import java.util.LinkedList;
 
 
 public class QuestionsGUI extends AppCompatActivity {
+
+    //Declaración de variables
+
+    //Variables estáticas que requieren de muchos recursos, que se busca que se creen pocas veces
     static TreeController treeControl;
-
     static HashMap<String, String> questions;
-
-    //static HashMap<String,String> questions;
-    //LinkedHashSet<String> currentInfo;
-
     static boolean openedBefore = false;
+
+    //Variables de la clase
     String currentQuestion;
     boolean extraQuestion = false;
     int currentExtraQuestions = 3;
     static MongoAdmin db;
 
 
+    /**
+     * This method describe the instance of the class
+      * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
 
+        //Clase dedicada para pasar parámetros
         Intent parameters = getIntent();
-        //currentInfo = (LinkedHashSet<String>) parameters.getExtras().getSerializable("treeCont");
-
-//        Matrix matrix = new Matrix();
-//        try {
-//            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
-//        } catch (Exception e) {
-//            //File not found
-//        }
-//        treeControl = new TreeController(matrix);
-
-        if (!openedBefore) {
+         if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
             Matrix matrix = new Matrix();
             db = new MongoAdmin(this.getApplicationContext());//creación del objeto
             questions = new HashMap<String, String>();
@@ -77,6 +73,8 @@ public class QuestionsGUI extends AppCompatActivity {
             treeControl.reset();
         }
 
+
+        //Linking between static buttons and actions
         ImageView btnGoHome = (ImageView) findViewById(R.id.btnBack);
         btnGoHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,10 +114,17 @@ public class QuestionsGUI extends AppCompatActivity {
 
     }
 
+    /**
+     * Inicialización de árbol
+     */
     protected void initialize() {
+
         this.setCurrentQuestion();
     }
 
+    /**
+     * Set the current question and sends it to other method to publish it on the gui
+     */
     protected void setCurrentQuestion() {
 
         if (extraQuestion) {
@@ -160,7 +165,10 @@ public class QuestionsGUI extends AppCompatActivity {
     /*
     *   This method receive an array with the current questions and answers
     *   to choice to display on the screen.
+    *   It generates dynamically buttons (options) depending on the current questions and answers,
+    *   publishing it on the corresponding layout.
     *   @param: String[] questionsAndOptions
+    *
     */
     protected void displayOnScreen(String[] questionsAndOptions) {
         ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
@@ -203,8 +211,11 @@ public class QuestionsGUI extends AppCompatActivity {
         }
     }
 
-    /*
-    *   This method reacts to the button action
+    /**
+     *   This method reacts to the button action
+     *   It´s the listener for the buttons. It has a different action depending on the input
+     * @param button
+     * @throws AnswerException
      */
     public void catchAction(Button button) throws AnswerException {
         String textB = button.getText().toString();
@@ -230,6 +241,10 @@ public class QuestionsGUI extends AppCompatActivity {
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
     }
 
+    /**
+     * This method load the set of questions from the database
+     * @throws Exception
+     */
     public void loadQuestions() throws Exception {
         db.getColl(new MongoAdmin.ServerCallback() {
             @Override
@@ -259,6 +274,12 @@ public class QuestionsGUI extends AppCompatActivity {
     }
 
 
+    /**
+     * Converts the charset of the string sended by the DB.
+     * @param string
+     * @return
+     * @throws java.io.UnsupportedEncodingException
+     */
     public String convert(String string) throws java.io.UnsupportedEncodingException {
         byte[] bytes = string.getBytes("ISO-8859-1");
         return new String(bytes);
