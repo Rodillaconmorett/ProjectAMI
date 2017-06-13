@@ -50,8 +50,9 @@ public class MongoAdmin {
     //Nota: Para la siguiente etapa, hay que cambiar la autenticación
     private Map<String,String> getDefaultParams() {
         Map<String, String> params = new HashMap<>();
-        String encodedString = Base64.encodeToString(String.format("%s:%s", "admin", "q1w2E3r4").getBytes(), Base64.NO_WRAP);
+        String encodedString = Base64.encodeToString(String.format("%s:%s", Config.AUTH_USER, Config.AUTH_USER_PASS).getBytes(), Base64.NO_WRAP);
         String value = String.format("Basic %s", encodedString);
+        Log.i("user&pass",encodedString);
         params.put(Config.AUTH_KEY,value);
         params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
         return params;
