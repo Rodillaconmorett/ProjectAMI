@@ -11,4 +11,5 @@
     <color name="lowQualColor">#ED1B24</color>
     <color name="startRedActionBar">#9b0000</color>
     <color name="endRedActionBar">#ea0000</color>
+    <color name="googleColor">#c93930</color>
 </resources>

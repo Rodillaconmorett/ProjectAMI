@@ -24,6 +24,7 @@ import android.widget.Toast;
 import android.widget.Button;
 
 import is.ecci.ucr.projectami.Activities.BugsSampleToRegisterActivity;
+import is.ecci.ucr.projectami.Activities.LogActivity;
 import is.ecci.ucr.projectami.Activities.QuestionsGUI;
 import is.ecci.ucr.projectami.Activities.SamplePointInfoActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
@@ -256,18 +257,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent activity;
         switch(id){
             case R.id.map_btn:
                 break;
             case R.id.add_bug_btn:
-                Intent activity = new Intent(MainActivity.this, BugsSampleToRegisterActivity.class);
+                activity = new Intent(MainActivity.this, BugsSampleToRegisterActivity.class);
                 startActivity(activity);
                 break;
             case R.id.catalog_btn:
                 break;
             case R.id.settings_btn:
+                activity = new Intent(MainActivity.this, LogActivity.class);
+                startActivity(activity);
                 break;
-
         }
         /*
         if (id == R.id.nav_camera) {
