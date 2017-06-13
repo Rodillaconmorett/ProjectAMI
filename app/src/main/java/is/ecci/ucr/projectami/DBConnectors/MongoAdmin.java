@@ -55,6 +55,7 @@ public class MongoAdmin {
         Log.i("user&pass",encodedString);
         params.put(Config.AUTH_KEY,value);
         params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
+        params.put("authenticationDatabase",Config.DATABASE_NAME);
         return params;
     }
 
