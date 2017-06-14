@@ -27,7 +27,7 @@ public class Config {
     //Dummy user object id
     public static String DUMMY_USER_ID = "alain.cruzc@gmail.com";
     //Dummy user authentication
-    public static String AUTH_USER = "admin";
+    public static String AUTH_USER = "tester";
     //Dummy user authentication password
-    public static String AUTH_USER_PASS = "q1w2E3r4";
+    public static String AUTH_USER_PASS = "cyzw24YwAV";
 }
