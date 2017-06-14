@@ -30,6 +30,4 @@ public class Questions {
         this.question = question;
         this.identificador = identificador;
     }
-
-
 }

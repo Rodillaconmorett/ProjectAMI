@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/place_autocomplete_separator"
     android:padding="0dp"
-    tools:context="is.ecci.ucr.projectami.Activities.BugsSampleToRegisterActivity"
+    tools:context="is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="25dp">
 
@@ -123,6 +123,6 @@
             android:textSize="18sp" />
 
     </RelativeLayout>
-    tools:context="is.ecci.ucr.projectami.Activities.BugsSampleToRegisterActivity">
+    tools:context="is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActivity">
 
 </android.support.constraint.ConstraintLayout>

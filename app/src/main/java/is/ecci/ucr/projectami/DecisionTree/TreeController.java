@@ -4,7 +4,6 @@ package is.ecci.ucr.projectami.DecisionTree;
 import android.support.v4.util.Pair;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Random;

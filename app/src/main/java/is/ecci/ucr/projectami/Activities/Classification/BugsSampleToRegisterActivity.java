@@ -1,36 +1,29 @@
-package is.ecci.ucr.projectami.Activities;
+package is.ecci.ucr.projectami.Activities.Classification;
 
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.google.android.gms.games.quest.Quest;
-
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
 
-import is.ecci.ucr.projectami.DecisionTree.Matrix;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SampleBugsAdapter;
-import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
 
-    QuestionsGUI questions;
+    QuestionsGUIActivity questions;
     private ArrayList<Bug> _bugsListToRegister;
     Button floatingActionButton;
     Site site;
@@ -54,10 +47,10 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         btnAddBug.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUI.class);
+                Intent intent = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUIActivity.class);
                 intent.putExtra("feedbackArray", currentInfo);
 
-               // intent.putExtra("QuestionsGUI", (Parcelable) treeControl);
+               // intent.putExtra("QuestionsGUIActivity", (Parcelable) treeControl);
                 startActivity(intent);
             }
         });
@@ -92,7 +85,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
 /*
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent Prueba = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUI.class);
+                Intent Prueba = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUIActivity.class);
                 startActivity(Prueba);
             }
         });

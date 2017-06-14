@@ -1,8 +1,6 @@
 package is.ecci.ucr.projectami.DecisionTree;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class Root extends Node {
 	
