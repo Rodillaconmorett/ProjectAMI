@@ -48,7 +48,7 @@ import is.ecci.ucr.projectami.SamplingPoints.Site;
 import static is.ecci.ucr.projectami.R.id.map;
 
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener,NavigationView.OnNavigationItemSelectedListener{
 
     private ArrayList<Bug> bugs;
 
@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
         //putMarket(map,9.86,-84.20,"hola","mundo");
         map.setOnMarkerClickListener(this);
-        map.setOnInfoWindowClickListener(this);
         loadMarks();
     }
 
@@ -229,15 +228,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return false;
     }
 
-
-
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        //Poner el evento de ir a ver la información de Rio
-        Toast.makeText(this, "Info window clicked",
-                Toast.LENGTH_SHORT).show();
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
 
