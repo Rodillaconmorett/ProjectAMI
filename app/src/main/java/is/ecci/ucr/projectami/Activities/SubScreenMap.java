@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
+import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.MainActivity;
@@ -48,8 +51,15 @@ public class SubScreenMap extends Activity {
 
         site = (Site)intent.getExtras().getSerializable("site");
 
+        samplingPoint = new SamplingPoint(site);
+
         db= new MongoAdmin(this.getApplicationContext());
         setSamplingPoint();
+        buttonInfo = (Button) findViewById(R.id.buttonInfo);
+        buttonRegister = (Button) findViewById(R.id.buttonRegister);
+
+        buttonInfo.setOnClickListener(btnInfoHandler);
+        buttonRegister.setOnClickListener(btnRegstrHandler);
 
 
 
@@ -58,8 +68,6 @@ public class SubScreenMap extends Activity {
     }
 
     private void setSamplingPoint(){
-
-        siteId = site.getObjID();
         db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
@@ -67,28 +75,30 @@ public class SubScreenMap extends Activity {
                 db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
                     @Override
                     public JSONObject onSuccess(JSONObject result) {
-                        samplingPoint.setBugList(JsonParserLF.parseBugs(result));
+                        Log.i("","Yellgue");
+                        LinkedList<Bug> bugs = JsonParserLF.parseBugs(result);
+                        samplingPoint.setBugList(bugs);
                         samplingPoint.updateScoreAndQualBug();
+
                         siteName = (TextView) findViewById(R.id.siteName);
                         siteName.setText(samplingPoint.getSite().getSiteName());
                         siteScore = (TextView) findViewById(R.id.siteScore);
                         siteScore.setText(String.valueOf(samplingPoint.getScore()));
                         textHghQualBugs = (TextView) findViewById(R.id.textHghQualBugs);
-                        textHghQualBugs.setText(samplingPoint.getHghQualBug());
+                        textHghQualBugs.setText(String.valueOf(samplingPoint.getHghQualBug()));
                         textMedQualBugs = (TextView) findViewById(R.id.textMedQualBugs);
-                        textMedQualBugs.setText(samplingPoint.getMedQualBug());
+                        textMedQualBugs.setText(String.valueOf(samplingPoint.getMedQualBug()));
                         textLowQualBugs = (TextView) findViewById(R.id.textLowQualBugs);
-                        textLowQualBugs.setText(samplingPoint.getLowQualBug());
+                        textLowQualBugs.setText(String.valueOf(samplingPoint.getLowQualBug()));
                         buttonInfo = (Button) findViewById(R.id.buttonInfo);
                         buttonRegister = (Button) findViewById(R.id.buttonRegister);
 
-                        buttonInfo.setOnClickListener(btnInfoHandler);
-                        buttonRegister.setOnClickListener(btnRegstrHandler);
                         return null;
                     }
 
                     @Override
                     public JSONObject onFailure(JSONObject result) {
+                        Log.i("","Falle");
                         return null;
                     }
                 },bugs);
@@ -114,9 +124,7 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
             Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
-
-            intent.putExtra("samplingPoint", samplingPoint);
-          
+            intent.putExtra("site", site);
             startActivity(intent);
         }
     };

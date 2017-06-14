@@ -9,6 +9,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.android.gms.games.quest.Quest;
@@ -24,6 +25,7 @@ import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SampleBugsAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
+import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
@@ -31,7 +33,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     QuestionsGUI questions;
     private ArrayList<Bug> _bugsListToRegister;
     Button floatingActionButton;
-    SamplingPoint samplePoint;
+    Site site;
 
     TreeController treeControl;
     LinkedList<Pair<String, String>> currentInfo;
@@ -43,15 +45,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bugs_sample_to_register);
 
         Intent intent = this.getIntent();
-        samplePoint = intent.getParcelableExtra("");                    // Nombre de intent variable
-
-        Matrix matrix = new Matrix();
-        try {
-            matrix.loadArff(getResources().openRawResource(R.raw.dataset));
-        } catch (Exception e) {
-            //File not found
-        }
-        treeControl = new TreeController(matrix);
+        site = (Site) intent.getExtras().getSerializable("site");                    // Nombre de intent variable
 
         ListView list = (ListView) findViewById(R.id.lstBugList);
 
@@ -68,6 +62,13 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             }
         });
 
+        ImageView btnGoHome = (ImageView) findViewById(R.id.btnGoHome);
+        btnGoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         Button btnRegister = (Button) findViewById(R.id.btnRegistrar);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override

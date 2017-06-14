@@ -10,7 +10,7 @@ import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.R;
 
 import android.content.Intent;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,25 +31,33 @@ import java.util.LinkedList;
 
 
 public class QuestionsGUI extends AppCompatActivity {
+
+    //Declaración de variables
+
+    //Variables estáticas que requieren de muchos recursos, que se busca que se creen pocas veces
     static TreeController treeControl;
-
     static HashMap<String, String> questions;
-
-    //static HashMap<String,String> questions;
-    //LinkedHashSet<String> currentInfo;
-  
     static boolean openedBefore = false;
+
+    //Variables de la clase
     String currentQuestion;
     boolean extraQuestion = false;
-    int currentExtraQuestions;
+    int currentExtraQuestions = 3;
     static MongoAdmin db;
 
 
+    /**
+     * This method describe the instance of the class
+      * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
-        if (!openedBefore) {
+
+        //Clase dedicada para pasar parámetros
+        Intent parameters = getIntent();
+         if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
             Matrix matrix = new Matrix();
             db = new MongoAdmin(this.getApplicationContext());//creación del objeto
             questions = new HashMap<String, String>();
@@ -61,8 +69,12 @@ public class QuestionsGUI extends AppCompatActivity {
             }
             treeControl = new TreeController(matrix);
             openedBefore = true;
+        } else {
+            treeControl.reset();
         }
 
+
+        //Linking between static buttons and actions
         ImageView btnGoHome = (ImageView) findViewById(R.id.btnBack);
         btnGoHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,33 +82,68 @@ public class QuestionsGUI extends AppCompatActivity {
                 finish();
             }
         });
+
+        Button backB = (Button) (findViewById(R.id.backButton));
+        backB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button pressed = (Button) v;
+                try {
+                    catchAction(pressed);
+                } catch (Exception e) {
+                    //Capturar la exceptión
+                }
+            }
+        });
+
+        Button contB = (Button) (findViewById(R.id.naButton));
+        contB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button pressed = (Button) v;
+                try {
+                    catchAction(pressed);
+                } catch (Exception e) {
+                    //Capturar la exceptión
+                }
+            }
+        });
+
         currentQuestion = "";
         this.initialize();
 
     }
 
+    /**
+     * Inicialización de árbol
+     */
     protected void initialize() {
+
         this.setCurrentQuestion();
     }
 
+    /**
+     * Set the current question and sends it to other method to publish it on the gui
+     */
     protected void setCurrentQuestion() {
 
         if (extraQuestion) {
-            if (currentExtraQuestions < 3) {
+            if (currentExtraQuestions > 0) {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
                 currentExtraQuestions--;
-            }else{
+            } else {
                 Intent parameters = getIntent();
-                LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>)parameters.getExtras().getSerializable("feedbackArray");
+                LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>) parameters.getExtras().getSerializable("feedbackArray");
                 currentInfo = treeControl.getQuestionsRealized();
-                try{
-                    this.finalize();
-                }catch (Throwable e){
+                try {
+                    finish();
+                } catch (Throwable e) {
                     //
                 }
             }
         } else {
-            if (!treeControl.isLeaf()) {
+            boolean j = treeControl.isLeaf();
+            if (!j) {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
             } else {
                 extraQuestion = true;
@@ -118,14 +165,18 @@ public class QuestionsGUI extends AppCompatActivity {
     /*
     *   This method receive an array with the current questions and answers
     *   to choice to display on the screen.
+    *   It generates dynamically buttons (options) depending on the current questions and answers,
+    *   publishing it on the corresponding layout.
     *   @param: String[] questionsAndOptions
+    *
     */
     protected void displayOnScreen(String[] questionsAndOptions) {
         ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
-            currentQuestion = questions.get(questionsAndOptions[0]);
+            String string = questions.get(questionsAndOptions[0]);
+            currentQuestion = (string == null) ? questionsAndOptions[0] : string;
             question.setText(currentQuestion);
             LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
@@ -150,18 +201,21 @@ public class QuestionsGUI extends AppCompatActivity {
             }
         } else {
             Intent parameters = getIntent();
-            LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>)parameters.getExtras().getSerializable("feedbackArray");
+            LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>) parameters.getExtras().getSerializable("feedbackArray");
             currentInfo = treeControl.getQuestionsRealized();
-            try{
-                this.finalize();
-            }catch (Throwable e){
+            try {
+                finish();
+            } catch (Throwable e) {
                 //
             }
         }
     }
 
-    /*
-    *   This method reacts to the button action
+    /**
+     *   This method reacts to the button action
+     *   It´s the listener for the buttons. It has a different action depending on the input
+     * @param button
+     * @throws AnswerException
      */
     public void catchAction(Button button) throws AnswerException {
         String textB = button.getText().toString();
@@ -171,14 +225,14 @@ public class QuestionsGUI extends AppCompatActivity {
         } else if (textB.equals("Continuar")) {
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
-            if (userAnswer.equals("")) {
-                treeControl.reply("NA", userAnswer);
-            } else {
+            if (userAnswer.trim().equals("")) {
                 treeControl.reply("NA");
+            } else {
+                treeControl.reply("NA",userAnswer);
             }
             ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.INVISIBLE);
         } else {
-            if (textB.equals("Retroceder")) {
+            if (textB.equals("Volver a pregunta anterior")) {
                 treeControl.goBack();
             } else {
                 treeControl.reply(textB);
@@ -187,6 +241,10 @@ public class QuestionsGUI extends AppCompatActivity {
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
     }
 
+    /**
+     * This method load the set of questions from the database
+     * @throws Exception
+     */
     public void loadQuestions() throws Exception {
         db.getColl(new MongoAdmin.ServerCallback() {
             @Override
@@ -194,8 +252,13 @@ public class QuestionsGUI extends AppCompatActivity {
                 ArrayList<Questions> questionsArray = JsonParserLF.parseQuestionsList(result);
                 int totalQuestions = questionsArray.size();
                 for (int i = 0; i < totalQuestions; i++) {
-                    questions.put(questionsArray.get(i).getIdentificador().trim(), questionsArray.get(i).getQuestion());
-                    Log.v("R:",questionsArray.get(i).getIdentificador().trim() + " " + questionsArray.get(i).getQuestion());
+                    try {
+                        questions.put(convert(questionsArray.get(i).getIdentificador().trim()), convert(questionsArray.get(i).getQuestion()));
+                        Log.v("R:", convert(questionsArray.get(i).getIdentificador().trim()) + " " + convert(questionsArray.get(i).getQuestion()));
+
+                    } catch (java.io.UnsupportedEncodingException e) {
+
+                    }
                 }
                 return null;
             }
@@ -208,6 +271,18 @@ public class QuestionsGUI extends AppCompatActivity {
         }, CollectionName.QUESTIONS);
 
 
+    }
+
+
+    /**
+     * Converts the charset of the string sended by the DB.
+     * @param string
+     * @return
+     * @throws java.io.UnsupportedEncodingException
+     */
+    public String convert(String string) throws java.io.UnsupportedEncodingException {
+        byte[] bytes = string.getBytes("ISO-8859-1");
+        return new String(bytes);
     }
 }
 

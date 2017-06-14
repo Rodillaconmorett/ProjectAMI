@@ -4,8 +4,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
-        android:icon="@drawable/logo_lifefinder"
-        android:label="@string/app_name"
+        android:icon="@drawable/ico_life_finder"
+        android:label="LifeFinder"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -33,7 +33,7 @@
             />
         <activity android:name=".Activities.QuestionsGUI"
             android:label="QuestionsGUI"/>
-        <!--<activity android:name=".Activities.BugsSampleToRegisterActivity"></activity>-->
+        <activity android:name=".Activities.BugsSampleToRegisterActivity"></activity>
     </application>
 
 </manifest>

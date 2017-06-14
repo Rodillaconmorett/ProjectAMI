@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 
+import is.ecci.ucr.projectami.Activities.BugsSampleToRegisterActivity;
+import is.ecci.ucr.projectami.Activities.LogActivity;
 import is.ecci.ucr.projectami.Activities.QuestionsGUI;
 import is.ecci.ucr.projectami.Activities.SamplePointInfoActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
@@ -54,6 +56,7 @@ import is.ecci.ucr.projectami.Bugs.BugAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
+import static is.ecci.ucr.projectami.R.id.action_image;
 import static is.ecci.ucr.projectami.R.id.map;
 import static is.ecci.ucr.projectami.R.id.pruebaText;
 
@@ -117,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
         /*
         Context context;
         mMapFragment = MapFragment.newInstance();
@@ -182,29 +187,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap map) {
         mMap=map;
 
-        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            // Use default InfoWindow frame
-            @Override
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-
-            // Defines the contents of the InfoWindow
-            @Override
-            public View getInfoContents(Marker arg0) {
-
-                // Getting view from the layout file info_window_layout
-                View v = getLayoutInflater().inflate(R.layout.sub_screen_map, null);
-
-                // Getting the position from the marker
-                LatLng latLng = arg0.getPosition();
-
-                // Returning the view containing InfoWindow contents
-                return v;
-
-            }
-        });
         LatLng pt = new LatLng(9.86, -84.20);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
         //putMarket(map,9.86,-84.20,"hola","mundo");
@@ -242,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
+
         //mandar el site
         double lat=marker.getPosition().latitude;
         double lon=marker.getPosition().longitude;
@@ -252,6 +234,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String info=marker.getSnippet().substring(mid,marker.getSnippet().length());
 
         Site site=new Site(objId,name,lat,lon,info);
+
+        Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
         Prueba.putExtra("site", site);
 
         startActivity(Prueba);
@@ -273,16 +257,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent activity;
         switch(id){
             case R.id.map_btn:
                 break;
             case R.id.add_bug_btn:
+                activity = new Intent(MainActivity.this, BugsSampleToRegisterActivity.class);
+                startActivity(activity);
                 break;
             case R.id.catalog_btn:
                 break;
             case R.id.settings_btn:
+                activity = new Intent(MainActivity.this, LogActivity.class);
+                startActivity(activity);
                 break;
-
         }
         /*
         if (id == R.id.nav_camera) {
