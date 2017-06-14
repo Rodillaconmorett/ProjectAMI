@@ -3,7 +3,6 @@ package is.ecci.ucr.projectami.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActivity;
 import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;

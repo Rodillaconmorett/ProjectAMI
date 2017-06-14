@@ -1,12 +1,8 @@
 package is.ecci.ucr.projectami;
 
 import android.content.ComponentCallbacks2;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,7 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,10 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 
-import is.ecci.ucr.projectami.Activities.BugsSampleToRegisterActivity;
+import is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActivity;
 import is.ecci.ucr.projectami.Activities.LogActivity;
-import is.ecci.ucr.projectami.Activities.QuestionsGUI;
-import is.ecci.ucr.projectami.Activities.SamplePointInfoActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
@@ -43,10 +36,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -56,9 +45,7 @@ import is.ecci.ucr.projectami.Bugs.BugAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
-import static is.ecci.ucr.projectami.R.id.action_image;
 import static is.ecci.ucr.projectami.R.id.map;
-import static is.ecci.ucr.projectami.R.id.pruebaText;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener{
@@ -279,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Intent Prueba = new Intent(MainActivity.this, SamplePointInfoActivity.class);
             startActivity(Prueba);
         } else if (id == R.id.nav_gallery) {
-            Intent Prueba = new Intent(MainActivity.this, QuestionsGUI.class);
+            Intent Prueba = new Intent(MainActivity.this, QuestionsGUIActivity.class);
             startActivity(Prueba);
         } else if (id == R.id.nav_slideshow) {
             Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);

@@ -1,4 +1,4 @@
-package is.ecci.ucr.projectami.Activities;
+package is.ecci.ucr.projectami.Activities.Classification;
 
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
@@ -30,7 +30,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 
-public class QuestionsGUI extends AppCompatActivity {
+public class QuestionsGUIActivity extends AppCompatActivity {
 
     //Declaración de variables
 

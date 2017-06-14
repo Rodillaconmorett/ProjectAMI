@@ -1,36 +1,24 @@
 package is.ecci.ucr.projectami.Activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
 
-import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
-import is.ecci.ucr.projectami.MainActivity;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
-import is.ecci.ucr.projectami.Activities.QuestionsGUI;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 /**
