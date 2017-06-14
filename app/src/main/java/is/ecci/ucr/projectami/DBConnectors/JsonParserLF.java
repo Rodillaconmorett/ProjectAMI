@@ -150,4 +150,8 @@ public class JsonParserLF {
         return bugID;
     }
 
+    private String convert(String string) throws java.io.UnsupportedEncodingException {
+        byte[] bytes = string.getBytes("ISO-8859-1");
+        return new String(bytes);
+    }
 }
