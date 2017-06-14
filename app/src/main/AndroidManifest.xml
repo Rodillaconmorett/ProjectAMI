@@ -34,6 +34,10 @@
         <activity android:name=".Activities.Classification.QuestionsGUIActivity"
             android:label="QuestionsGUI"/>
         <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity"></activity>
+        <activity android:name=".Activities.LogActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
+
     </application>
 
 </manifest>
