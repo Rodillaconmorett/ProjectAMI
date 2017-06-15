@@ -32,7 +32,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     )
-   compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.google.android.gms:play-services-auth:10.2.6'
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:+'
@@ -40,3 +41,4 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.android.support:gridlayout-v7:25.3.1'
 }
+apply plugin: 'com.google.gms.google-services'

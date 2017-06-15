@@ -25,6 +25,8 @@ import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,9 +48,10 @@ import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 import static is.ecci.ucr.projectami.R.id.map;
+import static is.ecci.ucr.projectami.R.id.pruebaText;
+import android.content.Intent;
 
-
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener,NavigationView.OnNavigationItemSelectedListener{
 
     private ArrayList<Bug> bugs;
 
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private ArrayList<Site> sites;
     private LinkedList<SamplingPoint> samplingPoints;
-
+    private Button bichosbtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(toolbar);
         db= new MongoAdmin(this.getApplicationContext());//creación del objeto
         samplingPoints = new LinkedList<>();
+
+
+
+
+
+
         /*
         * Aqui debe ir la vara de obtener de la base de datos
         *
@@ -178,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
         //putMarket(map,9.86,-84.20,"hola","mundo");
         map.setOnMarkerClickListener(this);
-        map.setOnInfoWindowClickListener(this);
         loadMarks();
     }
 
@@ -224,20 +232,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
         Prueba.putExtra("site", site);
-
         startActivity(Prueba);
         return false;
     }
 
-
-
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        //Poner el evento de ir a ver la información de Rio
-        Toast.makeText(this, "Info window clicked",
-                Toast.LENGTH_SHORT).show();
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
 
