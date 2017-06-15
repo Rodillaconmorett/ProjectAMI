@@ -29,7 +29,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     Site site;
 
     TreeController treeControl;
-    LinkedList<Pair<String, String>> currentInfo;
+    LinkedList<Pair<String,LinkedList<Pair<String,String>>>>retroInfo;
 
 
     @Override
@@ -43,15 +43,17 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         ListView list = (ListView) findViewById(R.id.lstBugList);
 
         FloatingActionButton btnAddBug = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-
+        retroInfo = new LinkedList<Pair<String, LinkedList<Pair<String,String>>>>();
         btnAddBug.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUIActivity.class);
+                LinkedList<Pair<String, String>> currentInfo = new LinkedList<Pair<String, String>>();
                 intent.putExtra("feedbackArray", currentInfo);
 
                // intent.putExtra("QuestionsGUIActivity", (Parcelable) treeControl);
                 startActivity(intent);
+                retroInfo.add(new Pair("Bug",currentInfo));
             }
         });
 
@@ -70,6 +72,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             }
         });
         _bugsListToRegister = new ArrayList<Bug>();
+        /*
         _bugsListToRegister.add(new Bug("Insectivorus", 5, ""));
         _bugsListToRegister.add(new Bug("Cucarachus", 5, ""));
         _bugsListToRegister.add(new Bug("Hormiguis", 5, ""));
@@ -77,7 +80,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         _bugsListToRegister.add(new Bug("Aedes Aegypti", 5, ""));
         _bugsListToRegister.add(new Bug("Mariposarium", 5,""));
         _bugsListToRegister.add(new Bug("Sompo Pa", 5,""));
-        _bugsListToRegister.add(new Bug("Scara Bajum", 5, ""));
+        _bugsListToRegister.add(new Bug("Scara Bajum", 5, ""));*/
 
         SampleBugsAdapter adapter = new SampleBugsAdapter(this, _bugsListToRegister);
         list.setAdapter(adapter);
@@ -94,6 +97,10 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
     public void addBugToBasket(Bug inBug){
         _bugsListToRegister.add(inBug);
+    }
+
+    public void registerOnScreen(){
+
     }
 
 }
