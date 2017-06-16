@@ -22,9 +22,12 @@ import is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActi
 import is.ecci.ucr.projectami.Activities.LogActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
+import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,13 +45,15 @@ import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugAdapter;
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
 import static is.ecci.ucr.projectami.R.id.map;
+import static is.ecci.ucr.projectami.R.id.pruebaText;
+import android.content.Intent;
 
-
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener ,GoogleMap.OnInfoWindowClickListener ,NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback ,ComponentCallbacks2, View.OnCreateContextMenuListener , GoogleMap.OnMarkerClickListener,NavigationView.OnNavigationItemSelectedListener{
 
     private ArrayList<Bug> bugs;
 
@@ -59,10 +64,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Fragment f;
     MapFragment mMapFragment;
     CameraUpdate cameraUpdate;
-
     TextView textView;
     Button getSites;
-    MongoAdmin db;
 
     GoogleMap mMap;
 
@@ -70,15 +73,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private ArrayList<Site> sites;
     private LinkedList<SamplingPoint> samplingPoints;
-
+    private Button bichosbtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        db= new MongoAdmin(this.getApplicationContext());//creación del objeto
+        MongoAdmin.setContext(this.getApplicationContext());
         samplingPoints = new LinkedList<>();
+
+
+
+
+
+
         /*
         * Aqui debe ir la vara de obtener de la base de datos
         *
@@ -142,10 +151,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         bugs.add(new Bug("orca", R.drawable.orca));
         bugs.add(new Bug("perro", R.drawable.perro));
         bugs.add(new Bug("vaca", R.drawable.vaca));*/
-    };
+    }
 
     public void loadMarks(){
-        db.getColl(new MongoAdmin.ServerCallback() {
+        Consultor.getColl(new ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
                 sites= JsonParserLF.parseSites(result);
@@ -178,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(pt, 10));
         //putMarket(map,9.86,-84.20,"hola","mundo");
         map.setOnMarkerClickListener(this);
-        map.setOnInfoWindowClickListener(this);
         loadMarks();
     }
 
@@ -224,20 +232,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
         Prueba.putExtra("site", site);
-
         startActivity(Prueba);
         return false;
     }
 
-
-
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        //Poner el evento de ir a ver la información de Rio
-        Toast.makeText(this, "Info window clicked",
-                Toast.LENGTH_SHORT).show();
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
 

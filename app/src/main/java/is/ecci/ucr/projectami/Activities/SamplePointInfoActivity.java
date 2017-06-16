@@ -15,8 +15,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
@@ -48,7 +50,6 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_info_sample_point);
         Intent intent = getIntent();
         site = (Site) intent.getExtras().getSerializable("site");
-        db = new MongoAdmin(this.getApplicationContext());
         Calendar today = Calendar.getInstance();
         initialDate = String.valueOf(today.get(Calendar.YEAR));
         initialDate += "-";
@@ -124,11 +125,11 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
     private void setSamplingPoint(){
         Log.i("","");
-        db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+        Consultor.getSamplesBySiteID(new ServerCallback() {
               @Override
               public JSONObject onSuccess(JSONObject result) {
                   ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
-                  db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+                  Consultor.getBugsByIdRange(new ServerCallback() {
                       @Override
                       public JSONObject onSuccess(JSONObject result) {
                           samplingPoint = new SamplingPoint(site);
