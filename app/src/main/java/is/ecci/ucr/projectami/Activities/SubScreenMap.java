@@ -16,8 +16,10 @@ import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActivity;
 import is.ecci.ucr.projectami.Bugs.Bug;
+import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.MainActivity;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
@@ -52,8 +54,6 @@ public class SubScreenMap extends Activity {
         site = (Site)intent.getExtras().getSerializable("site");
 
         samplingPoint = new SamplingPoint(site);
-
-        db= new MongoAdmin(this.getApplicationContext());
         setSamplingPoint();
         buttonInfo = (Button) findViewById(R.id.buttonInfo);
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
@@ -68,11 +68,11 @@ public class SubScreenMap extends Activity {
     }
 
     private void setSamplingPoint(){
-        db.getSamplesBySiteID(new MongoAdmin.ServerCallback() {
+        Consultor.getSamplesBySiteID(new ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
                 ArrayList<String> bugs = JsonParserLF.parseSampleBugList(result);
-                db.getBugsByIdRange(new MongoAdmin.ServerCallback() {
+                Consultor.getBugsByIdRange(new ServerCallback() {
                     @Override
                     public JSONObject onSuccess(JSONObject result) {
                         Log.i("","Yellgue");
