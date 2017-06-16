@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,7 +43,7 @@ public class SampleBugsAdapter extends ArrayAdapter<Bug> {
         _quantityBugs = new int[_bugs.size()];
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         // En primer lugar "inflamos" una nueva vista, que será la que se
         // mostrará en la celda del ListView. Para ello primero creamos el
         // inflater, y después inflamos la vista.
@@ -61,8 +62,19 @@ public class SampleBugsAdapter extends ArrayAdapter<Bug> {
 
         // Recogemos el TextView para mostrar el nombre y establecemos el
         // nombre.
-        TextView nombre = (TextView) convertView.findViewById(R.id.txtName);
+        TextView nombre = (TextView) convertView.findViewById(R.id.list_item_string);
         nombre.setText(_bugs.get(position).getFamily());
+
+        Button deleteBtn = (Button)convertView.findViewById(R.id.delete_btn);
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+                _bugs.remove(position); //or some other task
+                notifyDataSetChanged();
+            }
+        });
+
 
         // Recogemos el TextView para mostrar el número de celda y lo
         // establecemos.

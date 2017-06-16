@@ -40,6 +40,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
     static TreeController treeControl;
     static HashMap<String, String> questions;
     static boolean openedBefore = false;
+    static Matrix matrix = new Matrix();
 
     //Variables de la clase
     String currentQuestion;
@@ -56,10 +57,9 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
 
-        //Clase dedicada para pasar parámetros
+        //Clase dedicada para pasar parámetro
         Intent parameters = getIntent();
          if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
-            Matrix matrix = new Matrix();
             questions = new HashMap<String, String>();
             try {
                 matrix.loadArff(getResources().openRawResource(R.raw.dataset));
@@ -67,13 +67,10 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             } catch (Exception e) {
                 //File not found
             }
-            treeControl = new TreeController(matrix);
             openedBefore = true;
-        } else {
-            treeControl.reset();
         }
 
-
+        treeControl = new TreeController(matrix);
         //Linking between static buttons and actions
         ImageView btnGoHome = (ImageView) findViewById(R.id.btnBack);
         btnGoHome.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +105,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 }
             }
         });
-
         currentQuestion = "";
         this.initialize();
 
@@ -136,9 +132,11 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>) parameters.getExtras().getSerializable("feedbackArray");
                 currentInfo = treeControl.getQuestionsRealized();
                 try {
+                    System.out.println("Finishin the activity");
                     finish();
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     //
+                    System.out.println("Error finishing the frame");
                 }
             }
         } else {
@@ -269,10 +267,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 return null;
             }
         }, CollectionName.QUESTIONS);
-
-
     }
-
 
     /**
      * Converts the charset of the string sended by the DB.
