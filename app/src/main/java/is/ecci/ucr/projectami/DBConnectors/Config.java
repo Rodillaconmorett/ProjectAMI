@@ -12,6 +12,10 @@ public class Config {
     public static String REST_PORT = "8080";
     //Nombre de la base de datos en MongoDB
     public static String DATABASE_NAME = "LifeFinder";
+    //Nombre de la base de datos de usuarios en MongoDB
+    public static String DATABASE_NAME_AUTH = "auth";
+    //URL completo para realizar consultas HTTP a la base de datos
+    public static String CONNECTION_STRING_USERS = PUBLIC_DNS+":"+REST_PORT+"/"+DATABASE_NAME_AUTH;
     //URL completo para realizar consultas HTTP a la base de datos
     public static String CONNECTION_STRING = PUBLIC_DNS+":"+REST_PORT+"/"+DATABASE_NAME;
     //Parametro JSON para usar autenticación en las consultas
