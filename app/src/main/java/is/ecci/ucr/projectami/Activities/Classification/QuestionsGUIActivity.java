@@ -1,8 +1,10 @@
 package is.ecci.ucr.projectami.Activities.Classification;
 
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
+import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DecisionTree.Matrix;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
@@ -43,7 +45,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
     String currentQuestion;
     boolean extraQuestion = false;
     int currentExtraQuestions = 3;
-    static MongoAdmin db;
 
 
     /**
@@ -59,7 +60,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         Intent parameters = getIntent();
          if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
             Matrix matrix = new Matrix();
-            db = new MongoAdmin(this.getApplicationContext());//creación del objeto
             questions = new HashMap<String, String>();
             try {
                 matrix.loadArff(getResources().openRawResource(R.raw.dataset));
@@ -221,7 +221,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
-            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.VISIBLE);
+            findViewById(R.id.userAnswerLayout).setVisibility(View.VISIBLE);
         } else if (textB.equals("Continuar")) {
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
@@ -230,7 +230,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             } else {
                 treeControl.reply("NA",userAnswer);
             }
-            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.INVISIBLE);
+            findViewById(R.id.userAnswerLayout).setVisibility(View.INVISIBLE);
         } else {
             if (textB.equals("Volver a pregunta anterior")) {
                 treeControl.goBack();
@@ -246,7 +246,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
      * @throws Exception
      */
     public void loadQuestions() throws Exception {
-        db.getColl(new MongoAdmin.ServerCallback() {
+        Consultor.getColl(new ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
                 ArrayList<Questions> questionsArray = JsonParserLF.parseQuestionsList(result);
