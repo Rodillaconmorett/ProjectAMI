@@ -1,8 +1,10 @@
 package is.ecci.ucr.projectami.Activities.Classification;
 
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
+import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DecisionTree.Matrix;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
@@ -38,12 +40,12 @@ public class QuestionsGUIActivity extends AppCompatActivity {
     static TreeController treeControl;
     static HashMap<String, String> questions;
     static boolean openedBefore = false;
+    static Matrix matrix = new Matrix();
 
     //Variables de la clase
     String currentQuestion;
     boolean extraQuestion = false;
     int currentExtraQuestions = 3;
-    static MongoAdmin db;
 
 
     /**
@@ -55,11 +57,9 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_gui);
 
-        //Clase dedicada para pasar parámetros
+        //Clase dedicada para pasar parámetro
         Intent parameters = getIntent();
          if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
-            Matrix matrix = new Matrix();
-            db = new MongoAdmin(this.getApplicationContext());//creación del objeto
             questions = new HashMap<String, String>();
             try {
                 matrix.loadArff(getResources().openRawResource(R.raw.dataset));
@@ -67,13 +67,10 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             } catch (Exception e) {
                 //File not found
             }
-            treeControl = new TreeController(matrix);
             openedBefore = true;
-        } else {
-            treeControl.reset();
         }
 
-
+        treeControl = new TreeController(matrix);
         //Linking between static buttons and actions
         ImageView btnGoHome = (ImageView) findViewById(R.id.btnBack);
         btnGoHome.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +105,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 }
             }
         });
-
         currentQuestion = "";
         this.initialize();
 
@@ -136,9 +132,11 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>) parameters.getExtras().getSerializable("feedbackArray");
                 currentInfo = treeControl.getQuestionsRealized();
                 try {
+                    System.out.println("Finishin the activity");
                     finish();
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     //
+                    System.out.println("Error finishing the frame");
                 }
             }
         } else {
@@ -221,7 +219,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
-            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.VISIBLE);
+            findViewById(R.id.userAnswerLayout).setVisibility(View.VISIBLE);
         } else if (textB.equals("Continuar")) {
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
@@ -230,7 +228,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             } else {
                 treeControl.reply("NA",userAnswer);
             }
-            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.INVISIBLE);
+            findViewById(R.id.userAnswerLayout).setVisibility(View.INVISIBLE);
         } else {
             if (textB.equals("Volver a pregunta anterior")) {
                 treeControl.goBack();
@@ -246,7 +244,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
      * @throws Exception
      */
     public void loadQuestions() throws Exception {
-        db.getColl(new MongoAdmin.ServerCallback() {
+        Consultor.getColl(new ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
                 ArrayList<Questions> questionsArray = JsonParserLF.parseQuestionsList(result);
@@ -269,10 +267,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 return null;
             }
         }, CollectionName.QUESTIONS);
-
-
     }
-
 
     /**
      * Converts the charset of the string sended by the DB.
