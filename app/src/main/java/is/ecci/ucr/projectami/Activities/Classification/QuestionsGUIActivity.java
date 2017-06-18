@@ -51,6 +51,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
     boolean extraQuestion = false;
     int currentExtraQuestions = 3;
 
+
     /**
      * This method describe the instance of the class
       * @param savedInstanceState
@@ -219,7 +220,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
-            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.VISIBLE);
+            findViewById(R.id.userAnswerLayout).setVisibility(View.VISIBLE);
         } else if (textB.equals("Continuar")) {
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
@@ -228,7 +229,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             } else {
                 treeControl.reply("NA",userAnswer);
             }
-            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.INVISIBLE);
+            findViewById(R.id.userAnswerLayout).setVisibility(View.INVISIBLE);
         } else {
             if (textB.equals("Volver a pregunta anterior")) {
                 treeControl.goBack();

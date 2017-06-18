@@ -110,7 +110,7 @@
                     android:layout_gravity="center"
                     android:layout_row="4"
                     android:layout_marginTop="20dp"
-                    android:columnCount="1"
+                    android:columnCount="2"
                     android:rowCount="1"
                     >
 
@@ -125,6 +125,7 @@
                          android:layout_row="0"
                          android:layout_gravity="center"
                         />
+
 
 
 

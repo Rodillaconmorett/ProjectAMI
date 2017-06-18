@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Button getSites;
 
 
+
     GoogleMap mMap;
 
     public static Site _actualSite;

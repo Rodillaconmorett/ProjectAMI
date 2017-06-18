@@ -38,6 +38,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     SampleBugsAdapter adapter;
 
     TreeController treeControl;
+
     static private LinkedList<Pair<String, LinkedList<Pair<String, String>>>> retroInfo;
     static Boolean returningFromClassification = false;
 
