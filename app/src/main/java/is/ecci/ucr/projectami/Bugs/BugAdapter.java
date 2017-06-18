@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -48,6 +49,29 @@ public class BugAdapter extends ArrayAdapter<Bug> {
         // establecemos.
         TextView numCelda = (TextView) item.findViewById(R.id.tvField);
         numCelda.setText(String.valueOf(position));
+
+       /*
+        Button deleteBtn = (Button)convertView.findViewById(R.id.delete_btn);
+        Button addBtn = (Button)convertView.findViewById(R.id.add_btn);
+
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+                if(_bugs)
+
+                ..remove(position); //or some other task
+                notifyDataSetChanged();
+            }
+        });
+        addBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+                notifyDataSetChanged();
+            }
+        });
+        */
 
         // Devolvemos la vista para que se muestre en el ListView.
         return item;
