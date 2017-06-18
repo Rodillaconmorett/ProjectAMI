@@ -79,6 +79,17 @@ public class SampleBugsAdapter extends ArrayAdapter<Bug> {
         TextView nombre = (TextView) convertView.findViewById(R.id.txtName);
         nombre.setText(_bugs.get(position).getFamily());
 
+        Button deleteBtn = (Button)convertView.findViewById(R.id.delete_btn);
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+                _bugs.remove(position); //or some other task
+                notifyDataSetChanged();
+            }
+        });
+
+
         // Recogemos el TextView para mostrar el número de celda y lo
         // establecemos.
 
