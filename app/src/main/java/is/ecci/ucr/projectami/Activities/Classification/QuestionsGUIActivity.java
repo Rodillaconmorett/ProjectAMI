@@ -1,18 +1,17 @@
 package is.ecci.ucr.projectami.Activities.Classification;
 
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
-import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
-import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DecisionTree.Matrix;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
 import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.R;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.util.Pair;
+import android.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,12 +40,16 @@ public class QuestionsGUIActivity extends AppCompatActivity {
     static HashMap<String, String> questions;
     static boolean openedBefore = false;
     static Matrix matrix = new Matrix();
+    static MongoAdmin db;
+
+    //Variables estáticas que se llaman desde otras clases, para las cuales existen métodos
+    private static String currentBug;
+    private static LinkedList<Pair<String, String>> currentInfo;
 
     //Variables de la clase
     String currentQuestion;
     boolean extraQuestion = false;
     int currentExtraQuestions = 3;
-
 
     /**
      * This method describe the instance of the class
@@ -58,8 +61,11 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         setContentView(R.layout.activity_questions_gui);
 
         //Clase dedicada para pasar parámetro
-        Intent parameters = getIntent();
+        currentBug = "Unknown";
+        currentInfo = null;
+
          if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
+            db = new MongoAdmin(this.getApplicationContext());//creación del objeto
             questions = new HashMap<String, String>();
             try {
                 matrix.loadArff(getResources().openRawResource(R.raw.dataset));
@@ -128,12 +134,10 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
                 currentExtraQuestions--;
             } else {
-                Intent parameters = getIntent();
-                LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>) parameters.getExtras().getSerializable("feedbackArray");
                 currentInfo = treeControl.getQuestionsRealized();
                 try {
                     System.out.println("Finishin the activity");
-                    finish();
+                    terminarActividad();
                 } catch (Exception e) {
                     //
                     System.out.println("Error finishing the frame");
@@ -198,11 +202,10 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 answerContainer.addView(button, 0);
             }
         } else {
-            Intent parameters = getIntent();
-            LinkedList<Pair<String, String>> currentInfo = (LinkedList<Pair<String, String>>) parameters.getExtras().getSerializable("feedbackArray");
+            currentBug = currentQuestion;
             currentInfo = treeControl.getQuestionsRealized();
             try {
-                finish();
+                terminarActividad();
             } catch (Throwable e) {
                 //
             }
@@ -219,7 +222,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         String textB = button.getText().toString();
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
-            findViewById(R.id.userAnswerLayout).setVisibility(View.VISIBLE);
+            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.VISIBLE);
         } else if (textB.equals("Continuar")) {
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
@@ -228,7 +231,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             } else {
                 treeControl.reply("NA",userAnswer);
             }
-            findViewById(R.id.userAnswerLayout).setVisibility(View.INVISIBLE);
+            ((LinearLayout) findViewById(R.id.userAnswerLayout)).setVisibility(View.INVISIBLE);
         } else {
             if (textB.equals("Volver a pregunta anterior")) {
                 treeControl.goBack();
@@ -244,7 +247,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
      * @throws Exception
      */
     public void loadQuestions() throws Exception {
-        Consultor.getColl(new ServerCallback() {
+        db.getColl(new MongoAdmin.ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
                 ArrayList<Questions> questionsArray = JsonParserLF.parseQuestionsList(result);
@@ -269,6 +272,8 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         }, CollectionName.QUESTIONS);
     }
 
+
+
     /**
      * Converts the charset of the string sended by the DB.
      * @param string
@@ -279,5 +284,23 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         byte[] bytes = string.getBytes("ISO-8859-1");
         return new String(bytes);
     }
+
+    public void terminarActividad(){
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("returning_from_classification", true);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+    }
+
+    static String getCurrentBug(){
+        return currentBug;
+    }
+
+    static LinkedList<Pair<String,String>> getCurrentInfo(){
+        return currentInfo;
+    }
+
+
+
 }
 
