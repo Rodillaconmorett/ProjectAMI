@@ -2,6 +2,7 @@ package is.ecci.ucr.projectami.Activities.Classification;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -73,34 +74,15 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                registerBugsOnDataBase();
+                regiterFeedBackOnDataBase();
             }
         });
+
+
         _bugsListToRegister = new ArrayList<Bug>();
-
-        /*_bugsListToRegister.add(new Bug("Insectivorus", 5, ""));
-        _bugsListToRegister.add(new Bug("Cucarachus", 5, ""));
-        _bugsListToRegister.add(new Bug("Hormiguis", 5, ""));
-        _bugsListToRegister.add(new Bug("Mantis", 5, ""));
-        _bugsListToRegister.add(new Bug("Aedes Aegypti", 5, ""));
-        _bugsListToRegister.add(new Bug("Mariposarium", 5,""));
-        _bugsListToRegister.add(new Bug("Sompo Pa", 5,""));
-        _bugsListToRegister.add(new Bug("Scara Bajum", 5, ""));*/
-
         adapter = new SampleBugsAdapter(this, _bugsListToRegister);
         list.setAdapter(adapter);
-
-        //floatingActionButton = (Button) findViewById(R.id.floatingActionButton);
-/*
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent Prueba = new Intent(BugsSampleToRegisterActivity.this, QuestionsGUIActivity.class);
-                startActivity(Prueba);
-            }
-        });
-
-       */
-
     }
 
 
@@ -132,9 +114,6 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             ViewGroup currentView = findItem((ViewGroup) findViewById(R.id.lstBugList), currentBug);
             if (currentView != null) {
                 highligthItem(currentView);
-                //TextView cantidad = (TextView) currentView.findViewById(R.id.numberPicker);
-                //int currentValue = Integer.parseInt((String) cantidad.getText());
-                //cantidad.setText(currentValue + 1);
             }
         } else {
             if (!currentBug.equals("Unknown")) {
@@ -174,9 +153,8 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         return false;
     }
 
-    public void highligthItem(final View view){
-        final int color = 0x7DE8B4;
-        view.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+    public void highligthItem(final View view) {
+        view.getBackground().setColorFilter(Color.argb(125, 232, 176,70), PorterDuff.Mode.MULTIPLY);
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -186,6 +164,14 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         }, 2000);
     }
 
+    public void registerBugsOnDataBase(){
+
+    }
+
+    public void regiterFeedBackOnDataBase(){
+
+    }
+    
     public static void deleteFromFeedBack(String family) {
         int length = retroInfo.size();
         for (int i = 0; i < length; i++) {
