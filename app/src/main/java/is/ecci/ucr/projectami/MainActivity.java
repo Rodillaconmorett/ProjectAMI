@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     String info = tempSite.getObjID()+","+tempSite.getDescription();
                     putMarket(mMap, lat, lon, name, info);
                 }
-
                 return null;
             }
 
