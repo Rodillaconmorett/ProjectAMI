@@ -22,6 +22,7 @@ import is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActi
 import is.ecci.ucr.projectami.Activities.LogActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
+import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
@@ -44,6 +45,7 @@ import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugAdapter;
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
@@ -62,10 +64,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Fragment f;
     MapFragment mMapFragment;
     CameraUpdate cameraUpdate;
-
     TextView textView;
     Button getSites;
-    MongoAdmin db;
 
     GoogleMap mMap;
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        db= new MongoAdmin(this.getApplicationContext());//creación del objeto
+        MongoAdmin.setContext(this.getApplicationContext());
         samplingPoints = new LinkedList<>();
 
 
@@ -151,10 +151,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         bugs.add(new Bug("orca", R.drawable.orca));
         bugs.add(new Bug("perro", R.drawable.perro));
         bugs.add(new Bug("vaca", R.drawable.vaca));*/
-    };
+    }
 
     public void loadMarks(){
-        db.getColl(new MongoAdmin.ServerCallback() {
+        Consultor.getColl(new ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
                 sites= JsonParserLF.parseSites(result);

@@ -9,7 +9,7 @@ public enum CollectionName {
     SITE("/Site",0),
     BUGS("/Bugs",1),
     SAMPLE("/Sample",2),
-    USERS("/Users",3),
+    USERS("/users",3),
     KEYS("/ClassKey",4),
     QUESTIONS("/Questions",5);
 

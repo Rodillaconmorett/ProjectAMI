@@ -30,7 +30,6 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
     private GoogleSignInOptions googleSignInOptions;// loggin options
     private SignInButton signInButton;
 
-    private Button loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
