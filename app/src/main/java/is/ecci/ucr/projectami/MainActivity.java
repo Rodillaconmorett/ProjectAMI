@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView textView;
     Button getSites;
 
+
+
     GoogleMap mMap;
 
     public static Site _actualSite;
@@ -252,8 +254,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.catalog_btn:
                 break;
             case R.id.settings_btn:
-                activity = new Intent(MainActivity.this, LogActivity.class);
-                startActivity(activity);
+                if(LogInfo.isLogged()){
+                    // Aqui inicia el activity de ajustes
+                }
+                else {
+                    activity = new Intent(MainActivity.this, LogActivity.class);
+                    startActivity(activity);
+                }
                 break;
         }
         /*
