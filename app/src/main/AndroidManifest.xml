@@ -23,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-      
+
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA58eEmyOdwXxCTRh0k9wqOJvN5-k5n-us" />
@@ -41,7 +42,7 @@
         <activity android:name=".Activities.Classification.QuestionsGUIActivity"
             android:label="QuestionsGUI"/>
         <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity"></activity>
-
+        <activity android:name=".Activities.CatalogActivity"></activity>
     </application>
 
 </manifest>
