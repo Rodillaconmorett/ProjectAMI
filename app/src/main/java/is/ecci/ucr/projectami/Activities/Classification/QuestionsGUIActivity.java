@@ -270,8 +270,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         }, CollectionName.QUESTIONS);
     }
 
-
-
     /**
      * Converts the charset of the string sended by the DB.
      * @param string
@@ -297,8 +295,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
     static LinkedList<Pair<String,String>> getCurrentInfo(){
         return currentInfo;
     }
-
-
 
 }
 
