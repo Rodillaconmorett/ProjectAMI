@@ -3,7 +3,6 @@ package is.ecci.ucr.projectami.Activities.Classification;
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
-import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DecisionTree.Matrix;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
@@ -42,7 +41,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
     static HashMap<String, String> questions;
     static boolean openedBefore = false;
     static Matrix matrix = new Matrix();
-    static MongoAdmin db;
 
     //Variables estáticas que se llaman desde otras clases, para las cuales existen métodos
     private static String currentBug;
@@ -68,7 +66,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         currentInfo = null;
 
          if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
-            //db = new MongoAdmin(this.getApplicationContext());//creación del objeto
             questions = new HashMap<String, String>();
             try {
                 matrix.loadArff(getResources().openRawResource(R.raw.dataset));
@@ -116,7 +113,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         });
         currentQuestion = "";
         this.initialize();
-
     }
 
     /**
@@ -155,7 +151,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             }
         }
     }
-
 
     /*
     *   Convert a LikedHashSet to an array of strings

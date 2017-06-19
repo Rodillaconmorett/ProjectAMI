@@ -52,7 +52,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 .build();
 
 
-        signInButton = (SignInButton) findViewById(R.id.btnLogGoogled);
+        signInButton = (SignInButton) findViewById(R.id.btnLogGoogle);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
