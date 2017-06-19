@@ -83,7 +83,7 @@ public class SubScreenMap extends Activity {
                         siteName = (TextView) findViewById(R.id.siteName);
                         siteName.setText(samplingPoint.getSite().getSiteName());
                         siteScore = (TextView) findViewById(R.id.siteScore);
-                        siteScore.setText(String.valueOf(samplingPoint.getScore()));
+                        siteScore.setText("i: "+String.valueOf(samplingPoint.getScore()));
                         textHghQualBugs = (TextView) findViewById(R.id.textHghQualBugs);
                         textHghQualBugs.setText(String.valueOf(samplingPoint.getHghQualBug()));
                         textMedQualBugs = (TextView) findViewById(R.id.textMedQualBugs);
