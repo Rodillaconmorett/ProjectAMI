@@ -1,6 +1,6 @@
 @RELATION DatasetClave
 
-@ATTRIBUTE familia {Amphipoda,Annelida,Blattodea,Branchiopoda:Cladocera,Branchiopoda:Conchostraca,Callembola,Chelicerata,Chelicerata(Larva),Coleoptera,Coleoptera(Larva),Copepoda,Decapoda,Ephemeroptera,Hemiptera,Hexapoda:Diptera,Isopoda,Lepidoptera,Megaloptera:Corydalidae,Megaloptera:Sialidae,Mollusca:Bivalvia,Mollusca:Gastropoda,Nematoda,Nematomorpha,Neuroptera,Odonata:Anistoptera,Odonata:Zygoptera,Ostracoda,Platyhelminthes,Plecoptera,Trichoptera}
+@ATTRIBUTE familia {Amphipoda,Annelida,Blattodea,Branchiopoda:Cladocera,Branchiopoda:Conchostraca,Collembola,Chelicerata,Chelicerata(Larva),Coleoptera,Coleoptera(Larva),Copepoda,Decapoda,Ephemeroptera,Hemiptera,Hexapoda:Diptera,Isopoda,Lepidoptera,Megaloptera:Corydalidae,Megaloptera:Sialidae,Mollusca:Bivalvia,Mollusca:Gastropoda,Nematoda,Nematomorpha,Neuroptera,Odonata:Anisoptera,Odonata:Zygoptera,Ostracoda,Platyhelminthes,Plecoptera,Trichoptera}
 @ATTRIBUTE cantidadconchas {0,1,2}
 @ATTRIBUTE antenasopatas {FALSE,NA,TRUE}
 @ATTRIBUTE cabezaexpuesta {FALSE,NA,TRUE}

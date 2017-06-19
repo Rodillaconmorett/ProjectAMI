@@ -42,8 +42,8 @@ public class BugAdapter extends ArrayAdapter<Bug> {
 
         // Recogemos el TextView para mostrar el nombre y establecemos el
         // nombre.
-        //TextView nombre = (TextView) item.findViewById(R.id.tvContent);
-        //nombre.setText(datos.get(position).getFamily());
+//        TextView nombre = (TextView) item.findViewById(R.id.tvContent);
+//        nombre.setText(datos.get(position).getFamily());
 
         // Recogemos el TextView para mostrar el número de celda y lo
         // establecemos.
