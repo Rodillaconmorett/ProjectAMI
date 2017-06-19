@@ -68,7 +68,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         currentInfo = null;
 
          if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
-            db = new MongoAdmin(this.getApplicationContext());//creación del objeto
+            //db = new MongoAdmin(this.getApplicationContext());//creación del objeto
             questions = new HashMap<String, String>();
             try {
                 matrix.loadArff(getResources().openRawResource(R.raw.dataset));

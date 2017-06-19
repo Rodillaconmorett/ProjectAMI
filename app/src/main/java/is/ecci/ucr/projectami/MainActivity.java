@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 
+import is.ecci.ucr.projectami.Activities.CatalogActivity;
 import is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActivity;
 import is.ecci.ucr.projectami.Activities.LogActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
@@ -252,6 +253,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(activity);
                 break;
             case R.id.catalog_btn:
+                activity = new Intent(MainActivity.this, CatalogActivity.class);
+                startActivity(activity);
                 break;
             case R.id.settings_btn:
                 if(LogInfo.isLogged()){

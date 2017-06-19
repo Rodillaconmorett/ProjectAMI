@@ -37,18 +37,18 @@ public class BugAdapter extends ArrayAdapter<Bug> {
         // A partir de la vista, recogeremos los controles que contiene para
         // poder manipularlos.
         // Recogemos el ImageView y le asignamos una foto.
-        ImageView imagen = (ImageView) item.findViewById(R.id.imgAnimal);
-        imagen.setImageResource((int) datos.get(position).getScore());
+        //ImageView imagen = (ImageView) item.findViewById(R.id.imgAnimal);
+        //imagen.setImageResource((int) datos.get(position).getScore());
 
         // Recogemos el TextView para mostrar el nombre y establecemos el
         // nombre.
-        TextView nombre = (TextView) item.findViewById(R.id.tvContent);
-        nombre.setText(datos.get(position).getFamily());
+        //TextView nombre = (TextView) item.findViewById(R.id.tvContent);
+        //nombre.setText(datos.get(position).getFamily());
 
         // Recogemos el TextView para mostrar el número de celda y lo
         // establecemos.
-        TextView numCelda = (TextView) item.findViewById(R.id.tvField);
-        numCelda.setText(String.valueOf(position));
+        //TextView numCelda = (TextView) item.findViewById(R.id.tvField);
+        //numCelda.setText(String.valueOf(position));
 
        /*
         Button deleteBtn = (Button)convertView.findViewById(R.id.delete_btn);
