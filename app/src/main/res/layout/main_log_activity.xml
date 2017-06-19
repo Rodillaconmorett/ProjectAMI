@@ -12,7 +12,7 @@
     <GridLayout
         android:id="@+id/principalgl"
         android:layout_width="match_parent"
-        android:layout_height="420dp"
+        android:layout_height="440dp"
         android:columnCount="1"
         android:rowCount="3"
         >
@@ -34,7 +34,7 @@
 
             <GridLayout
                 android:layout_width="match_parent"
-                android:layout_height="260dp"
+                android:layout_height="280dp"
                 android:columnCount="1"
                 android:rowCount="5"
                 android:layout_centerVertical="true"
@@ -105,8 +105,8 @@
                     />
 
                 <GridLayout
-                    android:layout_width="210dp"
-                    android:layout_height="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_row="4"
                     android:layout_marginTop="20dp"
@@ -115,15 +115,13 @@
                     >
 
                     <com.google.android.gms.common.SignInButton
-                         android:id="@+id/btnLogGoogled"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:minHeight="0dp"
-                         android:minWidth="0dp"
-                         android:layout_column="0"
-                         android:textAllCaps="false"
-                         android:layout_row="0"
-                         android:layout_gravity="center"
+                        android:id="@+id/btnLogGoogle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:textAllCaps="false"
+                        android:layout_row="0"
+                        android:gravity="center"
                         />
 
 
