@@ -6,7 +6,7 @@ package is.ecci.ucr.projectami.Bugs;
 
 public class Bug {
 
-
+    private String id;
     private String family;
     private double score;
     private String description;
@@ -23,6 +23,13 @@ public class Bug {
         this.description = description;
     }
 
+    //Initializer with family and ID
+    public Bug(String id,String family, double score, String description){
+        this.id = id;
+        this.family = family;
+        this.score = score;
+        this.description = description;
+    }
 
     /**
      *
