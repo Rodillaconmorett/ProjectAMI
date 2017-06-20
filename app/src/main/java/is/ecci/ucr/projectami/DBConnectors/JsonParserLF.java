@@ -134,6 +134,7 @@ public class JsonParserLF {
 
     private static Bug readBug(JSONObject bugDoc) throws JSONException {
         String objID = bugDoc.getString("_id");
+        String familia = bugDoc.getString("familia");
         String desc;
         double score = bugDoc.getDouble("score");
         if (bugDoc.has("desc")) {
@@ -141,7 +142,7 @@ public class JsonParserLF {
         } else {
             desc = "N/A";
         }
-        return new Bug(objID,score,desc);
+        return new Bug(familia,score,desc);
     }
 
     private static String readBugID(JSONObject sampleDoc) throws  JSONException {

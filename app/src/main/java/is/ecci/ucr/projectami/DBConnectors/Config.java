@@ -30,8 +30,4 @@ public class Config {
     public static String CSV_KEYS = "keys.csv";
     //Dummy user object id
     public static String DUMMY_USER_ID = "alain.cruzc@gmail.com";
-    //Dummy user authentication
-    public static String AUTH_USER = "tester";
-    //Dummy user authentication password
-    public static String AUTH_USER_PASS = "cyzw24YwAV";
 }
