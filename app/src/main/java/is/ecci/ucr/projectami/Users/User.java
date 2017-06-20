@@ -9,7 +9,8 @@ import java.util.ArrayList;
 public class User {
 
     //Username
-    private String email, password, firstName, lastName;
+    private String email, password, firstName, lastName, dateCreated;
+    private boolean validated;
     ArrayList<String> roles;
 
     public User(String newEmail, String newPassword, String newFirstName, String newLastName){
@@ -17,10 +18,25 @@ public class User {
         this.password = newPassword;
         this.firstName = newFirstName;
         this.lastName = newLastName;
+        this.roles = new ArrayList<>();
     }
 
-    public void addRoles(ArrayList<String> newRoles){
+    public User(String newEmail, String newPassword, String newFirstName, String newLastName, String dateCreated, boolean validated){
+        this.email = newEmail;
+        this.password = newPassword;
+        this.firstName = newFirstName;
+        this.lastName = newLastName;
+        this.dateCreated = dateCreated;
+        this.validated = validated;
+        this.roles = new ArrayList<>();
+    }
+
+    public void setRoles(ArrayList<String> newRoles){
         this.roles = newRoles;
+    }
+
+    public void addRoles(String role){
+        this.roles.add(role);
     }
 
     public String getEmail() {
@@ -49,6 +65,10 @@ public class User {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public ArrayList<String> getRoles() {
+        return roles;
     }
 
     public void setLastName(String lastName) {

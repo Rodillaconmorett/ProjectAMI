@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
+import is.ecci.ucr.projectami.LogInfo;
 
 /**
  * Created by alaincruzcasanova on 6/16/17.
@@ -23,25 +24,11 @@ public class Inscriptor {
 
     private Inscriptor(){}
 
-    //Este método nos sirve para disminuir la repetición de este código
-    //Nota: Para la siguiente etapa, hay que cambiar la autenticación
-    static private Map<String,String> getDefaultParams() {
-        Map<String, String> params = new HashMap<>();
-        String encodedString = Base64.encodeToString(String.format("%s:%s", Config.AUTH_USER, Config.AUTH_USER_PASS).getBytes(), Base64.NO_WRAP);
-        String value = String.format("Basic %s", encodedString);
-        Log.i("user&pass",encodedString);
-        params.put(Config.AUTH_KEY,value);
-        params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
-        params.put("authenticationDatabase",Config.DATABASE_NAME);
-        return params;
-    }
-
     /*-------------------------- INSERT SECTION -------------------------*/
     /*Métodos que utilizamos para insertar documentos a la base de datos.*/
 
     static public void insertSampling(LinkedList<Bug> bugs, String siteId, String userId, ServerCallback callback) {
         String url = Config.CONNECTION_STRING+CollectionName.SAMPLE;
-        Map<String, String> params = getDefaultParams();
         JSONArray arrayObject = new JSONArray();
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -62,7 +49,7 @@ public class Inscriptor {
                 jsonBody.put("results", results);
                 arrayObject.put(jsonBody);
             }
-            MongoAdmin.jsonPostRequest(arrayObject,url,params, callback);
+            MongoAdmin.jsonPostRequest(arrayObject,url, callback);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -70,7 +57,6 @@ public class Inscriptor {
 
     static public void insertBug(String family, String desc, Double score, String[] imagesPaths, ServerCallback callback) {
         String url = Config.CONNECTION_STRING+CollectionName.BUGS;
-        Map<String, String> params = getDefaultParams();
         //Necesitamos incluir los parametros de datos
         JSONObject jsonBody = new JSONObject();
         try {
@@ -87,12 +73,11 @@ public class Inscriptor {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        MongoAdmin.jsonPostRequest(jsonBody,url,params, callback);
+        MongoAdmin.jsonPostRequest(jsonBody,url, callback);
     }
 
     static public void insertSite(String name, Double latitude, Double longitude, String description, String imagePath, ServerCallback callback) {
         String url = Config.CONNECTION_STRING+CollectionName.SITE;
-        Map<String, String> params = getDefaultParams();
         //Necesitamos incluir los parametros de datos
         JSONObject jsonBody = new JSONObject();
         JSONObject coor = new JSONObject();
@@ -107,6 +92,6 @@ public class Inscriptor {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        MongoAdmin.jsonPostRequest(jsonBody,url,params, callback);
+        MongoAdmin.jsonPostRequest(jsonBody,url, callback);
     }
 }

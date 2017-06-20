@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
+import is.ecci.ucr.projectami.LogInfo;
 
 
 public class MongoAdmin {
@@ -39,6 +40,20 @@ public class MongoAdmin {
 
     //Singleton
     private MongoAdmin() {
+    }
+
+    //Default headers for the queries
+    static private Map<String,String> getDefaultParams() {
+        Map<String, String> params = new HashMap<>();
+        if (LogInfo.getEmail()!=null && LogInfo.getPassword() != null) {
+            String encodedString = Base64.encodeToString(String.format("%s:%s", LogInfo.getEmail(), LogInfo.getPassword()).getBytes(), Base64.NO_WRAP);
+            String value = String.format("Basic %s", encodedString);
+            Log.i("user&pass",encodedString);
+            params.put(Config.AUTH_KEY,value);
+            params.put("authenticationDatabase",Config.DATABASE_NAME_AUTH);
+        }
+        params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
+        return params;
     }
 
     static public void setContext(Context appContext) {
@@ -53,9 +68,8 @@ public class MongoAdmin {
     /*------------------------- REQUEST SECTION -------------------------*/
     /*Código que útilizamos para realizar las consultas HTTP al servidor.*/
 
-
-    //GET Request
-    static public void jsonGetRequest(String url, Map<String, String> params,final ServerCallback callback) {
+    //GET Request - Specifically for Users
+    static public void jsonGetRequestUsers(String url, Map<String, String> params,final ServerCallback callback) {
         Custom_Volly_Request jsonRequest;
         jsonRequest = new Custom_Volly_Request(Request.Method.GET, url, params,
                 new Response.Listener<JSONObject>() {
@@ -82,11 +96,10 @@ public class MongoAdmin {
         queue.add(jsonRequest);
     }
 
-    //POST Request
-    static public void jsonPostRequest(JSONObject jsonBody, String url, Map<String, String> params, final ServerCallback callback) {
-        final String requestBody = jsonBody.toString();
+    //GET Request
+    static public void jsonGetRequest(String url, final ServerCallback callback) {
         Custom_Volly_Request jsonRequest;
-        jsonRequest = new Custom_Volly_Request(Request.Method.POST, url, params,
+        jsonRequest = new Custom_Volly_Request(Request.Method.GET, url, getDefaultParams(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -99,6 +112,35 @@ public class MongoAdmin {
                     public void onErrorResponse(VolleyError response)
                     {
                         Log.d("Response: Error", response.toString());
+                        JSONObject jsonFailed = new JSONObject();
+                        try {
+                            jsonFailed.put("failed","true");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        callback.onFailure(jsonFailed);
+                    }
+                });
+        queue.add(jsonRequest);
+    }
+
+    //POST Request
+    static public void jsonPostRequest(JSONObject jsonBody, String url, final ServerCallback callback) {
+        final String requestBody = jsonBody.toString();
+        Custom_Volly_Request jsonRequest;
+        jsonRequest = new Custom_Volly_Request(Request.Method.POST, url, getDefaultParams(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Response: ", response.toString());
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError response)
+                    {
+                        Log.d("***Response: Error", response.toString());
                         JSONObject jsonFailed = new JSONObject();
                         try {
                             jsonFailed.put("failed","true");
@@ -125,10 +167,10 @@ public class MongoAdmin {
     }
 
 
-    static public void jsonPostRequest(JSONArray jsonBody, String url, Map<String, String> params, final ServerCallback callback) {
+    static public void jsonPostRequest(JSONArray jsonBody, String url, final ServerCallback callback) {
         final String requestBody = jsonBody.toString();
         Custom_Volly_Request jsonRequest;
-        jsonRequest = new Custom_Volly_Request(Request.Method.POST, url, params,
+        jsonRequest = new Custom_Volly_Request(Request.Method.POST, url, getDefaultParams(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
