@@ -95,4 +95,33 @@ public class Consultor {
         Log.d("URL:",url);
         MongoAdmin.jsonGetRequest(url,callback);
     }
+
+    static public void getBugsFamily(ServerCallback callback){
+        String connectionString = Config.CONNECTION_STRING+CollectionName.BUGS;
+        String url = connectionString+"/_aggrs/family_aggr";
+        MongoAdmin.jsonGetRequest(url,callback);
+    }
 }
+
+
+//****** Ejemplo para bajar las familias de bichos con sus respectivos scores ******
+//    ArrayList<BugFamily> bugs = new ArrayList<>();
+//        Consultor.getBugsFamily(new ServerCallback() {
+//@Override
+//public JSONObject onSuccess(JSONObject result) {
+//        getBugs(JsonParserLF.parseBugsFamilyArrays(result));
+//        return null;
+//        }
+//
+//@Override
+//public JSONObject onFailure(JSONObject result) {
+//        return null;
+//        }
+//        });
+//
+//
+//    private void getBugs(ArrayList<BugFamily> bugs) {
+//        for (int i = 0; i<bugs.size(); i++) {
+//            Log.v("##### Look at me #####",bugs.get(i).getNameFamily());
+//        }
+//    }
