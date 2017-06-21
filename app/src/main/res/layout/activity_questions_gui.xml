@@ -92,7 +92,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.56"
-            android:onClick="catchAction"
             android:text="Continuar"
             tools:layout_editor_absoluteX="222dp"
             tools:layout_editor_absoluteY="311dp" />
@@ -143,7 +142,7 @@
         android:gravity="center_vertical|center"
         android:isScrollContainer="true"
         android:nestedScrollingEnabled="true"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:overScrollMode="ifContentScrolls"
         android:scrollIndicators="top|bottom"
         android:scrollbars="vertical"

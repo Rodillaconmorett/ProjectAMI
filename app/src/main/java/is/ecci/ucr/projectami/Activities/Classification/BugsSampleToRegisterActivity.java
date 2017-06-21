@@ -26,9 +26,13 @@ import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SampleBugsAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import static java.security.AccessController.getContext;
 
 public class BugsSampleToRegisterActivity extends AppCompatActivity {
+
 
 
     QuestionsGUIActivity questions;
@@ -39,7 +43,19 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
     TreeController treeControl;
 
-    static private LinkedList<Pair<String, LinkedList<Pair<String, String>>>> retroInfo;
+    /********************EstructuraAlterna1: Lista de pares****************************/
+    //Lista de macroinv para la retroalimentación
+    /*FORMATO: [
+                (FamilyBugName1,[(Question1, ItsAnswer1),(Question2,ItsAnswer2),...]),
+                (FamilyBugName2,[(Question1, ItsAnswer1),(Question2,ItsAnswer2),...]),
+                ...
+                ]*/
+    static private LinkedList<Pair<String, LinkedList<Pair<String, String>>>> feedbacks;
+
+
+    /*******************EstructuraAlterna2: Arreglo de JSONs****************************/
+    //static private JSONArray feedbacks;
+
     static Boolean returningFromClassification = false;
 
 
@@ -54,7 +70,11 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         ListView list = (ListView) findViewById(R.id.lstBugList);
 
         FloatingActionButton btnAddBug = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        retroInfo = new LinkedList<Pair<String, LinkedList<Pair<String, String>>>>();
+
+        feedbacks = new LinkedList<Pair<String, LinkedList<Pair<String, String>>>>();
+        //feedbacks = new JSONArray();
+
+
         btnAddBug.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,7 +143,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         }
 
         if (currentInfo != null) {
-            retroInfo.add(new Pair(currentBug, currentInfo));
+            feedbacks.add(new Pair(currentBug, currentInfo));
         }
     }
 
@@ -173,10 +193,10 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     }
     
     public static void deleteFromFeedBack(String family) {
-        int length = retroInfo.size();
+        int length = feedbacks.size();
         for (int i = 0; i < length; i++) {
-            if (family.equals(retroInfo.get(i).first)) {
-                retroInfo.remove(i);
+            if (family.equals(feedbacks.get(i).first)) {
+                feedbacks.remove(i);
                 i = length;
             }
         }
