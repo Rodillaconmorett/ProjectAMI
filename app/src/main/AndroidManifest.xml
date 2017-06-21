@@ -41,8 +41,12 @@
             />
         <activity android:name=".Activities.Classification.QuestionsGUIActivity"
             android:label="QuestionsGUI"/>
-        <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity"></activity>
-        <activity android:name=".Activities.CatalogActivity"></activity>
+        <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity"
+            ></activity>
+        <activity android:name=".Activities.CatalogActivity"
+            android:theme="@style/AppTheme"
+            android:label="Catálogo"
+            ></activity>
     </application>
 
 </manifest>

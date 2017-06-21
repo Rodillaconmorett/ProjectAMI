@@ -34,7 +34,6 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
     private String initialDate;
     private String finalDate;
-    MongoAdmin db;
     private TextView siteName;
     private TextView siteDescription;
     private TextView textTotSpecies;
@@ -48,16 +47,19 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_sample_point);
+        /************** LOAD SITE *********************/
         Intent intent = getIntent();
         site = (Site) intent.getExtras().getSerializable("site");
+
+        /*********** INITIALIZE THE DATES ***************/
         Calendar today = Calendar.getInstance();
         initialDate = String.valueOf(today.get(Calendar.YEAR));
         initialDate += "-";
         int month = today.get(Calendar.MONTH);
-        if(month < 10){
+        if(month < 9){
             initialDate += "0";
         }
-        initialDate += String.valueOf(today.get(Calendar.MONTH));
+        initialDate += String.valueOf(today.get(Calendar.MONTH)+1);
         initialDate += "-";
         int day = today.get(Calendar.DAY_OF_MONTH);
         if(day < 10){
@@ -65,32 +67,34 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         }
         initialDate += String.valueOf(today.get(Calendar.DAY_OF_MONTH));
         finalDate = initialDate;
-        datePicker = (DatePicker) findViewById(R.id.datePicker);
         setSamplingPoint();
+
+        /*********** INITIALIZE THE BACK BUTTON *************/
         btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(btnBackHandler);
 
+        /*************** LOAD THE DATEPICKER **************/
+        datePicker = (DatePicker) findViewById(R.id.datePicker);
         datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
             new DatePicker.OnDateChangedListener() {
                 @Override
                 public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                initialDate = String.valueOf(year);
-                initialDate += "-";
-                if(monthOfYear < 10){
-                    initialDate += "0";
-                }
-                initialDate += String.valueOf(monthOfYear);
-                initialDate += "-";
-                if(dayOfMonth < 10){
-                    initialDate += "0";
-                }
-                initialDate += String.valueOf(dayOfMonth);
-
+                    initialDate = String.valueOf(year);
+                    initialDate += "-";
+                    if(monthOfYear < 9){
+                        initialDate += "0";
+                    }
+                    initialDate += String.valueOf(monthOfYear + 1);
+                    initialDate += "-";
+                    if(dayOfMonth < 10){
+                        initialDate += "0";
+                    }
+                    initialDate += String.valueOf(view.getDayOfMonth());
+                    setSamplingPoint();
                 }
 
             }
         );
-
     }
 
     private void setInitialDate(){
@@ -109,10 +113,10 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         }
         initialDate += String.valueOf(today.get(Calendar.DAY_OF_MONTH));
         finalDate = initialDate;
-        setTextViews();
+        setSamplingPoint();
     }
 
-    private void setTextViews(){
+    private void refreshData(){
         siteName = (TextView) findViewById(R.id.siteName);
         siteName.setText(samplingPoint.getSite().getSiteName());
         siteDescription = (TextView) findViewById(R.id.siteDescription);
@@ -135,7 +139,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
                           samplingPoint = new SamplingPoint(site);
                           samplingPoint.setBugList(JsonParserLF.parseBugs(result));
                           samplingPoint.updateScoreAndQualBug();
-                          setTextViews();
+                          refreshData();
                           return null;
                       }
 
@@ -154,7 +158,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
                   return null;
               }
           },site.getObjID()
-        );
+        ,initialDate,finalDate);
     }
 
     View.OnClickListener btnBackHandler = new View.OnClickListener() {
