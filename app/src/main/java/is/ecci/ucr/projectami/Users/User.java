@@ -10,6 +10,7 @@ public class User {
 
     //Username
     private String email, password, firstName, lastName, dateCreated;
+
     private boolean validated;
     ArrayList<String> roles;
 
@@ -73,5 +74,13 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean isValidated() {
+        return validated;
+    }
+
+    public void setValidated(boolean validated) {
+        this.validated = validated;
     }
 }
