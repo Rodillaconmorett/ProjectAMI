@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
+import is.ecci.ucr.projectami.Bugs.BugMap;
 import is.ecci.ucr.projectami.LogInfo;
 
 /**
@@ -46,6 +47,34 @@ public class Inscriptor {
                 JSONObject results = new JSONObject();
                 results.put("bug_id", bugs.get(i).getFamily());
                 results.put("qty", 1);
+                jsonBody.put("results", results);
+                arrayObject.put(jsonBody);
+            }
+            MongoAdmin.jsonPostRequest(arrayObject,url, callback);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static public void insertSamplingQuantity(LinkedList<BugMap> bugs, String siteId, String userId, ServerCallback callback) {
+        String url = Config.CONNECTION_STRING+CollectionName.SAMPLE;
+        JSONArray arrayObject = new JSONArray();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = df.format(cal.getTime());
+        try {
+            for(int i = 0; i<bugs.size(); i++) {
+                JSONObject jsonBody = new JSONObject();
+                JSONObject objIDSite = new JSONObject();
+                JSONObject objIDUser = new JSONObject();
+                objIDSite.put("$oid",siteId);
+                jsonBody.put("site_id", objIDSite);
+                objIDUser.put("$oid",userId);
+                jsonBody.put("user_id", objIDUser);
+                jsonBody.put("date", formattedDate);
+                JSONObject results = new JSONObject();
+                results.put("bug_id", bugs.get(i).getName());
+                results.put("qty", bugs.get(i).getQuantity());
                 jsonBody.put("results", results);
                 arrayObject.put(jsonBody);
             }
