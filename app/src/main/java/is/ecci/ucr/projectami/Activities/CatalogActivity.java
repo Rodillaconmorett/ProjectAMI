@@ -2,7 +2,9 @@ package is.ecci.ucr.projectami.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -25,7 +27,7 @@ public class CatalogActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_catalog);
+        setContentView(R.layout.acivity_catalog);
         fillManually();
         bugFamilyAdapter= new BugFamilyAdapter(this,bugFamilies);
         ListView listView = (ListView) findViewById(R.id.lvAnimals);
@@ -47,23 +49,9 @@ public class CatalogActivity extends AppCompatActivity {
         bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
         bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
         bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
-        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
-        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
-        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
-        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
     }
 
-    private int getIcoQuality(BugFamily bugFamily){
-        if(bugFamily.getPoints() < 3){
-            return R.drawable.lifefinder_icon_red;
-        }
-        else if (bugFamily.getPoints() < 7){
-            return R.drawable.lifefinder_icon_orange;
-        }
-        else {
-            return R.drawable.lifefinder_icon_red;
-        }
-    }
+
 
 
 }
