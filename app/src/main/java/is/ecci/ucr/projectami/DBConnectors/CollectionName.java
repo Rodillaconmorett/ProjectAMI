@@ -16,6 +16,7 @@ public enum CollectionName {
     private String stringValue;
     private int intValue;
 
+
     CollectionName(String toString, int value){
         stringValue = toString;
         intValue = value;
