@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
+import is.ecci.ucr.projectami.Bugs.BugFamily;
 import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
@@ -73,6 +74,23 @@ public class JsonParserLF {
             e.printStackTrace();
         }
         return  bugs;
+    }
+
+    public static ArrayList<BugFamily> parseBugsFamilyArrays(JSONObject response) {
+        ArrayList<BugFamily> bugFamilies = new ArrayList<>();
+        try {
+            if (response.has("_embedded")) {
+                JSONArray jsonArray = response.getJSONArray("_embedded");
+                for (int i = 0; i<jsonArray.length(); i++) {
+                    JSONObject docJson = jsonArray.getJSONObject(i);
+                    bugFamilies.add(readBugFamily(docJson));
+                }
+            } else {
+                bugFamilies.add(readBugFamily(response));
+            }} catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  bugFamilies;
     }
 
     public static ArrayList<String> parseSampleBugList(JSONObject response) {
@@ -143,6 +161,12 @@ public class JsonParserLF {
             desc = "N/A";
         }
         return new Bug(familia,score,desc);
+    }
+
+    private static BugFamily readBugFamily(JSONObject bugFamDoc) throws JSONException {
+        String family = bugFamDoc.getString("_id");
+        double score = bugFamDoc.getDouble("avg_score");
+        return new BugFamily(family,score,0);
     }
 
     private static String readBugID(JSONObject sampleDoc) throws  JSONException {

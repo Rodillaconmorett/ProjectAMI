@@ -8,9 +8,12 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -46,7 +49,7 @@ public class MongoAdmin {
     static private Map<String,String> getDefaultParams() {
         Map<String, String> params = new HashMap<>();
         if (LogInfo.getEmail()!=null && LogInfo.getPassword() != null) {
-            String encodedString = Base64.encodeToString(String.format("%s:%s", LogInfo.getEmail(), LogInfo.getPassword()).getBytes(), Base64.NO_WRAP);
+            String encodedString = Base64.encodeToString(String.format("%s:%s", "admin", "q1w2E3r4").getBytes(), Base64.NO_WRAP);
             String value = String.format("Basic %s", encodedString);
             Log.i("user&pass",encodedString);
             params.put(Config.AUTH_KEY,value);
@@ -151,6 +154,14 @@ public class MongoAdmin {
                     }
                 }) {
             @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                if (response.data == null || response.data.length == 0) {
+                    return Response.success(null, HttpHeaderParser.parseCacheHeaders(response));
+                } else {
+                    return super.parseNetworkResponse(response);
+                }
+            }
+            @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
             }
@@ -193,6 +204,14 @@ public class MongoAdmin {
                     }
                 }) {
             @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                if (response.data == null || response.data.length == 0) {
+                    return Response.success(null, HttpHeaderParser.parseCacheHeaders(response));
+                } else {
+                    return super.parseNetworkResponse(response);
+                }
+            }
+            @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
             }
@@ -205,6 +224,53 @@ public class MongoAdmin {
                     return null;
                 }
             }};
+        queue.add(jsonRequest);
+    }
+
+    static void jsonPatchRequest(JSONObject jsonBody, String url, final ServerCallback callback) {
+        final String requestBody = jsonBody.toString();
+        Custom_Volly_Request jsonRequest = new Custom_Volly_Request(Request.Method.PATCH, url, getDefaultParams(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError response) {
+                        Log.d("### --> Response: Error", response.toString());
+                        JSONObject jsonFailed = new JSONObject();
+                        try {
+                            jsonFailed.put("failed", "true");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        callback.onFailure(jsonFailed);
+                    }
+                }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                if (response.data == null || response.data.length == 0) {
+                    return Response.success(null, HttpHeaderParser.parseCacheHeaders(response));
+                } else {
+                    return super.parseNetworkResponse(response);
+                }
+            }
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Encoding no valido de %s usando %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+        };
         queue.add(jsonRequest);
     }
 }

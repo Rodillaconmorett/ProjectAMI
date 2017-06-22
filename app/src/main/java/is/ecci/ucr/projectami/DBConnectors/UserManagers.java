@@ -63,9 +63,39 @@ public class UserManagers {
         } catch (JSONException e) {
             Log.i("Error parsing User",e.toString());
         }
-        String getURL = Config.CONNECTION_STRING_USERS+CollectionName.USERS.toString();
+        String getURL = Config.CONNECTION_STRING_USERS+CollectionName.USERS;
         params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
         MongoAdmin.jsonPostRequest(jsonBody,getURL,callback);
+    }
+
+    static public void updateUser(User user, ServerCallback callback){
+        Map<String, String> params = new HashMap<>();
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("password", user.getPassword());
+            JSONArray roles = new JSONArray();
+            if (!user.getRoles().isEmpty()) {
+                for (int i = 0; i < user.getRoles().size(); i++) {
+                    roles.put(user.getRoles().get(i));
+                }
+                jsonBody.put("roles",roles);
+            } else {
+                jsonBody.put("roles",roles);
+            }
+            JSONObject names = new JSONObject();
+            names.put("first",user.getFirstName());
+            names.put("last",user.getLastName());
+            jsonBody.put("name",names);
+            if(user.isValidated()){
+                jsonBody.put("validated",user.isValidated());
+            }
+            Log.d("****Updated User:",jsonBody.toString());
+        } catch (JSONException e) {
+            Log.i("Error parsing User",e.toString());
+        }
+        String getURL = Config.CONNECTION_STRING_USERS+CollectionName.USERS+"/"+user.getEmail();
+        params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
+        MongoAdmin.jsonPatchRequest(jsonBody,getURL,callback);
     }
 }
 
