@@ -266,29 +266,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 break;
         }
-        /*
-        if (id == R.id.nav_camera) {
-            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
-        if (id == R.id.frame_map) {
-            Intent Prueba = new Intent(MainActivity.this, SamplePointInfoActivity.class);
-            startActivity(Prueba);
-        } else if (id == R.id.nav_gallery) {
-            Intent Prueba = new Intent(MainActivity.this, QuestionsGUIActivity.class);
-            startActivity(Prueba);
-        } else if (id == R.id.nav_slideshow) {
-            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
-            startActivity(Prueba);
-        } else if (id == R.id.nav_manage) {
-            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
-            startActivity(Prueba);
-        } else if (id == R.id.nav_share) {
-            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
-            startActivity(Prueba);
-        } else if (id == R.id.nav_send) {
-            Intent Prueba = new Intent(MainActivity.this, SubScreenMap.class);
-            startActivity(Prueba);
-        }
-        */
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
