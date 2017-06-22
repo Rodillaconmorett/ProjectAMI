@@ -94,4 +94,5 @@ public class Inscriptor {
         }
         MongoAdmin.jsonPostRequest(jsonBody,url, callback);
     }
+
 }

@@ -104,6 +104,7 @@ public class Consultor {
 }
 
 
+
 //****** Ejemplo para bajar las familias de bichos con sus respectivos scores ******
 //    ArrayList<BugFamily> bugs = new ArrayList<>();
 //        Consultor.getBugsFamily(new ServerCallback() {

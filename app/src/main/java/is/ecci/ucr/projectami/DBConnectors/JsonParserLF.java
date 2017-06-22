@@ -179,4 +179,5 @@ public class JsonParserLF {
         byte[] bytes = string.getBytes("ISO-8859-1");
         return new String(bytes);
     }
+
 }

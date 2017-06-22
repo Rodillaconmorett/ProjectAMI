@@ -3,8 +3,9 @@ package is.ecci.ucr.projectami.Users;
 import java.util.ArrayList;
 
 /**
- * Created by alaincruzcasanova on 6/16/17.
+ * Created by alaincruzcasanova on 6/16/17
  */
+
 
 public class User {
 
