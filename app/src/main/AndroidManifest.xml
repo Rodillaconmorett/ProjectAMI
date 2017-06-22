@@ -42,17 +42,13 @@
         <activity
             android:name=".Activities.SubScreenMap"
             android:label="SubScreenMap"
-            android:theme="@style/AppTheme.PopUpTheme"
-            />
-        <activity android:name=".Activities.Classification.QuestionsGUIActivity"
-            android:label="QuestionsGUI"/>
-        <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity"
-            ></activity>
-        <activity android:name=".Activities.CatalogActivity"
-            android:theme="@style/AppTheme"
-            android:label="Catálogo"
-            ></activity>
-      <!--<activity-->
+            android:theme="@style/AppTheme.PopUpTheme" />
+        <activity
+            android:name=".Activities.Classification.QuestionsGUIActivity"
+            android:label="QuestionsGUI" />
+        <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity" />
+        <activity android:name=".Activities.CatalogActivity" />
+        <!--<activity-->
             <!--android:name=".PagerActivity"-->
             <!--android:label="@string/title_activity_pager"-->
             <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>-->
