@@ -40,7 +40,8 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
-    <style name="date_picker_theme" parent="@android:style/Widget.DatePicker"></style>
+    <style name="date_picker_theme" parent="@android:style/Widget.DatePicker">
+    </style>
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
