@@ -1,10 +1,6 @@
 package is.ecci.ucr.projectami;
 
-import android.widget.Switch;
-
 import java.util.BitSet;
-
-import is.ecci.ucr.projectami.Users.User;
 
 /**
  * Created by Oscar Azofeifa on 13/05/2017.
@@ -15,65 +11,20 @@ import is.ecci.ucr.projectami.Users.User;
 
 public class TokenPrivilegios {
 
-    /* PRIVILEGES FORMAT:
+    /*Formato de los privilegios: PENDIENTE*/
+    private BitSet actionPrivileges;
+    private BitSet adminPrivileges;
+    int codKey;
+    String username;
+    String name;
 
-    *
-    * *******************************USERs TYPES
-    * Consultors Rights:
-    *   -See the map with sample points.
-    *   -Show general sample points data.
-    *   -Search sample points.
-    *   -Access to bugs catalog.
-    * Collectors Rights:
-    *   -Register samples sets.
-    *   -Make feedbacks based on images.
-    * Administrators Rights (Inherits Collector):
-    *   -Add, modify and delete sample points.
-    *   -Add, modify and delete users.
-    * BioAdministrators Rights:
-    *   -Add, modify and delete invertebrates.
-    *   -Make feedbacks without images.
+    /* E:
+    *  S:
+    *  R:
     * */
-
-    public enum UserProfile {
-        CONSULTOR,
-        COLLECTOR,
-        ADMINISTRATOR,
-        BIOADMINISTRATOR
-    }
-
-    private BitSet _actionPrivileges;
-    private BitSet _adminPrivileges;
-    private int _codKey;
-    private String _username;
-    private String _name;
-
-
-    /* E: User to create
-    *  S: Creates a token with privileges related with the user specified.
-    *  R: If input is different than any kind of user, creates a Consultor Token by default.
-    * */
-    public TokenPrivilegios(String username, String name, UserProfile kindaUser){
-
-        _username = username;
-        _name = name;
-
-        switch (kindaUser) {
-            case CONSULTOR:
-                break;
-            case COLLECTOR:
-                break;
-            case ADMINISTRATOR:
-                break;
-            case BIOADMINISTRATOR:
-                break;
-        }
-    }
-
-    public TokenPrivilegios(String username, String name, long customizedPrivilges){
+    public TokenPrivilegios(){
 
     }
-
     /* E:
        S:
        R:

@@ -2,17 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true"
     android:layout_centerInParent="true"
     android:layout_gravity="center"
-    android:layout_width="250dp"
-    android:layout_height="250dp"
-    android:id="@+id/container_all"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
     >
+    <RelativeLayout
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:id="@+id/container_all"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
     <GridLayout
         android:layout_width="match_parent"
@@ -286,5 +288,7 @@
 
 
     </GridLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
