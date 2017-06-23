@@ -138,7 +138,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
         if(googleSignInResult.isSuccess()){
             loadPrincipalActivity(googleSignInResult);
         }else{
-            Toast.makeText(this,"Fallo el ingreo.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Por favor, ingrese una cuenta correcta.",Toast.LENGTH_SHORT).show();
         }
     }
 
