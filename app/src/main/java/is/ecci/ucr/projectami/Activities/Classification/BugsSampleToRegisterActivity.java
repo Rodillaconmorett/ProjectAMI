@@ -191,21 +191,29 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         }
 
         if (bugMap.size() > 0) {
-            Inscriptor.insertSamplingQuantity(bugMap, site.getObjID(), Config.DUMMY_USER_ID, new ServerCallback() {
-                @Override
-                public JSONObject onSuccess(JSONObject result) {
-                    Toast.makeText(context, "Los datos fueron agregados corretamente", 4);
-                    finish();
-                    return null;
-                }
+            if (LogInfo.getEmail() != null && LogInfo.getPassword() != null) {
+                Inscriptor.insertSamplingQuantity(bugMap, site.getObjID(), LogInfo.getEmail(), new ServerCallback() {
+                    @Override
+                    public JSONObject onSuccess(JSONObject result) {
+                        Toast.makeText(getApplicationContext(), "Los datos fueron agregados corretamente", 4).show();
+                        finish();
+                        return null;
+                    }
 
-                @Override
-                public JSONObject onFailure(JSONObject result) {
-                    Toast.makeText(context, "Los datos no fueron agregados corretamente", 4);
-
-                    return null;
-                }
-            });
+                    @Override
+                    public JSONObject onFailure(JSONObject result) {
+                        String resultString = result.toString();
+                        if (resultString.matches(".*401.*")) {
+                            Toast.makeText(getApplicationContext(), "No tiene permisos para ingresar muestras.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "No se pudieron agregar los datos correctamente..", Toast.LENGTH_SHORT).show();
+                        }
+                        return null;
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "Tiene que ingresar su usuario antes de agregar muestras.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

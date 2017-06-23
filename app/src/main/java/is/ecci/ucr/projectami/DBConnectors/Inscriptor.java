@@ -37,8 +37,6 @@ public class Inscriptor {
         try {
             for(int i = 0; i<bugs.size(); i++) {
                 JSONObject jsonBody = new JSONObject();
-                JSONObject objIDSite = new JSONObject();
-                JSONObject objIDUser = new JSONObject();
                 jsonBody.put("site_id", siteId);
                 jsonBody.put("user_id", userId);
                 jsonBody.put("date", formattedDate);

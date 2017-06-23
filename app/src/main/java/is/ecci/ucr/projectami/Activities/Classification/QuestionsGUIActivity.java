@@ -128,7 +128,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             }
         });
         currentQuestion = "";
-
         this.setCurrentQuestion();
     }
 
