@@ -127,9 +127,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
 
         if(requestCode ==777){
             GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            Toast.makeText(this,"Log status "+ " "+ googleSignInResult.isSuccess(),Toast.LENGTH_SHORT).show();
             handleSignal(googleSignInResult);
-
         }
     }
 
@@ -159,9 +157,10 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 if(user.getFirstName()!=null && user.getLastName()!=null){
                     LogInfo.setFirstName(user.getFirstName());
                     LogInfo.setLastName(user.getLastName());
-                    Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Hello, "+ JsonParserLF.convert(LogInfo.getFirstName())+" "+ JsonParserLF.convert(LogInfo.getLastName())+"!",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Hello, " + LogInfo.getEmail() + "!", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LogActivity.this, MainActivity.class);
                 startActivity(intent);
                 return null;
@@ -178,12 +177,20 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                     UserManagers.addNewUser(user, new ServerCallback() {
                         @Override
                         public JSONObject onSuccess(JSONObject result) {
-                            Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
+                            User user = JsonParserLF.parseUsers(result);
+                            LogInfo.setEmail(user.getEmail());
+                            LogInfo.setPassword(user.getPassword());
+                            if(user.getFirstName()!=null && user.getLastName()!=null){
+                                LogInfo.setFirstName(user.getFirstName());
+                                LogInfo.setLastName(user.getLastName());
+                                Toast.makeText(getApplicationContext(),"Hello, "+JsonParserLF.convert(LogInfo.getFirstName())+" "+ JsonParserLF.convert(LogInfo.getLastName())+"!",Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Hello, " + LogInfo.getEmail() + "!", Toast.LENGTH_SHORT).show();
+                            }
                             Intent intent = new Intent(LogActivity.this, MainActivity.class);
                             startActivity(intent);
                             return null;
                         }
-
                         @Override
                         public JSONObject onFailure(JSONObject result) {
                             Toast.makeText(getApplicationContext(),"Sorry, there was a problem. Please, re-try.",Toast.LENGTH_SHORT).show();

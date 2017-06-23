@@ -213,8 +213,13 @@ public class JsonParserLF {
         return bugID;
     }
 
-    private String convert(String string) throws java.io.UnsupportedEncodingException {
-        byte[] bytes = string.getBytes("ISO-8859-1");
+    public static String convert(String string) {
+        byte[] bytes = null;
+        try {
+            bytes = string.getBytes("ISO-8859-1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return new String(bytes);
     }
 
