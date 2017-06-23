@@ -82,7 +82,7 @@ public class Consultor {
     }
 
     static public void getSamplesBySiteID(ServerCallback callback, String id) {
-        String url = Config.CONNECTION_STRING+CollectionName.SAMPLE+"?filter={site_id:{\"$oid\":\""+ id +"\"}}";
+        String url = Config.CONNECTION_STRING+CollectionName.SAMPLE+"?filter={site_id:\""+ id +"\"}";
         Log.d("URL:",url);
         MongoAdmin.jsonGetRequest(url,callback);
     }

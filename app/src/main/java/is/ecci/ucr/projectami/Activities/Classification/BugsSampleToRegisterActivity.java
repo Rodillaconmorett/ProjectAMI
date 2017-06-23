@@ -181,8 +181,12 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         for (int i = 0; i < childCount; i++) {
             String bugID = (String) ((TextView) currentView.getChildAt(i).findViewById(R.id.txtName)).getText();
             String quantityValue = ((TextView)currentView.getChildAt(i).findViewById(R.id.numberPicker)).getText().toString();
+            int quantity = 1;
 
-            int quantity = (quantityValue == null) ? 1 :  Integer.parseInt(quantityValue);
+            if(!(quantityValue == null || quantityValue.equals(""))){
+                quantity = Integer.parseInt(quantityValue);
+            }
+
             bugMap.add(new BugMap(bugID, quantity));
         }
 
