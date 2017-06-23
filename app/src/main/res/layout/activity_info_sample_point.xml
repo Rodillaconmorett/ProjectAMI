@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Activities.SamplePointInfoActivity">
 
-    <GridLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -50,32 +51,20 @@
         </RelativeLayout>
 
 
-        <GridLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:background="@color/temaLifeFinder"
-            android:columnCount="3"
-            android:rowCount="1">
-
-
-            <DatePicker
-                android:id="@+id/datePicker"
-                android:layout_width="190dp"
-                android:layout_height="match_parent"
-                android:layout_column="1"
-                android:layout_row="0"
-                android:headerBackground="@color/temaLifeFinder"
-                android:spinnersShown="true"
-                android:calendarTextColor="#FFFFFF"
-                style="@style/date_picker_theme"
-                />
+            android:weightSum="2"
+            >
 
             <TextView
                 android:id="@+id/siteName"
-                android:layout_width="190dp"
+                android:layout_width="160dp"
                 android:layout_height="match_parent"
                 android:layout_column="0"
                 android:layout_row="0"
@@ -84,18 +73,35 @@
                 android:layout_marginLeft="10dp"
                 android:text="Nombre"
                 android:textColor="#FFFFFF"
-                android:textSize="28sp" />
-        </GridLayout>
+                android:textSize="28sp"
+                />
+
+            <DatePicker
+                android:id="@+id/datePicker"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:headerBackground="@color/temaLifeFinder"
+                android:spinnersShown="true"
+                android:calendarTextColor="#FFFFFF"
+                style="@style/date_picker_theme"
+
+                />
+
+        </LinearLayout>
 
         <TextView
-        android:id="@+id/siteDescription"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_column="0"
-        android:layout_row="2"
-        android:fontFamily="sans-serif"
-        android:text="Descripcion"
-        android:textSize="18sp" />
+            android:id="@+id/siteDescription"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_column="0"
+            android:layout_row="2"
+            android:fontFamily="sans-serif"
+            android:text="Descripcion"
+            android:layout_marginLeft="10dp"
+            android:textSize="18sp" />
 
 
         <ImageView
@@ -109,97 +115,116 @@
             app:srcCompat="@color/temaLifeFinder" />
 
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_column="0"
-        android:layout_row="4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:columnCount="2"
-        android:rowCount="1"
-        android:layout_below="@+id/gridLayout"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_column="0"
+            android:layout_row="4"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:columnCount="2"
+            android:rowCount="1"
+            android:layout_below="@+id/gridLayout"
             android:weightSum="2"
             >
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
-            >
-
-            <ImageView
-                android:id="@+id/imageViewSpecies"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="false"
-                android:layout_centerVertical="true"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:src="@drawable/especies" />
-
-            <TextView
-                android:id="@+id/textTotSpecies"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:text="#"
-                android:textColor="@color/especiesColor"
-                android:textSize="36sp"
-                android:textStyle="bold" />
+                android:layout_weight="1"
 
-        </RelativeLayout>
+                >
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+                <ImageView
+                    android:id="@+id/imageViewSpecies"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="false"
+                    android:layout_centerVertical="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/especies" />
+
+                <TextView
+                    android:id="@+id/textTotSpecies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="#"
+                    android:textColor="@color/especiesColor"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:id="@+id/imageViewScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="false"
+                    android:layout_centerVertical="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/puntaje"
+                    app:srcCompat="@drawable/puntaje" />
+
+                <TextView
+                    android:id="@+id/textTotScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_row="0"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="#"
+                    android:textColor="@color/puntajeColor"
+                    android:textSize="36sp"
+                    android:textStyle="bold"
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="350dp"
+            android:layout_height="3dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_row="5"
+            android:layout_column="0"
+            app:srcCompat="@color/temaLifeFinder"
+            />
+
+        <GridLayout
+            android:layout_row="6"
+            android:layout_column="0"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
             >
 
-            <ImageView
-                android:id="@+id/imageViewScore"
+            <ListView
+                android:id="@+id/lvBugs"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentBottom="false"
-                android:layout_centerVertical="true"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:src="@drawable/puntaje"
-                app:srcCompat="@drawable/puntaje" />
+                android:layout_column="0"
+                android:layout_row="6"
+                >
+            </ListView>
 
-            <TextView
-                android:id="@+id/textTotScore"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_column="1"
-                android:layout_row="0"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:text="#"
-                android:textColor="@color/puntajeColor"
-                android:textSize="36sp"
-                android:textStyle="bold"
-                />
-        </RelativeLayout>
+        </GridLayout>
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="350dp"
-        android:layout_height="3dp"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_row="5"
-        android:layout_column="0"
-        app:srcCompat="@color/temaLifeFinder"
-       />
-
-
-</GridLayout>
 </RelativeLayout>

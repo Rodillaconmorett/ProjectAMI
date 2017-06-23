@@ -79,7 +79,7 @@ public class SampleBugsAdapter extends ArrayAdapter<Bug> {
         TextView nombre = (TextView) convertView.findViewById(R.id.txtName);
         nombre.setText(_bugs.get(position).getFamily());
 
-        Button deleteBtn = (Button)convertView.findViewById(R.id.delete_btn);
+        Button deleteBtn = (Button)convertView.findViewById(R.id.del_item);
         deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

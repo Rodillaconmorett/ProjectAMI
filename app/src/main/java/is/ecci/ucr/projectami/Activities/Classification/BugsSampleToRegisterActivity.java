@@ -1,6 +1,7 @@
 package is.ecci.ucr.projectami.Activities.Classification;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -13,20 +14,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.os.Handler;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
 
+import is.ecci.ucr.projectami.Bugs.BugMap;
+import is.ecci.ucr.projectami.DBConnectors.Config;
+import is.ecci.ucr.projectami.DBConnectors.Inscriptor;
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
+import is.ecci.ucr.projectami.LogInfo;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SampleBugsAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
-
-import static java.security.AccessController.getContext;
 
 public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
@@ -42,7 +50,6 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     static private LinkedList<Pair<String, LinkedList<Pair<String, String>>>> retroInfo;
     static Boolean returningFromClassification = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +59,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         site = (Site) intent.getExtras().getSerializable("site");                    // Nombre de intent variable
 
         ListView list = (ListView) findViewById(R.id.lstBugList);
+
 
         FloatingActionButton btnAddBug = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         retroInfo = new LinkedList<Pair<String, LinkedList<Pair<String, String>>>>();
@@ -74,15 +82,15 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerBugsOnDataBase();
+                registerBugsOnDataBase(view.getContext());
                 regiterFeedBackOnDataBase();
             }
         });
 
-
         _bugsListToRegister = new ArrayList<Bug>();
         adapter = new SampleBugsAdapter(this, _bugsListToRegister);
         list.setAdapter(adapter);
+
     }
 
 
@@ -100,6 +108,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
     public void addBugToBasket(Bug inBug) {
         _bugsListToRegister.add(inBug);
+
     }
 
     public void registerOnScreen() {
@@ -117,7 +126,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             }
         } else {
             if (!currentBug.equals("Unknown")) {
-                addBugToBasket(new Bug(currentBug, 2, ""));
+                addBugToBasket(new Bug(currentBug, 0, ""));
                 adapter.notifyDataSetChanged();
             }
         }
@@ -154,7 +163,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
     }
 
     public void highligthItem(final View view) {
-        view.getBackground().setColorFilter(Color.argb(125, 232, 176,70), PorterDuff.Mode.MULTIPLY);
+        view.getBackground().setColorFilter(Color.argb(125, 232, 176, 70), PorterDuff.Mode.MULTIPLY);
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -164,14 +173,42 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    public void registerBugsOnDataBase(){
+    public void registerBugsOnDataBase(final Context context) {
+
+        LinkedList<BugMap> bugMap = new LinkedList<BugMap>();
+        ViewGroup currentView = (ViewGroup) findViewById(R.id.lstBugList);
+        int childCount = currentView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            String bugID = (String) ((TextView) currentView.getChildAt(i).findViewById(R.id.txtName)).getText();
+            String quantityValue = ((TextView)currentView.getChildAt(i).findViewById(R.id.numberPicker)).getText().toString();
+
+            int quantity = (quantityValue == null) ? 1 :  Integer.parseInt(quantityValue);
+            bugMap.add(new BugMap(bugID, quantity));
+        }
+
+        if (bugMap.size() > 0) {
+            Inscriptor.insertSamplingQuantity(bugMap, site.getObjID(), Config.DUMMY_USER_ID, new ServerCallback() {
+                @Override
+                public JSONObject onSuccess(JSONObject result) {
+                    Toast.makeText(context, "Los datos fueron agregados corretamente", 4);
+                    finish();
+                    return null;
+                }
+
+                @Override
+                public JSONObject onFailure(JSONObject result) {
+                    Toast.makeText(context, "Los datos no fueron agregados corretamente", 4);
+
+                    return null;
+                }
+            });
+        }
+    }
+
+    public void regiterFeedBackOnDataBase() {
 
     }
 
-    public void regiterFeedBackOnDataBase(){
-
-    }
-    
     public static void deleteFromFeedBack(String family) {
         int length = retroInfo.size();
         for (int i = 0; i < length; i++) {

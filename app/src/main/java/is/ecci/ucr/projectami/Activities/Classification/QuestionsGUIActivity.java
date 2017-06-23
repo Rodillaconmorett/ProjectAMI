@@ -264,7 +264,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
             @Override
             public JSONObject onFailure(JSONObject result) {
-                System.out.println("Error descargando de BD");
+                Log.d("Failed to request##","Error descargando de BD");
                 return null;
             }
         }, CollectionName.QUESTIONS);
