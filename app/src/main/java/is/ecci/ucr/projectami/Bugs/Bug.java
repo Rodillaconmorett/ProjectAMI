@@ -19,7 +19,6 @@ public class Bug {
      */
     public Bug(String family, double score, String description){
         this.family = family;
-        this.score = score;
         this.description = description;
     }
 
