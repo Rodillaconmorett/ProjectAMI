@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -245,11 +246,10 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAllCaps="false"
-                    android:text="Información"
                     android:gravity="bottom|center"
-                    android:textColor="@color/temaLifeFinder"
-                    />
+                    android:text="Información"
+                    android:textAllCaps="false"
+                    android:textColor="@color/temaLifeFinder" />
 
             </RelativeLayout>
 
