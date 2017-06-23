@@ -119,7 +119,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
      * Inicialización de árbol
      */
     protected void initialize() {
-
         this.setCurrentQuestion();
     }
 

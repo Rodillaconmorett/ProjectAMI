@@ -81,10 +81,12 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 EditText userText = (EditText)findViewById(R.id.userInput);
                 EditText passText = (EditText)findViewById(R.id.passwordInput);
                 String user, pass;
-                if(userText.getText()!=null && passText.getText()!=null) {
+                if(userText.getText() !=null && passText.getText()!=null) {
                     user = userText.getText().toString();
                     pass = passText.getText().toString();
-                    logInUser(user, pass);
+                    if(user.length() != 0 && pass.length() != 0) {
+                        logInUser(user, pass);
+                    }
                 }
             }
         });
@@ -100,9 +102,9 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 if(user.getFirstName()!=null && user.getLastName()!=null){
                     LogInfo.setFirstName(user.getFirstName());
                     LogInfo.setLastName(user.getLastName());
-                    Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Hola, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Hola, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LogActivity.this, MainActivity.class);
                 startActivity(intent);
                 return null;
@@ -110,7 +112,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
 
             @Override
             public JSONObject onFailure(JSONObject result) {
-                Toast.makeText(getApplicationContext(),"Log failed. Please, re-try.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"No se pudo inciar sección.",Toast.LENGTH_SHORT).show();
                 return null;
             }
         });
@@ -127,9 +129,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
 
         if(requestCode ==777){
             GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            Toast.makeText(this,"Log status "+ " "+ googleSignInResult.isSuccess(),Toast.LENGTH_SHORT).show();
             handleSignal(googleSignInResult);
-
         }
     }
 
@@ -137,7 +137,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
         if(googleSignInResult.isSuccess()){
             loadPrincipalActivity(googleSignInResult);
         }else{
-            Toast.makeText(this,"Log fail",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Fallo el ingreo.",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -159,9 +159,10 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 if(user.getFirstName()!=null && user.getLastName()!=null){
                     LogInfo.setFirstName(user.getFirstName());
                     LogInfo.setLastName(user.getLastName());
-                    Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Hola, "+ JsonParserLF.convert(LogInfo.getFirstName())+" "+ JsonParserLF.convert(LogInfo.getLastName())+"!",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Hola, " + LogInfo.getEmail() + "!", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LogActivity.this, MainActivity.class);
                 startActivity(intent);
                 return null;
@@ -178,20 +179,28 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                     UserManagers.addNewUser(user, new ServerCallback() {
                         @Override
                         public JSONObject onSuccess(JSONObject result) {
-                            Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
+                            User user = JsonParserLF.parseUsers(result);
+                            LogInfo.setEmail(user.getEmail());
+                            LogInfo.setPassword(user.getPassword());
+                            if(user.getFirstName()!=null && user.getLastName()!=null){
+                                LogInfo.setFirstName(user.getFirstName());
+                                LogInfo.setLastName(user.getLastName());
+                                Toast.makeText(getApplicationContext(),"Hola, "+JsonParserLF.convert(LogInfo.getFirstName())+" "+ JsonParserLF.convert(LogInfo.getLastName())+"!",Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Hola, " + LogInfo.getEmail() + "!", Toast.LENGTH_SHORT).show();
+                            }
                             Intent intent = new Intent(LogActivity.this, MainActivity.class);
                             startActivity(intent);
                             return null;
                         }
-
                         @Override
                         public JSONObject onFailure(JSONObject result) {
-                            Toast.makeText(getApplicationContext(),"Sorry, there was a problem. Please, re-try.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"Hubo un problema. Por favor, intente de nuevo.",Toast.LENGTH_SHORT).show();
                             return null;
                         }
                     });
                 }
-                Toast.makeText(getApplicationContext(),"Sorry, there was a problem. Please, re-try.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Hubo un problema. Por favor, intente de nuevo.",Toast.LENGTH_SHORT).show();
                 return null;
             }
         });
