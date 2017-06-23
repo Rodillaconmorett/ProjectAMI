@@ -23,4 +23,16 @@
     <include layout="@layout/content_main"
         android:id="@+id/include" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnRefreshMarkers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:clickable="true"
+        app:fabSize="mini"
+        android:visibility="invisible"
+        android:layout_marginBottom="32dp"
+        app:layout_anchorGravity="bottom|center_horizontal"
+        app:srcCompat="@drawable/quantum_ic_refresh_white_24" />
+
 </android.support.design.widget.CoordinatorLayout>

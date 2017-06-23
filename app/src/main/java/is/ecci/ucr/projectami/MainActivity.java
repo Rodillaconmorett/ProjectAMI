@@ -2,6 +2,7 @@ package is.ecci.ucr.projectami;
 
 import android.content.ComponentCallbacks2;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -29,6 +30,7 @@ import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.flags.impl.FlagProviderImpl;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -50,6 +52,7 @@ import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
+import static is.ecci.ucr.projectami.R.id.btnRefreshMarkers;
 import static is.ecci.ucr.projectami.R.id.map;
 import static is.ecci.ucr.projectami.R.id.pruebaText;
 import android.content.Intent;
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     CameraUpdate cameraUpdate;
     TextView textView;
     Button getSites;
-
+    FloatingActionButton btnRefresh;
 
 
     GoogleMap mMap;
@@ -120,6 +123,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        btnRefresh = (FloatingActionButton) findViewById(btnRefreshMarkers);
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadMarks();
+            }
+        });
 
         /*
         Context context;
@@ -160,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Consultor.getColl(new ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
+                btnRefresh.setVisibility(View.INVISIBLE);
                 sites= JsonParserLF.parseSites(result);
 
                 for(int i=0; i< sites.size(); i++) {
@@ -176,6 +187,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public JSONObject onFailure(JSONObject result) {
                 //Mensaje de Fallo
+                Toast.makeText(getApplicationContext(),"Los puntos de muestreo no se han podido cargar, por favor refresque más tarde.",Toast.LENGTH_SHORT).show();
+
+                btnRefresh.setVisibility(View.VISIBLE);
+
                 return null;
             }
         }, CollectionName.SITE);
