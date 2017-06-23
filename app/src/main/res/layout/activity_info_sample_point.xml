@@ -64,7 +64,7 @@
 
             <TextView
                 android:id="@+id/siteName"
-                android:layout_width="160dp"
+                android:layout_width="190dp"
                 android:layout_height="match_parent"
                 android:layout_column="0"
                 android:layout_row="0"
@@ -75,7 +75,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="28sp"
                 />
-
+            <!--
             <DatePicker
                 android:id="@+id/datePicker"
                 android:layout_width="fill_parent"
@@ -87,9 +87,46 @@
                 android:spinnersShown="true"
                 android:calendarTextColor="#FFFFFF"
                 style="@style/date_picker_theme"
-
                 />
+            -->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="2"
+                    >
+
+                    <TextView
+                        android:id="@+id/txtInitialDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        />
+
+                    <TextView
+                        android:id="@+id/txtFinalDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        />
+
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/btnDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ico_calendar_white"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
@@ -101,6 +138,7 @@
         android:fontFamily="sans-serif"
         android:text="Descripcion"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:textSize="18sp" />
 
 
@@ -211,6 +249,7 @@
             android:layout_column="0"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
+            android:layout_marginTop="10dp"
             >
 
             <ListView
