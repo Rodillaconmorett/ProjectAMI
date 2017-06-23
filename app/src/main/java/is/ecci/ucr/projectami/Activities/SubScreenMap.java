@@ -41,6 +41,7 @@ public class SubScreenMap extends Activity {
     TextView textHghQualBugs;
     TextView textMedQualBugs;
     TextView textLowQualBugs;
+
     MongoAdmin db;
     RelativeLayout container_all;
 
@@ -61,9 +62,11 @@ public class SubScreenMap extends Activity {
         buttonInfo.setOnClickListener(btnInfoHandler);
         buttonRegister.setOnClickListener(btnRegstrHandler);
 
+        if (true /* consultar si tiene el privilegio necesario */){
 
-
-
+        }else {
+            buttonRegister.setVisibility(View.INVISIBLE);
+        }
 
     }
 
