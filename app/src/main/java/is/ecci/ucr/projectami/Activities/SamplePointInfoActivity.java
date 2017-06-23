@@ -140,8 +140,8 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
                  return null;
              }
-         },site.getObjID()
-        ,initialDate,finalDate);
+         },site.getObjID());
+//        ,initialDate,finalDate);
     }
 
     View.OnClickListener btnBackHandler = new View.OnClickListener() {
