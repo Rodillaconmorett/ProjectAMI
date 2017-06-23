@@ -125,15 +125,14 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
              /* consultar si tiene el privilegio necesario */
-             ArrayList<String> hola = new ArrayList<String>();
-            hola.add("recolector");
-            LogInfo.setRoles(hola);
             if (LogInfo.getRoles()!= null && LogInfo.getRoles().contains("recolector")){
                 Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
                 intent.putExtra("site", site);
                 startActivity(intent);
             }else {
                 Toast.makeText(getApplicationContext(),"Lo sentimos, no tiene el rol necesario para realizar esta acción",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SubScreenMap.this, LogActivity.class);
+                startActivity(intent);
             }
 
         }
