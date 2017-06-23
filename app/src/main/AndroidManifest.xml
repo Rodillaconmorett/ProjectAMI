@@ -34,7 +34,7 @@
         <activity android:name=".Activities.SamplePointInfoActivity"
             android:label="SamplePointInfoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        
+
         <activity android:name=".Activities.SubScreenMap"
             android:label="SubScreenMap"
             android:theme="@style/AppTheme.PopUpTheme"
