@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -15,6 +16,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import is.ecci.ucr.projectami.Bugs.BugFamily;
+import is.ecci.ucr.projectami.Bugs.BugFamilyAdapter;
 import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
@@ -42,6 +45,9 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
     private DatePicker datePicker;
 
     private ImageButton btnBack;
+
+    private ListView lvBugs;
+    private ArrayList<BugFamily> bugFamilies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,12 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         /*********** INITIALIZE THE BACK BUTTON *************/
         btnBack = (ImageButton) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(btnBackHandler);
+
+        /************** INITIALIZE THE LIST ******************/
+        lvBugs = (ListView) findViewById(R.id.lvBugs);
+        fillManually();
+        BugFamilyAdapter bugFamilyAdapter = new BugFamilyAdapter(this,bugFamilies);
+        lvBugs.setAdapter(bugFamilyAdapter);
 
         /*************** LOAD THE DATEPICKER **************/
         datePicker = (DatePicker) findViewById(R.id.datePicker);
@@ -166,6 +178,18 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
                 finish();
         }
     };
+
+    private void fillManually(){
+        bugFamilies = new ArrayList<>();
+        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
+        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
+        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
+        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
+        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
+        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
+        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
+        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
+    }
 
     @Override
     public void onClick(View v) {

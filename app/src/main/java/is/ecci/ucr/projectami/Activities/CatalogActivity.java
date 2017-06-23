@@ -30,7 +30,6 @@ public class CatalogActivity extends AppCompatActivity {
         bugFamilyAdapter= new BugFamilyAdapter(this,bugFamilies);
         ListView listView = (ListView) findViewById(R.id.lvAnimals);
         listView.setAdapter(bugFamilyAdapter);
-
     }
 
 
