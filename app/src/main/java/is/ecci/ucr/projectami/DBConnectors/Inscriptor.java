@@ -39,10 +39,8 @@ public class Inscriptor {
                 JSONObject jsonBody = new JSONObject();
                 JSONObject objIDSite = new JSONObject();
                 JSONObject objIDUser = new JSONObject();
-                objIDSite.put("$oid",siteId);
-                jsonBody.put("site_id", objIDSite);
-                objIDUser.put("$oid",userId);
-                jsonBody.put("user_id", objIDUser);
+                jsonBody.put("site_id", siteId);
+                jsonBody.put("user_id", userId);
                 jsonBody.put("date", formattedDate);
                 JSONObject results = new JSONObject();
                 results.put("bug_id", bugs.get(i).getFamily());
@@ -67,10 +65,8 @@ public class Inscriptor {
                 JSONObject jsonBody = new JSONObject();
                 JSONObject objIDSite = new JSONObject();
                 JSONObject objIDUser = new JSONObject();
-                objIDSite.put("$oid",siteId);
-                jsonBody.put("site_id", objIDSite);
-                objIDUser.put("$oid",userId);
-                jsonBody.put("user_id", objIDUser);
+                jsonBody.put("site_id", siteId);
+                jsonBody.put("user_id", userId);
                 jsonBody.put("date", formattedDate);
                 JSONObject results = new JSONObject();
                 results.put("bug_id", bugs.get(i).getName());
@@ -84,20 +80,14 @@ public class Inscriptor {
         }
     }
 
-    static public void insertBug(String family, String desc, Double score, String[] imagesPaths, ServerCallback callback) {
+    static public void insertBug(String family, String bicho,String desc, int score, ServerCallback callback) {
         String url = Config.CONNECTION_STRING+CollectionName.BUGS;
         //Necesitamos incluir los parametros de datos
         JSONObject jsonBody = new JSONObject();
         try {
+            jsonBody.put("_id",bicho);
             jsonBody.put("family",family);
             jsonBody.put("score",score);
-            if (imagesPaths != null) {
-                JSONArray imageArray = new JSONArray();
-                for (int i = 0; i<imagesPaths.length; i++) {
-                    imageArray.put(imagesPaths[i]);
-                }
-                jsonBody.put("images",imageArray);
-            }
             if (desc != null) jsonBody.put("desc",desc);
         } catch (JSONException e) {
             e.printStackTrace();

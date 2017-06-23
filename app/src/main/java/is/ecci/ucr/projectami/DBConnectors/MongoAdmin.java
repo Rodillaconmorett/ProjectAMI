@@ -59,7 +59,6 @@ public class MongoAdmin {
         String value = String.format("Basic %s", encodedString);
         Log.i("user&pass",encodedString);
         params.put(Config.AUTH_KEY,value);
-        params.put("authenticationDatabase",Config.DATABASE_NAME_AUTH);
         params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
         return params;
     }
@@ -140,7 +139,7 @@ public class MongoAdmin {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Response: ", response.toString());
+                        Log.d("Response: ", "It worked!");
                         callback.onSuccess(response);
                     }
                 },
@@ -190,7 +189,7 @@ public class MongoAdmin {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Response: ", response.toString());
+                        Log.d("Response: ", "It worked!");
                         callback.onSuccess(response);
                     }
                 },
