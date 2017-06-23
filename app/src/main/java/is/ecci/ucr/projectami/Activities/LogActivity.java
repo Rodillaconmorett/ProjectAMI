@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -21,8 +25,16 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
+import is.ecci.ucr.projectami.DBConnectors.UserManagers;
+import is.ecci.ucr.projectami.LogInfo;
 import is.ecci.ucr.projectami.MainActivity;
 import is.ecci.ucr.projectami.R;
+import is.ecci.ucr.projectami.Users.User;
 
 /**
  * Created by bjgd9 on 12/6/2017.
@@ -34,6 +46,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
     public  GoogleApiClient googleApiClient;//to create the login
     private static GoogleSignInOptions googleSignInOptions;// loggin options
     private SignInButton signInButton;
+    private Button logIn;
 
 
     @Override
@@ -58,7 +71,47 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
             public void onClick(View v) {
                 Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(intent,777);
+            }
+        });
 
+        logIn = (Button) findViewById(R.id.buttonLogin);
+        logIn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                EditText userText = (EditText)findViewById(R.id.userInput);
+                EditText passText = (EditText)findViewById(R.id.passwordInput);
+                String user, pass;
+                if(userText.getText()!=null && passText.getText()!=null) {
+                    user = userText.getText().toString();
+                    pass = passText.getText().toString();
+                    logInUser(user, pass);
+                }
+            }
+        });
+    }
+
+    public void logInUser(String user, String pass){
+        UserManagers.logInUser(user, pass, new ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                User user = JsonParserLF.parseUsers(result);
+                LogInfo.setEmail(user.getEmail());
+                LogInfo.setPassword(user.getPassword());
+                if(user.getFirstName()!=null && user.getLastName()!=null){
+                    LogInfo.setFirstName(user.getFirstName());
+                    LogInfo.setLastName(user.getLastName());
+                    Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
+                }
+                Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LogActivity.this, MainActivity.class);
+                startActivity(intent);
+                return null;
+            }
+
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                Toast.makeText(getApplicationContext(),"Log failed. Please, re-try.",Toast.LENGTH_SHORT).show();
+                return null;
             }
         });
     }
@@ -96,15 +149,52 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
         String personEmail = acct.getEmail();
         String personId = acct.getId();
         Uri personPhoto = acct.getPhotoUrl();
+        final User user = new User(personEmail,personId,personGivenName,personFamilyName);
+        UserManagers.logInUser(personEmail, personId, new ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                User user = JsonParserLF.parseUsers(result);
+                LogInfo.setEmail(user.getEmail());
+                LogInfo.setPassword(user.getPassword());
+                if(user.getFirstName()!=null && user.getLastName()!=null){
+                    LogInfo.setFirstName(user.getFirstName());
+                    LogInfo.setLastName(user.getLastName());
+                    Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
+                }
+                Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LogActivity.this, MainActivity.class);
+                startActivity(intent);
+                return null;
+            }
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                String resultString = "";
+                try {
+                    resultString = result.getString("failed").toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(resultString.matches(".*AuthFailureError")){
+                    UserManagers.addNewUser(user, new ServerCallback() {
+                        @Override
+                        public JSONObject onSuccess(JSONObject result) {
+                            Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LogActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            return null;
+                        }
 
-        Toast.makeText(this,"person Name : "+ personName+
-                "\npersonGivenName : "+personGivenName+
-                "\npersonFamilyName : "+ personFamilyName +
-                "\npersonEmail : "+personEmail+
-                "\npersonId : "+personId+
-                "\npersonPhoto : "+personPhoto,Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LogActivity.this, MainActivity.class);//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP  |Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK   );
-        startActivity(intent);
+                        @Override
+                        public JSONObject onFailure(JSONObject result) {
+                            Toast.makeText(getApplicationContext(),"Sorry, there was a problem. Please, re-try.",Toast.LENGTH_SHORT).show();
+                            return null;
+                        }
+                    });
+                }
+                Toast.makeText(getApplicationContext(),"Sorry, there was a problem. Please, re-try.",Toast.LENGTH_SHORT).show();
+                return null;
+            }
+        });
     }
 
     private void signOut() {
@@ -120,28 +210,6 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
     @Override
     public void onStart() {
         super.onStart();
-
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-        if (opr.isDone()) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-            // and the GoogleSignInResult will be available instantly.
-
-            GoogleSignInResult result = opr.get();
-            handleSignal(result);
-
-        } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-            // single sign-on will occur in this branch.
-
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    handleSignal(googleSignInResult);
-
-                }
-            });
-        }
     }
 
 }

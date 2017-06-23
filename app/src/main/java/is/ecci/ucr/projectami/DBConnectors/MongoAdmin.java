@@ -49,7 +49,7 @@ public class MongoAdmin {
     static private Map<String,String> getDefaultParams() {
         Map<String, String> params = new HashMap<>();
         if (LogInfo.getEmail()!=null && LogInfo.getPassword() != null) {
-            String encodedString = Base64.encodeToString(String.format("%s:%s", "admin", "q1w2E3r4").getBytes(), Base64.NO_WRAP);
+            String encodedString = Base64.encodeToString(String.format("%s:%s", LogInfo.getEmail(), LogInfo.getPassword()).getBytes(), Base64.NO_WRAP);
             String value = String.format("Basic %s", encodedString);
             Log.i("user&pass",encodedString);
             params.put(Config.AUTH_KEY,value);
@@ -93,7 +93,7 @@ public class MongoAdmin {
                         Log.d("Response: Error", response.toString());
                         JSONObject jsonFailed = new JSONObject();
                         try {
-                            jsonFailed.put("failed","true");
+                            jsonFailed.put("failed",response.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -7,7 +7,7 @@ package is.ecci.ucr.projectami;
 public class LogInfo {
 
     /*--------------------------------------ATRIBUTOS---------------------------------------------*/
-    private static String email, password, firstName, lastName, role;
+    private static String email, password, firstName, lastName;
     private static int age;
     private static boolean logged;
 
@@ -45,14 +45,6 @@ public class LogInfo {
 
     public static void setLastName(String lastName) {
         LogInfo.lastName = lastName;
-    }
-
-    public static String getRole() {
-        return role;
-    }
-
-    public static void setRole(String role) {
-        LogInfo.role = role;
     }
 
     public static int getAge() {
