@@ -117,14 +117,21 @@
 
                 </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/btnDate"
+                <GridLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ico_calendar_white"
-                    android:background="@null"
-                    android:scaleType="centerInside"
-                    />
+                    android:layout_height="match_parent">
+                    <ImageButton
+                        android:id="@+id/btnDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/ico_calendar_white"
+                        android:background="@null"
+                        android:scaleType="centerInside"
+
+                        />
+                </GridLayout>
+
 
             </LinearLayout>
         </LinearLayout>

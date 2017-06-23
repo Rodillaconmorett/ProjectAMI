@@ -27,6 +27,17 @@ public class BugAdapter extends ArrayAdapter<Bug> {
         this.context = context;
         this.datos = datos;
     }
+
+    public BugAdapter(Context context) {
+        super(context, 0);
+        // Guardamos los parámetros en variables de clase.
+        this.context = context;
+    }
+
+    public void setAdapterData(ArrayList<Bug> arrayList){
+        datos = arrayList;
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
         // En primer lugar "inflamos" una nueva vista, que será la que se
         // mostrará en la celda del ListView. Para ello primero creamos el

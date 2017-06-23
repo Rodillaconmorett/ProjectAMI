@@ -48,9 +48,9 @@ public class CatalogActivity extends AppCompatActivity {
             @Override
             public JSONObject onSuccess(JSONObject result) {
                 bugFamilies = JsonParserLF.parseBugsFamilyArrays(result);
-                for (int i = 0; i<bugFamilies.size();i++){
+                for (int i = 0; i < bugFamilies.size(); i++){
                     String imageName = getImageName(bugFamilies.get(i).getNameFamily());
-                    int resourceId = getResources().getIdentifier("drawable/"+imageName,null,context.getPackageName());
+                    int resourceId = getResources().getIdentifier("drawable/"+imageName, null, context.getPackageName());
                     bugFamilies.get(i).setImageID(resourceId);
                 }
                 bugFamilyAdapter = new BugFamilyAdapter(context,bugFamilies);
