@@ -82,7 +82,7 @@ public class Consultor {
     }
 
     static public void getSamplesBySiteID(ServerCallback callback, String id) {
-        String url = Config.CONNECTION_STRING+CollectionName.SAMPLE+"?filter={site_id:{\"$oid\":\""+ id +"\"}}";
+        String url = Config.CONNECTION_STRING+CollectionName.SAMPLE+"?filter={site_id:\""+ id +"\"}";
         Log.d("URL:",url);
         MongoAdmin.jsonGetRequest(url,callback);
     }
@@ -91,7 +91,7 @@ public class Consultor {
     //Formato de las fechas "YYYY-MM-DD"
     static public void getSamplesBySiteID(ServerCallback callback, String id, String initDate, String finalDate) {
         String connectionString = Config.CONNECTION_STRING+CollectionName.SAMPLE;
-        String url = connectionString+"?filter={site_id:{\"$oid\":\""+ id +"\"},date:{\"$gte\":{\"$date\":\""+initDate+"\"},\"$lte\":{\"$date\":\"" + finalDate + "\"}}}";
+        String url = connectionString+"?filter={site_id:\""+ id +"\",date:{\"$gte\":{\"$date\":\""+initDate+"\"},\"$lte\":{\"$date\":\"" + finalDate + "\"}}}";
         Log.d("URL:",url);
         MongoAdmin.jsonGetRequest(url,callback);
     }
