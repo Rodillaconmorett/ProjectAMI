@@ -58,8 +58,11 @@ public class UserManagers {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             String formattedDate = df.format(cal.getTime());
             jsonBody.put("date_created",formattedDate.toString());
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put("recolector");
+            jsonArray.put("");
+            jsonBody.put("roles",jsonArray);
             Log.d("****Added User:",jsonBody.toString());
-
         } catch (JSONException e) {
             Log.i("Error parsing User",e.toString());
         }

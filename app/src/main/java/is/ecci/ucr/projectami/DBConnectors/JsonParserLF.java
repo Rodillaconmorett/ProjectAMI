@@ -13,6 +13,7 @@ import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugFamily;
 import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
+import is.ecci.ucr.projectami.Users.User;
 
 /**
  * Created by alaincruzcasanova on 5/22/17.
@@ -40,6 +41,24 @@ public class JsonParserLF {
             e.printStackTrace();
         }
         return  sites;
+    }
+
+    public static User parseUsers(JSONObject response) {
+        User user = new User("","","","");
+        try{
+            if(response.has("_embedded")){
+                JSONArray jsonArray = response.getJSONArray("_embedded");
+                for (int i = 0; i<jsonArray.length(); i++) {
+                    JSONObject docJson = jsonArray.getJSONObject(i);
+                    user = readUser(docJson);
+                }
+            } else {
+                user = readUser(response);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
     public static LinkedList<Bug> parseBugs(JSONObject response) {
@@ -128,6 +147,25 @@ public class JsonParserLF {
     }
 
     //Readers
+
+    private static User readUser(JSONObject userDoc) throws JSONException {
+        String email = userDoc.getString("_id");
+        String pass = userDoc.getString("password");
+        String firstName = userDoc.getJSONObject("name").getString("first");
+        String lastName = userDoc.getJSONObject("name").getString("last");
+        String validated = userDoc.getString("validated");
+        ArrayList<String> arrayRoles = new ArrayList<>();
+        boolean validatedBool;
+        validatedBool = validated != "false";
+        String date = userDoc.getString("date_created");
+        JSONArray roles = userDoc.getJSONArray("roles");
+        for(int i = 0; i<roles.length(); i++){
+            arrayRoles.add(roles.get(i).toString());
+        }
+        User user = new User(email,pass,firstName,lastName,date,validatedBool);
+        user.setRoles(arrayRoles);
+        return user;
+    }
 
     private static Site readSite(JSONObject siteDoc) throws JSONException {
         String objID = siteDoc.getJSONObject("_id").getString("$oid");
