@@ -221,7 +221,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
             findViewById(R.id.userAnswerLayout).setVisibility(View.VISIBLE);
-        } else if (textB.equals("CONTINUAR")) {
+        } else if (textB.equals("Continuar")) {
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
             if (userAnswer.trim().equals("")) {
