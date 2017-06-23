@@ -60,7 +60,7 @@ public class UserManagers {
             jsonBody.put("date_created",formattedDate.toString());
             JSONArray jsonArray = new JSONArray();
             jsonArray.put("recolector");
-            jsonArray.put("");
+            jsonArray.put("usuario");
             jsonBody.put("roles",jsonArray);
             Log.d("****Added User:",jsonBody.toString());
         } catch (JSONException e) {
