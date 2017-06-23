@@ -1,16 +1,25 @@
 package is.ecci.ucr.projectami.Activities;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.BugFamily;
 import is.ecci.ucr.projectami.Bugs.BugFamilyAdapter;
+import is.ecci.ucr.projectami.DBConnectors.Consultor;
+import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.R;
 
 /**
@@ -28,19 +37,39 @@ public class CatalogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acivity_catalog);
-        fillManually();
-        bugFamilyAdapter= new BugFamilyAdapter(this,bugFamilies);
-        ListView listView = (ListView) findViewById(R.id.lvAnimals);
-        listView.setAdapter(bugFamilyAdapter);
-
+        fillListWithDB(this.getApplicationContext());
     }
 
 
 
-    private  void fillListWithDB(){
+    private  void fillListWithDB(final Context context){
+        bugFamilies = new ArrayList<>();
+        Consultor.getBugsFamily(new ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                bugFamilies = JsonParserLF.parseBugsFamilyArrays(result);
+                for (int i = 0; i<bugFamilies.size();i++){
+                    String imageName = getImageName(bugFamilies.get(i).getNameFamily());
+                    int resourceId = getResources().getIdentifier("drawable/"+imageName,null,context.getPackageName());
+                    bugFamilies.get(i).setImageID(resourceId);
+                }
+                bugFamilyAdapter = new BugFamilyAdapter(context,bugFamilies);
+                ListView listView = (ListView) findViewById(R.id.lvAnimals);
+                listView.setAdapter(bugFamilyAdapter);
+                return null;
+            }
 
-        bugFamilies= null;//acá cambiar por la consulta que me da todos las familias
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                Toast.makeText(context,"Couldn't load bugs",4);
+                return null;
+            }
+        });
+    }
 
+    private String getImageName(String bugFamily){
+        String finalString = (bugFamily.replace(":","_")).toLowerCase();
+        return "img_"+finalString;
     }
 
     private void fillManually(){
