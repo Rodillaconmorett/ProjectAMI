@@ -54,7 +54,8 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
     /**
      * This method describe the instance of the class
-      * @param savedInstanceState
+     *
+     * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,11 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         //Clase dedicada para pasar parámetro
         currentBug = "Unknown";
         currentInfo = null;
+        findViewById(R.id.progressBarQuestion).setVisibility(View.VISIBLE);
+        findViewById(R.id.dynamicAnswers).setVisibility(View.GONE);
 
-         if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
+
+        if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
             questions = new HashMap<String, String>();
             try {
                 matrix.loadArff(getResources().openRawResource(R.raw.dataset));
@@ -74,7 +78,19 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 //File not found
             }
             openedBefore = true;
+        } else {
+            this.initialize();
         }
+    }
+
+    /**
+     * Inicialización de árbol
+     */
+    protected void initialize() {
+
+        findViewById(R.id.progressBarQuestion).setVisibility(View.GONE);
+        findViewById(R.id.dynamicAnswers).setVisibility(View.VISIBLE);
+
 
         treeControl = new TreeController(matrix);
         //Linking between static buttons and actions
@@ -112,13 +128,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             }
         });
         currentQuestion = "";
-        this.initialize();
-    }
-
-    /**
-     * Inicialización de árbol
-     */
-    protected void initialize() {
         this.setCurrentQuestion();
     }
 
@@ -181,7 +190,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
             for (int i = 1; i < arraySize; i++) {
                 Button button = new Button(this);
-                button.setText(questionsAndOptions[i]);
+                button.setText(translateReply(questionsAndOptions[i], true));
                 button.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -196,8 +205,28 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                         }
                     }
                 });
-                answerContainer.addView(button, 0);
+                answerContainer.addView(button, answerContainer.getChildCount());
             }
+
+            if (treeControl.isLeaf()) {
+                //Seach for the id of the image
+                int resourceId = getResources().getIdentifier("drawable/" + getImageName(currentQuestion), null, this.getApplicationContext().getPackageName());
+                if (resourceId > 0) {
+                    //ImageView Setup
+                    ImageView icon = (ImageView) new ImageView(this);
+
+                    //setting image resource
+                    icon.setImageResource(resourceId);
+
+                    icon.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                    //adding view to layout
+                    answerContainer.addView(icon, 0);
+                }
+
+            }
+
         } else {
             currentBug = currentQuestion;
             currentInfo = treeControl.getQuestionsRealized();
@@ -210,13 +239,14 @@ public class QuestionsGUIActivity extends AppCompatActivity {
     }
 
     /**
-     *   This method reacts to the button action
-     *   It´s the listener for the buttons. It has a different action depending on the input
+     * This method reacts to the button action
+     * It´s the listener for the buttons. It has a different action depending on the input
+     *
      * @param button
      * @throws AnswerException
      */
     public void catchAction(Button button) throws AnswerException {
-        String textB = button.getText().toString();
+        String textB = translateReply(button.getText().toString(), false);
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
             findViewById(R.id.userAnswerLayout).setVisibility(View.VISIBLE);
@@ -226,7 +256,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             if (userAnswer.trim().equals("")) {
                 treeControl.reply("NA");
             } else {
-                treeControl.reply("NA",userAnswer);
+                treeControl.reply("NA", userAnswer);
             }
             findViewById(R.id.userAnswerLayout).setVisibility(View.INVISIBLE);
         } else {
@@ -239,8 +269,32 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
     }
 
+    private String translateReply(String s, Boolean b) {
+        if (b) {
+            if (s.equals("TRUE")) {
+                return "Si";
+            } else if (s.equals("FALSE")) {
+                return "No";
+            }
+            if (s.equals("NA")) {
+                return "No aplica";
+            }
+        } else {
+            if (s.equals("Si")) {
+                return "TRUE";
+            } else if (s.equals("No")) {
+                return "FALSE";
+            }
+            if (s.equals("No aplica")) {
+                return "NA";
+            }
+        }
+        return s;
+    }
+
     /**
      * This method load the set of questions from the database
+     *
      * @throws Exception
      */
     public void loadQuestions() throws Exception {
@@ -252,18 +306,21 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 for (int i = 0; i < totalQuestions; i++) {
                     try {
                         questions.put(convert(questionsArray.get(i).getIdentificador().trim()), convert(questionsArray.get(i).getQuestion()));
-                        Log.v("R:", convert(questionsArray.get(i).getIdentificador().trim()) + " " + convert(questionsArray.get(i).getQuestion()));
+                        Log.v("Sucessfull::", "Questions correctly downloaded");
 
                     } catch (java.io.UnsupportedEncodingException e) {
-
+                        Log.v("Error::", "Questions incorrectly downloaded");
                     }
                 }
+                initialize();
                 return null;
+
             }
 
             @Override
             public JSONObject onFailure(JSONObject result) {
-                Log.d("Failed to request##","Error descargando de BD");
+                Log.d("Failed to request##", "Error descargando de BD");
+                initialize();
                 return null;
             }
         }, CollectionName.QUESTIONS);
@@ -271,28 +328,36 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
     /**
      * Converts the charset of the string sended by the DB.
+     *
      * @param string
      * @return
      * @throws java.io.UnsupportedEncodingException
      */
     public String convert(String string) throws java.io.UnsupportedEncodingException {
-        byte[] bytes = string.getBytes("ISO-8859-1");
-        return new String(bytes);
+        byte[] bytes = string.getBytes("ISO_8859-1");
+        string = new String(bytes);
+        string.replace(((char) 65533), '¿');
+        return string;
     }
 
-    public void terminarActividad(){
+    public void terminarActividad() {
         Intent resultIntent = new Intent();
         resultIntent.putExtra("returning_from_classification", true);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
 
-    static String getCurrentBug(){
+    static String getCurrentBug() {
         return currentBug;
     }
 
-    static LinkedList<Pair<String,String>> getCurrentInfo(){
+    static LinkedList<Pair<String, String>> getCurrentInfo() {
         return currentInfo;
+    }
+
+    private String getImageName(String bugFamily) {
+        String finalString = (bugFamily.replace(":", "_")).toLowerCase();
+        return "img_" + finalString;
     }
 
 }
