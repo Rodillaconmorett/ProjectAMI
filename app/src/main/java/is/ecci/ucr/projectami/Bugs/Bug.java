@@ -10,6 +10,7 @@ public class Bug {
     private String family;
     private double score;
     private String description;
+    private int imageID;
 
     /**
      *
@@ -61,5 +62,13 @@ public class Bug {
      */
     public String getDescription() {
         return description;
+    }
+
+    public void setImageID(int imageID) {
+        this.imageID = imageID;
+    }
+
+    public int getImageID() {
+        return imageID;
     }
 }
