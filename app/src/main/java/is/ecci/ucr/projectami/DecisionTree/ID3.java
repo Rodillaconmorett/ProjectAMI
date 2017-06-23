@@ -50,19 +50,19 @@ public class ID3 {
 	public Node runID3 (Matrix examples, Matrix targetAttributes, LinkedHashSet<Attribute> attributes) {
 		
 		//Prueba de recorrido sobre los atributos
-		int counter = 1;
-		for (Attribute attri : attributes){
-			System.out.print(counter + " : "+ attri.getName() + "{");
-			for (Double value : attri.getValues()){
-				/*examples.attrValue(): String
-				Este m�todo hace uso de m_enum_to_str.get(attr).get(val) el cual devuelve el nombre del valor de atributo.
-				*/
-				System.out.print(examples.attrValue(attri.getColumnPositionID(), value.intValue()) + ",");
-			}
-			System.out.println("}");
-			counter++;
-		}
-		
+//		int counter = 1;
+//		for (Attribute attri : attributes){
+//			System.out.print(counter + " : "+ attri.getName() + "{");
+//			for (Double value : attri.getValues()){
+//				/*examples.attrValue(): String
+//				Este mtodo hace uso de m_enum_to_str.get(attr).get(val) el cual devuelve el nombre del valor de atributo.
+//				*/
+//				System.out.print(examples.attrValue(attri.getColumnPositionID(), value.intValue()) + ",");
+//			}
+//			System.out.println("}");
+//			counter++;
+//		}
+//
 		Node root = new Node(_nodeCounter);
 		_nodeCounter++;
 		if (allExamplesPositive(targetAttributes) || attributes.isEmpty()) {
