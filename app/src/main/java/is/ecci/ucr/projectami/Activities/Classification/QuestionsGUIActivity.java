@@ -335,9 +335,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
      */
     public String convert(String string) throws java.io.UnsupportedEncodingException {
         byte[] bytes = string.getBytes("ISO_8859-1");
-        string = new String(bytes);
-        string.replace(((char) 65533), '¿');
-        return string;
+        return new String(bytes);
     }
 
     public void terminarActividad() {
