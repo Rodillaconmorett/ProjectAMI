@@ -99,6 +99,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 User user = JsonParserLF.parseUsers(result);
                 LogInfo.setEmail(user.getEmail());
                 LogInfo.setPassword(user.getPassword());
+                LogInfo.setRoles(user.getRoles());
                 if(user.getFirstName()!=null && user.getLastName()!=null){
                     LogInfo.setFirstName(user.getFirstName());
                     LogInfo.setLastName(user.getLastName());

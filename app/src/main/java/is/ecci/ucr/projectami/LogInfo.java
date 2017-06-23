@@ -1,5 +1,7 @@
 package is.ecci.ucr.projectami;
 
+import java.util.ArrayList;
+
 /**
  * Created by Oscar Azofeifa on 12/05/2017.
  */
@@ -10,6 +12,7 @@ public class LogInfo {
     private static String email, password, firstName, lastName;
     private static int age;
     private static boolean logged;
+    private static ArrayList<String> roles;
 
     public LogInfo(){
 
@@ -57,6 +60,14 @@ public class LogInfo {
 
     public static boolean isLogged() {
         return logged;
+    }
+
+    public static void setRoles(ArrayList<String> rolesIn){
+        roles = rolesIn;
+    }
+
+    public static ArrayList<String> getRoles(){
+        return roles;
     }
 
     public static void setLogged(boolean logged) {
