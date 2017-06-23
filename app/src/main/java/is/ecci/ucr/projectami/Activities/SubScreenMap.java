@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -20,10 +21,13 @@ import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
 import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
+import is.ecci.ucr.projectami.DBConnectors.UserManagers;
+import is.ecci.ucr.projectami.LogInfo;
 import is.ecci.ucr.projectami.MainActivity;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
+import is.ecci.ucr.projectami.Users.User;
 
 /**
  * Created by Daniel on 5/20/2017.
@@ -61,12 +65,6 @@ public class SubScreenMap extends Activity {
 
         buttonInfo.setOnClickListener(btnInfoHandler);
         buttonRegister.setOnClickListener(btnRegstrHandler);
-
-        if (true /* consultar si tiene el privilegio necesario */){
-
-        }else {
-            buttonRegister.setVisibility(View.INVISIBLE);
-        }
 
     }
 
@@ -126,9 +124,18 @@ public class SubScreenMap extends Activity {
 
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
-            Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
-            intent.putExtra("site", site);
-            startActivity(intent);
+             /* consultar si tiene el privilegio necesario */
+             ArrayList<String> hola = new ArrayList<String>();
+            hola.add("recolector");
+            LogInfo.setRoles(hola);
+            if (LogInfo.getRoles()!= null && LogInfo.getRoles().contains("recolector")){
+                Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
+                intent.putExtra("site", site);
+                startActivity(intent);
+            }else {
+                Toast.makeText(getApplicationContext(),"Lo sentimos, no tiene el rol necesario para realizar esta acción",Toast.LENGTH_SHORT).show();
+            }
+
         }
     };
 
