@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
-import com.android.volley.ParseError;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
@@ -23,14 +22,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
-import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.LogInfo;
 
 
@@ -48,17 +42,13 @@ public class MongoAdmin {
     //Default headers for the queries
     static private Map<String,String> getDefaultParams() {
         Map<String, String> params = new HashMap<>();
-        if (LogInfo.getEmail()!=null && LogInfo.getPassword() != null) {
+        if (LogInfo.getEmail() !=null && LogInfo.getPassword() != null) {
             String encodedString = Base64.encodeToString(String.format("%s:%s", LogInfo.getEmail(), LogInfo.getPassword()).getBytes(), Base64.NO_WRAP);
             String value = String.format("Basic %s", encodedString);
             Log.i("user&pass",encodedString);
             params.put(Config.AUTH_KEY,value);
             params.put("authenticationDatabase",Config.DATABASE_NAME_AUTH);
         }
-        String encodedString = Base64.encodeToString(String.format("%s:%s", "admin", "q1w2E3r4").getBytes(), Base64.NO_WRAP);
-        String value = String.format("Basic %s", encodedString);
-        Log.i("user&pass",encodedString);
-        params.put(Config.AUTH_KEY,value);
         params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
         return params;
     }
