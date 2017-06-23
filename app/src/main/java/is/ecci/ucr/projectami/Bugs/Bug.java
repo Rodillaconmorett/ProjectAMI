@@ -20,6 +20,7 @@ public class Bug {
     public Bug(String family, double score, String description){
         this.family = family;
         this.description = description;
+        this.score = score;
     }
 
     //Initializer with family and ID
