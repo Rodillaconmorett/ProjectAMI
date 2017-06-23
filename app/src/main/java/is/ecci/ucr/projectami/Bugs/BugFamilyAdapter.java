@@ -1,6 +1,8 @@
 package is.ecci.ucr.projectami.Bugs;
 
 import android.content.Context;
+import android.media.Image;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,10 +45,20 @@ public class BugFamilyAdapter extends ArrayAdapter<BugFamily> {
         ImageView imagen = (ImageView) item.findViewById(R.id.imgFamily);
         imagen.setImageResource(datos.get(position).getImageID());
 
+        ImageView qualImg = (ImageView) item.findViewById(R.id.imgQualBug);
+        qualImg.setImageResource(getBugQualImg(datos.get(position).getPoints()));
+
         // Recogemos el TextView para mostrar el nombre y establecemos el
         // nombre.
         TextView nombre = (TextView) item.findViewById(R.id.nameFamily);
         nombre.setText( datos.get(position).getNameFamily());
+
+        TextView txtScore = (TextView) item.findViewById(R.id.txtScore);
+        txtScore.setText( datos.get(position).getPoints() + " pts");
+
+//        TextView txtCount = (TextView) item.findViewById(R.id.txtCount);
+//        txtScore.setText( "Cont: " + datos.get(position).getQuantity);
+
 
         // Recogemos el TextView para mostrar el número de celda y lo
         // establecemos.
@@ -55,6 +67,16 @@ public class BugFamilyAdapter extends ArrayAdapter<BugFamily> {
         return item;
     }
 
-
+    public int getBugQualImg(double score){
+        if(score < 3){
+            return R.drawable.lifefinder_icon_red;
+        }
+        else if(score < 7){
+            return R.drawable.lifefinder_icon_orange;
+        }
+        else {
+            return R.drawable.lifefinder_icon_green;
+        }
+    }
 
 }
