@@ -221,7 +221,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
             findViewById(R.id.userAnswerLayout).setVisibility(View.VISIBLE);
-        } else if (textB.equals("Continuar")) {
+        } else if (textB.equals("CONTINUAR")) {
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
             if (userAnswer.trim().equals("")) {
@@ -264,7 +264,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
             @Override
             public JSONObject onFailure(JSONObject result) {
-                System.out.println("Error descargando de BD");
+                Log.d("Failed to request##","Error descargando de BD");
                 return null;
             }
         }, CollectionName.QUESTIONS);
