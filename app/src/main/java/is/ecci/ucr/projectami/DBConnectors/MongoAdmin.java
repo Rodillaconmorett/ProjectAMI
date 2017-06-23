@@ -55,6 +55,11 @@ public class MongoAdmin {
             params.put(Config.AUTH_KEY,value);
             params.put("authenticationDatabase",Config.DATABASE_NAME_AUTH);
         }
+        String encodedString = Base64.encodeToString(String.format("%s:%s", "admin", "q1w2E3r4").getBytes(), Base64.NO_WRAP);
+        String value = String.format("Basic %s", encodedString);
+        Log.i("user&pass",encodedString);
+        params.put(Config.AUTH_KEY,value);
+        params.put("authenticationDatabase",Config.DATABASE_NAME_AUTH);
         params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
         return params;
     }
