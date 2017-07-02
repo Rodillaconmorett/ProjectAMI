@@ -61,6 +61,8 @@ public class TreeController implements Serializable {
     *  R:  -
     * */
     public LinkedHashSet<String> getQuestionAndOptions() {
+        monitorQuestionsRealized(true); //Solo para monitorear las preguntas
+
         LinkedHashSet<String> result = new LinkedHashSet<String>();
         String buffer = "";
         if (_MIFoundState == InductionState.POSSIBLE_TO_FIND) {
@@ -127,6 +129,7 @@ public class TreeController implements Serializable {
                         _actualNode = pair.first;
                         _realizedQuestions.remove(i);
                         break;
+
                     }
                     i++;
                 }
@@ -346,6 +349,20 @@ public class TreeController implements Serializable {
             i++;
         }
         return matrix;
+    }
+
+    private String monitorQuestionsRealized(boolean print){
+        String result = "ROOT";
+            for (Pair<Node, String> pair: _realizedQuestions){
+                if (pair.first.getLabel().getValue() != -1){
+                    result += "LEAFNODE:  " + pair.first.getLabel().getStrValue()+ " : "+ pair.second + "\n";
+                }else {
+                    result += "NODE: " + pair.first.getAttribute().getName() + " : " + pair.second + "\n";
+                }
+            }
+        if (print)
+            System.out.println(result);
+        return result;
     }
 
     public LinkedList<Pair<String, String>> getQuestionsRealized() {
