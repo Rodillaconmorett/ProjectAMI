@@ -4,6 +4,7 @@ package is.ecci.ucr.projectami.DecisionTree;
 import android.util.Pair;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Random;
@@ -15,12 +16,18 @@ import java.util.TreeMap;
 
 public class TreeController implements Serializable {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     private enum InductionState {
         FOUND_COMMITED, FOUND_NOT_COMMITED, POSSIBLE_TO_FIND, IMPOSSIBLE_TO_FIND,
     }
 
     /*-----------------------------------------ATTRIBUTES-----------------------------------------*/
     private Node _actualNode;
+    private Node _rootNode;
     private ID3 _actualInstance;
     private Matrix _features;
     private Matrix _labels;
@@ -43,7 +50,8 @@ public class TreeController implements Serializable {
         _labels = new Matrix(mainMatrix, 0, 0, mainMatrix.rows(), 1);
 
         _actualInstance = new ID3();
-        _actualNode = _actualInstance.buildTree(_features, _labels);
+        _rootNode = _actualInstance.buildTree(_features, _labels);
+        _actualNode = _rootNode;
 
         _realizedQuestions = new LinkedList<Pair<Node, String>>();
 
@@ -61,7 +69,7 @@ public class TreeController implements Serializable {
     *  R:  -
     * */
     public LinkedHashSet<String> getQuestionAndOptions() {
-        monitorQuestionsRealized(true); //Solo para monitorear las preguntas
+        monitor(); //Solo para monitorear las preguntas
 
         LinkedHashSet<String> result = new LinkedHashSet<String>();
         String buffer = "";
@@ -123,9 +131,11 @@ public class TreeController implements Serializable {
                 _MIFoundState = InductionState.FOUND_COMMITED;
             } else if (response.equals("FALSE")) {
                 _MIFoundState = InductionState.IMPOSSIBLE_TO_FIND;
+
+                //Revisa en la lista de preguntas realizadas hay alguna NA para esclarecer y formar un feedback consistente.
                 int i = 0;
                 for (Pair<Node, String> pair : _realizedQuestions) {
-                    if (pair.second == "NA") {
+                    if (pair.second.equals("NA")) {
                         _actualNode = pair.first;
                         _realizedQuestions.remove(i);
                         break;
@@ -133,14 +143,14 @@ public class TreeController implements Serializable {
                     }
                     i++;
                 }
-                if (_realizedQuestions.size() == i) {
+                if (_realizedQuestions.size() == i) { //Si no hubieron NAs en la lista
                     boolean hasBeenAsked = true;
                     Random numberNumber;
-                    int num;                                                        // NO ABARCA TODOS LOS NODOS
+                    int num;
                     Node randomQuestion;
                     do {
                         numberNumber = new Random();
-                        num = numberNumber.nextInt(_features.cols());                // NO ABARCA TODOS LOS NODOS
+                        num = numberNumber.nextInt((int)_actualInstance.getNodeCounter() - 1);                // NO ABARCA TODOS LOS NODOS
                         randomQuestion = this.getNode(num);
                         int j = 0;
                         for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
@@ -178,7 +188,7 @@ public class TreeController implements Serializable {
                     //Busca una pregunta con respuesta NA dentro de la lista de preguntas realizadas.
                     int i = 0;
                     for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
-                        if (questionAndAnswer.second == "NA") {
+                        if (questionAndAnswer.second.equals("NA")) {
                             _actualNode = questionAndAnswer.first;
                             _realizedQuestions.remove(i);
                             break;
@@ -190,11 +200,11 @@ public class TreeController implements Serializable {
                     if (_realizedQuestions.size() == i) {
                         boolean hasBeenAsked = true;
                         Random numberNumber;
-                        int num;                                                        // NO ABARCA TODOS LOS NODOS
+                        int num;
                         Node randomQuestion;
                         do {
                             numberNumber = new Random();
-                            num = numberNumber.nextInt(_features.cols());                // NO ABARCA TODOS LOS NODOS
+                            num = numberNumber.nextInt(_actualInstance.getNodeCounter() - 1);
                             randomQuestion = this.getNode(num);                        // Sacamos un nodo aleatorio
                             int j = 0;                                                    // Verificamos si el nodo ya se preguntó
                             for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
@@ -210,7 +220,7 @@ public class TreeController implements Serializable {
                         _actualNode = randomQuestion;
                     }
 
-                    //Si es un nodo hoja, abre posiblidad abre posibilidad de responder TRUE o FALSE.
+                    //Si es un nodo hoja, abre posibilidad de responder TRUE o FALSE.
                     if (_actualNode.getLabel().getValue() != -1) {
                         _MIFoundState = InductionState.FOUND_NOT_COMMITED;
                     }
@@ -233,16 +243,10 @@ public class TreeController implements Serializable {
         this.reply(response);
     }
 
-    private Node getNode(int n) {
-        if (_realizedQuestions.size() != 0) {
-            return getNodeAux(_realizedQuestions.getFirst().first, 0, n).first;
-        } else {
-            return getNodeAux(_actualNode, 0, n).first;
-        }
-    }
+    private Node getNode(int n) {return getNodeAux(_rootNode, n);}
 
-    private Pair<Node, Integer> getNodeAux(Node currentNode, int i, int n) {
-        if (i == n) {
+    private Node getNodeAux(Node currentNode, int n) {
+        /*if (i == n) {
             return new Pair<Node, Integer>(currentNode, i);
         } else if (currentNode.getLabel().getValue() == -1) {
             Pair<Node, Integer> pair;
@@ -256,10 +260,23 @@ public class TreeController implements Serializable {
             return new Pair<Node, Integer>(currentNode, i);
         } else {
             return new Pair<Node, Integer>(currentNode, i + 1);
+        }*/
+        if (currentNode.getNodeID() == n) {
+        } else  {//Nodo Interno?
+            if (currentNode.getLabel().getValue() == -1){
+                Node actual;
+                for (Double value : currentNode.getAttribute().getValues()) {
+                    actual = getNodeAux(currentNode.getBranches().get(value), n);
+                    if (actual.getNodeID() == n) {
+                        return actual;
+                    }
+                }
+            }
         }
+        return currentNode;
     }
 
-    /* E: attribute-> En este caso es la pregunta que se responde, value-> La respuesta a la pregunta
+    /* E: attribute-> La pregunta, value-> La respuesta a la pregunta
      * S: Agrega la pregunta a la lista de preguntas respondidas
      * R: La lista contenga al menos una pregunta, con atributos distintos a attribute.
      * */
@@ -276,6 +293,14 @@ public class TreeController implements Serializable {
         _realizedQuestions.add(new Pair<Node, String>(node, "TRUE"));
     }
 
+    public void resolve(String MIFamilyName) throws Exception {
+        if (_MIFoundState != InductionState.FOUND_COMMITED){
+            addAnswer("familia", MIFamilyName);
+            _MIFoundState = InductionState.FOUND_COMMITED;
+        }else {
+            throw new Exception("Failed Attempt: This induction is already resolved. Try to resolve an unresolved induction.");
+        }
+    }
     /* E:  -
     *  S:  Resetea el nodoActual al nodo raÃ­z del Ã¡rbol de decisiÃ³n.
     *  R:  -
@@ -351,18 +376,48 @@ public class TreeController implements Serializable {
         return matrix;
     }
 
+
+    private void monitor(){
+        System.out.println("ESTADO: " + _MIFoundState.toString());
+        monitorQuestionsRealized(true);
+
+    }
+
     private String monitorQuestionsRealized(boolean print){
         String result = "ROOT";
-            for (Pair<Node, String> pair: _realizedQuestions){
-                if (pair.first.getLabel().getValue() != -1){
-                    result += "LEAFNODE:  " + pair.first.getLabel().getStrValue()+ " : "+ pair.second + "\n";
-                }else {
-                    result += "NODE: " + pair.first.getAttribute().getName() + " : " + pair.second + "\n";
-                }
+        for (Pair<Node, String> pair: _realizedQuestions){
+            if (pair.first.getLabel().getValue() != -1){
+                result += "LEAFNODE:  " + pair.first.getLabel().getStrValue()+ " : "+ pair.second + "\n";
+            }else {
+                result += "NODE: " + pair.first.getAttribute().getName() + " : " + pair.second + "\n";
             }
+        }
         if (print)
             System.out.println(result);
         return result;
+    }
+
+
+    public void printTree(){
+        printTreeAux("",_rootNode, _features, _labels);
+    }
+
+    private void printTreeAux(String espaciado,Node nodito, Matrix features, Matrix labels){
+        //Si el nodo es una hoja
+        if (nodito.getLabel().getValue() != -1){
+            System.out.println(espaciado + "Node " + nodito.getNodeID() + ": "+ nodito.getLabel().getStrValue());
+        }
+        else {//Si el nodo es interno
+            System.out.println(espaciado + "Node "+ nodito.getNodeID() + ": " + nodito.getAttribute().getName());
+        }
+        LinkedHashMap<Double,Node> sub = nodito.getBranches();
+        if(!sub.isEmpty()){
+            for (Double nodititito : sub.keySet()){
+                System.out.println(espaciado+"|   Valor = " + features.attrValue(nodito.getAttribute().getColumnPositionID(), nodititito.intValue()));
+                printTreeAux(espaciado+"|   ",sub.get(nodititito), features, labels)	;
+            }
+        }
+
     }
 
     public LinkedList<Pair<String, String>> getQuestionsRealized() {

@@ -13,7 +13,7 @@ public class ID3 {
 		_nodeCounter = 0;
 	}
 	
-	public double getNodeCounter() {
+	public int getNodeCounter() {
 		return _nodeCounter;
 	}
 	
