@@ -51,7 +51,7 @@
             android:gravity="left|center"
             android:layout_marginLeft="5dp"
             android:text="Nombre"
-            android:textColor="@color/temaLifeFinder"
+            android:textColor="@color/colorPrimary"
             android:textSize="22sp" />
 
         <TextView
@@ -76,7 +76,7 @@
             android:layout_gravity="center"
             android:layout_row="1"
             android:gravity="center"
-            app:srcCompat="@color/temaLifeFinder" />
+            app:srcCompat="@color/colorPrimary" />
 
         <GridLayout
             android:layout_width="match_parent"
@@ -106,7 +106,7 @@
                     android:layout_row="0"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/lifefinder_icon_green" />
+                    android:src="@drawable/nimbu_icon_green" />
 
                 <TextView
                     android:id="@+id/textHghQualBugs"
@@ -148,7 +148,7 @@
                     android:layout_row="0"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/lifefinder_icon_orange" />
+                    android:src="@drawable/nimbu_icon_orange" />
 
                 <TextView
                     android:id="@+id/textMedQualBugs"
@@ -188,7 +188,7 @@
                     android:layout_row="0"
                     android:adjustViewBounds="true"
                     android:scaleType="centerInside"
-                    android:src="@drawable/lifefinder_icon_red" />
+                    android:src="@drawable/nimbu_icon_red" />
 
                 <TextView
                     android:id="@+id/textLowQualBugs"
@@ -249,7 +249,7 @@
                     android:gravity="bottom|center"
                     android:text="Información"
                     android:textAllCaps="false"
-                    android:textColor="@color/temaLifeFinder" />
+                    android:textColor="@color/colorPrimary" />
 
             </RelativeLayout>
 
@@ -277,7 +277,7 @@
                     android:textAllCaps="false"
                     android:text="Clasificar"
                     android:gravity="bottom|center"
-                    android:textColor="@color/temaLifeFinder"
+                    android:textColor="@color/colorPrimary"
                     />
 
             </RelativeLayout>
