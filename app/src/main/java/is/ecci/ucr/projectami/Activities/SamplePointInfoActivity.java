@@ -1,6 +1,7 @@
  package is.ecci.ucr.projectami.Activities;
 
         import android.app.DatePickerDialog;
+        import android.content.Context;
         import android.content.Intent;
         import android.media.Image;
         import android.os.Bundle;
@@ -11,18 +12,22 @@
         import android.widget.ImageButton;
         import android.widget.ListView;
         import android.widget.TextView;
+        import android.widget.Toast;
 
         import org.json.JSONObject;
 
         import java.io.Serializable;
         import java.util.ArrayList;
         import java.util.Calendar;
+        import java.util.Iterator;
+        import java.util.LinkedList;
 
+        import is.ecci.ucr.projectami.Bugs.Bug;
+        import is.ecci.ucr.projectami.Bugs.BugAdapter;
         import is.ecci.ucr.projectami.Bugs.BugFamily;
         import is.ecci.ucr.projectami.Bugs.BugFamilyAdapter;
         import is.ecci.ucr.projectami.DBConnectors.Consultor;
         import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
-        import is.ecci.ucr.projectami.DBConnectors.MongoAdmin;
         import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
         import is.ecci.ucr.projectami.R;
         import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
@@ -53,7 +58,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
     private ImageButton btnBack;
 
     private ListView lvBugs;
-    private ArrayList<BugFamily> bugFamilies;
+    private BugFamilyAdapter bugAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,20 +70,35 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
         /*********** INITIALIZE THE DATES ***************/
         Calendar today = Calendar.getInstance();
+        finalDate = String.valueOf(today.get(Calendar.YEAR));
+        finalDate += "-";
+        int month = today.get(Calendar.MONTH);
+        if(month < 9){
+            finalDate += "0";
+        }
+        finalDate += String.valueOf(today.get(Calendar.MONTH)+1);
+        finalDate += "-";
+        int day = today.get(Calendar.DAY_OF_MONTH);
+        if(day < 10){
+            finalDate += "0";
+        }
+        finalDate += String.valueOf(today.get(Calendar.DAY_OF_MONTH));
+        today.add(Calendar.MONTH, -1);
         initialDate = String.valueOf(today.get(Calendar.YEAR));
         initialDate += "-";
-        int month = today.get(Calendar.MONTH);
+        month = today.get(Calendar.MONTH);
         if(month < 9){
             initialDate += "0";
         }
         initialDate += String.valueOf(today.get(Calendar.MONTH)+1);
         initialDate += "-";
-        int day = today.get(Calendar.DAY_OF_MONTH);
+        day = today.get(Calendar.DAY_OF_MONTH);
         if(day < 10){
             initialDate += "0";
         }
         initialDate += String.valueOf(today.get(Calendar.DAY_OF_MONTH));
-        finalDate = initialDate;
+
+        //bugAdapter = new BugAdapter(getApplicationContext());
         setSamplingPoint();
 
         /*********** INITIALIZE THE BACK BUTTON *************/
@@ -87,15 +107,16 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
         /************** INITIALIZE THE LIST ******************/
         lvBugs = (ListView) findViewById(R.id.lvBugs);
-        fillManually();
-        BugFamilyAdapter bugFamilyAdapter = new BugFamilyAdapter(this,bugFamilies);
-        lvBugs.setAdapter(bugFamilyAdapter);
+
+        //lvBugs.setAdapter(bugFamilyAdapter);
 
         /*************** LOAD THE DATEPICKER **************/
         btnDate = (ImageButton) findViewById(R.id.btnDate);
         btnDate.setOnClickListener(btnDateHandler);
         txtInitialDate = (TextView) findViewById(R.id.txtInitialDate);
         txtFinalDate = (TextView) findViewById(R.id.txtFinalDate);
+        txtInitialDate.setText(initialDate);
+        txtFinalDate.setText(finalDate);
         calendar = Calendar.getInstance();
     }
 
@@ -108,6 +129,29 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         textTotScore.setText(String.valueOf(samplingPoint.getScore()));
         textTotSpecies = (TextView) findViewById(R.id.textTotSpecies);
         textTotSpecies.setText(String.valueOf(samplingPoint.getBugList().size()));
+        ArrayList<BugFamily> bugArrayList = castLinked2Array(samplingPoint.getBugList());
+        for (int i = 0; i < bugArrayList.size(); i++){
+            String imageName = getImageName(bugArrayList.get(i).getNameFamily());
+            int resourceId = getResources().getIdentifier("drawable/"+imageName, null, getApplicationContext().getPackageName());
+            bugArrayList.get(i).setImageID(resourceId);
+        }
+        bugAdapter = new BugFamilyAdapter(getApplicationContext(),bugArrayList);
+        lvBugs.setAdapter(bugAdapter);
+    }
+
+    private ArrayList<BugFamily> castLinked2Array(LinkedList<Bug> linkedList){
+        Iterator<Bug> iterator = linkedList.listIterator();
+        ArrayList<BugFamily> arrayList =  new ArrayList<>();
+        while(iterator.hasNext()) {
+            Bug bug = iterator.next();
+            arrayList.add(new BugFamily(bug.getFamily(),bug.getScore(),bug.getImageID()));
+        }
+        return arrayList;
+    }
+
+    private String getImageName(String bugFamily){
+        String finalString = (bugFamily.replace(":","_")).toLowerCase();
+        return "img_"+finalString;
     }
 
     private void setSamplingPoint(){
@@ -129,6 +173,7 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
                      @Override
                      public JSONObject onFailure(JSONObject result) {
                          Log.i("","");
+                         Toast.makeText(getApplicationContext(),"No se pudo cargar de la base de datos",Toast.LENGTH_SHORT).show();
                          return null;
                      }
                  },bugs);
@@ -137,11 +182,12 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
              @Override
              public JSONObject onFailure(JSONObject result) {
-
+                 Toast.makeText(getApplicationContext(),"No se pudo cargar de la base de datos",Toast.LENGTH_SHORT).show();
                  return null;
              }
-         },site.getObjID());
-//        ,initialDate,finalDate);
+         },site.getObjID()
+        );
+        //,initialDate,finalDate);
     }
 
     View.OnClickListener btnBackHandler = new View.OnClickListener() {
@@ -150,62 +196,60 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
         }
     };
 
-    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+    DatePickerDialog.OnDateSetListener dateI = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, monthOfYear);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            finalDate = String.valueOf(year);
+            finalDate += "-";
+            if(monthOfYear < 9){
+                finalDate += "0";
+            }
+            finalDate += String.valueOf(monthOfYear + 1);
+            finalDate += "-";
+            if(dayOfMonth < 10){
+                finalDate += "0";
+            }
+            finalDate += String.valueOf(dayOfMonth);
+            txtFinalDate.setText(finalDate);
+        }
+    };
+
+    DatePickerDialog.OnDateSetListener dateF = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, monthOfYear);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            finalDate = String.valueOf(year);
+            finalDate += "-";
+            if(monthOfYear < 9){
+                finalDate += "0";
+            }
+            finalDate += String.valueOf(monthOfYear + 1);
+            finalDate += "-";
+            if(dayOfMonth < 10){
+                finalDate += "0";
+            }
+            finalDate += String.valueOf(dayOfMonth);
+            txtFinalDate.setText(finalDate);
+            setSamplingPoint();
         }
     };
 
     View.OnClickListener btnDateHandler = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            new DatePickerDialog(SamplePointInfoActivity.this, date, calendar.get(Calendar.YEAR),
+            new DatePickerDialog(SamplePointInfoActivity.this, dateF, calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-            initialDate = String.valueOf(calendar.YEAR);
-            initialDate += "-";
-            if(calendar.MONTH < 9){
-                initialDate += "0";
-            }
-            initialDate += String.valueOf(calendar.MONTH + 1);
-            initialDate += "-";
-            if(calendar.DAY_OF_MONTH < 10){
-                initialDate += "0";
-            }
-            initialDate += String.valueOf(calendar.DAY_OF_MONTH);
-            txtInitialDate.setText(initialDate);
-            new DatePickerDialog(SamplePointInfoActivity.this, date, calendar.get(Calendar.YEAR),
+            new DatePickerDialog(SamplePointInfoActivity.this, dateI, calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-            finalDate = String.valueOf(calendar.YEAR);
-            finalDate += "-";
-            if(calendar.MONTH < 9){
-                finalDate += "0";
-            }
-            finalDate += String.valueOf(calendar.MONTH + 1);
-            finalDate += "-";
-            if(calendar.DAY_OF_MONTH < 10){
-                finalDate += "0";
-            }
-            finalDate += String.valueOf(calendar.DAY_OF_MONTH);
-            txtFinalDate.setText(finalDate);
-            setSamplingPoint();
         }
     };
-
-    private void fillManually(){
-        bugFamilies = new ArrayList<>();
-        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
-        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
-        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
-        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
-        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
-        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
-        bugFamilies.add(new BugFamily("Amphipoda", 3.0,R.drawable.img_amphipoda));
-        bugFamilies.add(new BugFamily("Annelida", 2.0,R.drawable.img_annelida));
-    }
 
     @Override
     public void onClick(View v) {

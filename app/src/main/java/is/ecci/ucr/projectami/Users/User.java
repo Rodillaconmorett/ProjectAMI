@@ -72,6 +72,7 @@ public class User {
     public ArrayList<String> getRoles() {
         return roles;
     }
+    ;
 
     public void setLastName(String lastName) {
         this.lastName = lastName;

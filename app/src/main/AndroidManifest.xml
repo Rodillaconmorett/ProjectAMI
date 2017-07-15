@@ -4,25 +4,21 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ico_life_finder"
-        android:label="LifeFinder"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@drawable/nimbu_ic"
+        android:label="Nimbu"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+        android:theme="@style/AppTheme">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.LogActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".MainActivity"
+            android:label="Nimbu"
+            />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
 
         <meta-data
@@ -31,10 +27,12 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity android:name=".Activities.SamplePointInfoActivity"
             android:label="SamplePointInfoActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
+        <activity android:name=".Activities.LogActivity"/>
         <activity android:name=".Activities.SubScreenMap"
             android:label="SubScreenMap"
             android:theme="@style/AppTheme.PopUpTheme"
@@ -43,6 +41,8 @@
             android:label="QuestionsGUI"/>
         <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity"></activity>
         <activity android:name=".Activities.CatalogActivity"></activity>
+
+
     </application>
 
 </manifest>

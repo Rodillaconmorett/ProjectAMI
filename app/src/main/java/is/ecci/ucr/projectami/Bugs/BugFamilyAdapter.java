@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.R;
 
@@ -43,10 +42,20 @@ public class BugFamilyAdapter extends ArrayAdapter<BugFamily> {
         ImageView imagen = (ImageView) item.findViewById(R.id.imgFamily);
         imagen.setImageResource(datos.get(position).getImageID());
 
+        ImageView qualImg = (ImageView) item.findViewById(R.id.imgQualBug);
+        qualImg.setImageResource(getBugQualImg(datos.get(position).getPoints()));
+
         // Recogemos el TextView para mostrar el nombre y establecemos el
         // nombre.
         TextView nombre = (TextView) item.findViewById(R.id.nameFamily);
         nombre.setText( datos.get(position).getNameFamily());
+
+        TextView txtScore = (TextView) item.findViewById(R.id.txtScore);
+        txtScore.setText( datos.get(position).getPoints() + " pts");
+
+//        TextView txtCount = (TextView) item.findViewById(R.id.txtCount);
+//        txtScore.setText( "Cont: " + datos.get(position).getQuantity);
+
 
         // Recogemos el TextView para mostrar el número de celda y lo
         // establecemos.
@@ -55,6 +64,16 @@ public class BugFamilyAdapter extends ArrayAdapter<BugFamily> {
         return item;
     }
 
-
+    public int getBugQualImg(double score){
+        if(score < 3){
+            return R.drawable.nimbu_icon_red;
+        }
+        else if(score < 7){
+            return R.drawable.nimbu_icon_orange;
+        }
+        else {
+            return R.drawable.nimbu_icon_green;
+        }
+    }
 
 }
