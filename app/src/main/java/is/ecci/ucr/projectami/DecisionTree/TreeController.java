@@ -150,7 +150,7 @@ public class TreeController implements Serializable {
                     Node randomQuestion;
                     do {
                         numberNumber = new Random();
-                        num = numberNumber.nextInt((int)_actualInstance.getNodeCounter() - 1);                // NO ABARCA TODOS LOS NODOS
+                        num = numberNumber.nextInt((int)_actualInstance.getNodeCounter() - 1);
                         randomQuestion = this.getNode(num);
                         int j = 0;
                         for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
@@ -293,6 +293,10 @@ public class TreeController implements Serializable {
         _realizedQuestions.add(new Pair<Node, String>(node, "TRUE"));
     }
 
+    /* E: Nombre de la familia para resolver retroalimentacion
+    *  S: -
+    *  R: Debe estar secuencia de preguntas sin resolver.
+    * */
     public void resolve(String MIFamilyName) throws Exception {
         if (_MIFoundState != InductionState.FOUND_COMMITED){
             addAnswer("familia", MIFamilyName);
