@@ -185,7 +185,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             TextView question = (TextView) findViewById(R.id.questionID);
             String string = questions.get(questionsAndOptions[0]);
             currentQuestion = (string == null) ? questionsAndOptions[0] : string;
-            question.setText(currentQuestion);
+            question.setText(JsonParserLF.convert(currentQuestion));
             LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
             for (int i = 1; i < arraySize; i++) {
@@ -250,6 +250,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
             findViewById(R.id.userAnswerLayout).setVisibility(View.VISIBLE);
+            findViewById(R.id.scrollQuestionsView).setVisibility(View.INVISIBLE);
         } else if (textB.equals("Continuar")) {
             EditText answerBox = (EditText) findViewById(R.id.userAnswer);
             String userAnswer = answerBox.getText().toString();
@@ -257,11 +258,16 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 treeControl.reply("NA");
             } else {
                 treeControl.reply("NA", userAnswer);
+                ((TextView)findViewById(R.id.userAnswer)).setText("");
             }
             findViewById(R.id.userAnswerLayout).setVisibility(View.INVISIBLE);
+            findViewById(R.id.scrollQuestionsView).setVisibility(View.VISIBLE);
+
         } else {
             if (textB.equals("Volver a pregunta anterior")) {
                 treeControl.goBack();
+                findViewById(R.id.userAnswerLayout).setVisibility(View.INVISIBLE);
+                findViewById(R.id.scrollQuestionsView).setVisibility(View.VISIBLE);
             } else {
                 treeControl.reply(textB);
             }
@@ -335,9 +341,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
      */
     public String convert(String string) throws java.io.UnsupportedEncodingException {
         byte[] bytes = string.getBytes("ISO_8859-1");
-        string = new String(bytes);
-        string.replace(((char) 65533), '¿');
-        return string;
+        return new String(bytes);
     }
 
     public void terminarActividad() {

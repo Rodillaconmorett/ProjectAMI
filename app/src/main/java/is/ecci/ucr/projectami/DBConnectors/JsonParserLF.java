@@ -13,6 +13,7 @@ import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugFamily;
 import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
+import is.ecci.ucr.projectami.UserLog.SampleLog;
 import is.ecci.ucr.projectami.Users.User;
 
 /**
@@ -129,6 +130,23 @@ public class JsonParserLF {
         return bugs;
     }
 
+    public static ArrayList<SampleLog> parseSamples(JSONObject response) {
+        ArrayList<SampleLog> userSamples = new ArrayList<>();
+
+        try {
+            if (response.has("_embedded")) {
+                JSONArray jsonArray = response.getJSONArray("_embedded");
+                for (int i = 0; i<jsonArray.length(); i++) {
+                    JSONObject docJson = jsonArray.getJSONObject(i);
+                    userSamples.add(new SampleLog(docJson));
+                }
+            } else {
+                userSamples.add(new SampleLog(response));
+            }} catch (Exception e) {
+            e.printStackTrace();
+        }
+        return  userSamples;
+    }
     public static ArrayList<Questions> parseQuestionsList(JSONObject response) {
         ArrayList<Questions> questions = new ArrayList<>();
         try {

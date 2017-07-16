@@ -268,4 +268,41 @@ public class MongoAdmin {
         queue.add(jsonRequest);
     }
 
+    static void jsonDeleteRequest(String url, final ServerCallback callback) {
+        Custom_Volly_Request jsonRequest = new Custom_Volly_Request(Request.Method.DELETE, url, getDefaultParams(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError response) {
+                        Log.d("### --> Response: Error", response.toString());
+                        JSONObject jsonFailed = new JSONObject();
+                        try {
+                            jsonFailed.put("failed", "true");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        callback.onFailure(jsonFailed);
+                    }
+                }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                if (response.data == null || response.data.length == 0) {
+                    return Response.success(null, HttpHeaderParser.parseCacheHeaders(response));
+                } else {
+                    return super.parseNetworkResponse(response);
+                }
+            }
+        };
+        queue.add(jsonRequest);
+    }
+
 }

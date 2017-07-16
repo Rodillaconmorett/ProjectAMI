@@ -40,6 +40,7 @@ public class Consultor {
         MongoAdmin.jsonGetRequest(getURL,callback);
     }
 
+
     /*--------------- KEYS UPDATE ----------------*/
     /*Actualizamos el archivo CSV con las llaves.*/
 
@@ -101,7 +102,15 @@ public class Consultor {
         String url = connectionString+"/_aggrs/family_aggr";
         MongoAdmin.jsonGetRequest(url,callback);
     }
+
+    static public void getSamplesByUserID(ServerCallback callback, String id){
+        String connectionString = Config.CONNECTION_STRING+CollectionName.SAMPLE;
+        String url = connectionString+"?filter={user_id:\""+ id +"\"}";
+        Log.d("URL:",url);
+        MongoAdmin.jsonGetRequest(url,callback);
+    }
 }
+
 
 
 
