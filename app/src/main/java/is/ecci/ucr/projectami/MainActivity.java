@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-
         /*
         * Aqui debe ir la vara de obtener de la base de datos
         *
