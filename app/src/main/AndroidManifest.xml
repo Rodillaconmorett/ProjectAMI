@@ -37,6 +37,12 @@
             android:label="SubScreenMap"
             android:theme="@style/AppTheme.PopUpTheme"
             />
+
+        <activity android:name=".Activities.Classification.PerfilActivity"
+            android:label="PerfilActivity"
+            android:theme="@style/AppTheme.PopUpTheme"
+            />
+
         <activity android:name=".Activities.Classification.QuestionsGUIActivity"
             android:label="QuestionsGUI"/>
         <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity"></activity>

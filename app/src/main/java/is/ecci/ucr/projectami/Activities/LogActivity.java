@@ -71,7 +71,6 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signOut.setVisibility(View.VISIBLE);
                 Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(intent,777);
             }
@@ -89,9 +88,13 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
             }
         });
 
-        signOut.setVisibility(View.INVISIBLE);
+
+
+
+
 
         logIn = (Button) findViewById(R.id.buttonLogin);
+
         logIn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
