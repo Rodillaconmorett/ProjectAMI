@@ -15,7 +15,7 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:rotation="90"
         android:scaleType="center"
         android:scaleX="1.5"
@@ -28,15 +28,14 @@
 
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="309dp"
-        android:layout_height="159dp"
+        android:layout_width="152dp"
+        android:layout_height="78dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="0dp"
         android:contentDescription="LifeFinder Logo"
-        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +50,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="32dp"
         android:text="Cargando datos"
         android:textAlignment="center"
         android:textSize="18sp"
@@ -182,5 +181,18 @@
             app:layout_constraintTop_toBottomOf="@+id/questionID"></LinearLayout>
 
     </ScrollView>
+
+    <TextView
+        android:id="@+id/txtResolve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Resolver"
+        android:textColor="@color/colorPrimary"
+        android:textIsSelectable="true"
+        android:textStyle="bold|italic"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

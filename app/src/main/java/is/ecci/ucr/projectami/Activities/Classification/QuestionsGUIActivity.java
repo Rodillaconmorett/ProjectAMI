@@ -105,7 +105,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         Button backB = (Button) (findViewById(R.id.backButton));
         backB.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //Boton de pregunta anterior
                 Button pressed = (Button) v;
                 try {
                     catchAction(pressed);
@@ -140,10 +140,10 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             if (currentExtraQuestions > 0) {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
                 currentExtraQuestions--;
-            } else {
+            } else { //Si se acaban las 5 preguntas extras de retroalimentacion
                 currentInfo = treeControl.getQuestionsRealized();
                 try {
-                    System.out.println("Finishin the activity");
+                    System.out.println("Finishing the activity");
                     terminarActividad();
                 } catch (Exception e) {
                     //
@@ -183,12 +183,13 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
-            String string = questions.get(questionsAndOptions[0]);
+            String string = questions.get(questionsAndOptions[0]); //Traduce del id de la pregunta a la pregunta en si.
             currentQuestion = (string == null) ? questionsAndOptions[0] : string;
+
             question.setText(currentQuestion);
             LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
-            for (int i = 1; i < arraySize; i++) {
+            for (int i = 1; i < arraySize; i++) { //Agrega los botones por cada respuesta
                 Button button = new Button(this);
                 button.setText(translateReply(questionsAndOptions[i], true));
                 button.setLayoutParams(new LinearLayout.LayoutParams(
@@ -209,7 +210,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             }
 
             if (treeControl.isLeaf()) {
-                //Seach for the id of the image
+                //Search by image id
                 int resourceId = getResources().getIdentifier("drawable/" + getImageName(currentQuestion), null, this.getApplicationContext().getPackageName());
                 if (resourceId > 0) {
                     //ImageView Setup

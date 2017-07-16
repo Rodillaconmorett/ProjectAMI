@@ -268,7 +268,7 @@ public class TreeController implements Serializable {
                     //}
                     //break;
                 case FOUND_NOT_COMMITED:
-                    throw new AnswerException("'NA' isn't a option");
+                    throw new AnswerException("'NA' isn't an option");
                 case IMPOSSIBLE_TO_FIND:
                     for (Double value : _actualNode.getAttribute().getValues()) { //Compara cada una de las respuestas con la ingresada
                         if (response.equals(_features.attrValue(_actualNode.getAttribute().getColumnPositionID(), value.intValue()))) {
@@ -311,16 +311,13 @@ public class TreeController implements Serializable {
                                     }
                                 } while (hasBeenAsked);
                                 _actualNode = randomQuestion;
-                                if (_actualNode.getLabel().getValue() == -1){//es un nodo interno
-                                    _MIFoundState = InductionState.POSSIBLE_TO_FIND;
-                                }else {
-                                    _MIFoundState = InductionState.FOUND_NOT_COMMITED;
-                                }
                             }
 
                             //Si es un nodo hoja, abre posibilidad de responder TRUE o FALSE.
-                            if (_actualNode.getLabel().getValue() != -1) {
+                            if (_actualNode.getLabel().getValue() != -1) { //Si es hoja
                                 _MIFoundState = InductionState.FOUND_NOT_COMMITED;
+                            } else {
+                                _MIFoundState = InductionState.POSSIBLE_TO_FIND;
                             }
                             _questionsCounter++;
                             return;

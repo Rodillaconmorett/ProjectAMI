@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.google.firebase.auth.UserInfo;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ import is.ecci.ucr.projectami.LogInfo;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SampleBugsAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
+import is.ecci.ucr.projectami.Users.User;
 
 public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
@@ -56,7 +59,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bugs_sample_to_register);
 
         Intent intent = this.getIntent();
-        site = (Site) intent.getExtras().getSerializable("site");                    // Nombre de intent variable
+        site = (Site) intent.getExtras().getSerializable("site");       // Nombre de intent variable
 
         ListView list = (ListView) findViewById(R.id.lstBugList);
 
@@ -90,6 +93,13 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         _bugsListToRegister = new ArrayList<Bug>();
         adapter = new SampleBugsAdapter(this, _bugsListToRegister);
         list.setAdapter(adapter);
+
+        TextView btnResolve = (TextView) findViewById(R.id.txtResolve);
+        btnResolve.setVisibility(View.INVISIBLE);
+
+        if (LogInfo.getRoles() != null && LogInfo.getRoles().contains("bioadministrador")){
+            btnResolve.setVisibility(View.VISIBLE);
+        }
 
     }
 
