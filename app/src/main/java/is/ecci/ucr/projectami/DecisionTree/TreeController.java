@@ -508,7 +508,7 @@ public class TreeController implements Serializable {
         for (String family: test){
             result += family + ",";
         }
-        result = result.substring(0, result.length()-1);
+        result = result.substring(0, result.length()-1) + "}";
         if (print) System.out.println(result);
         return result;
     }
@@ -526,7 +526,6 @@ public class TreeController implements Serializable {
             System.out.println(result);
         return result;
     }
-
 
     public void printTree(){
         printTreeAux("",_rootNode, _features, _labels);
