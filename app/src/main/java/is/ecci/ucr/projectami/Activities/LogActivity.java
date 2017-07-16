@@ -120,6 +120,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                     Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
                     //signOut.setVisibility(View.VISIBLE);
                 }
+                LogInfo.setRoles(user.getRoles());
                 Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LogActivity.this, MainActivity.class);
                 //signOut.setVisibility(View.VISIBLE);
