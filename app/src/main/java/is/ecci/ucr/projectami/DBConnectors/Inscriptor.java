@@ -112,4 +112,16 @@ public class Inscriptor {
         MongoAdmin.jsonPostRequest(jsonBody,url, callback);
     }
 
+    static public void deleteAllUserSamples(String userEmail, ServerCallback serverCallback){
+        String url = Config.CONNECTION_STRING+CollectionName.SAMPLE;
+        url += "*?filter={user_id:\""+ userEmail +"\"}";
+        MongoAdmin.jsonDeleteRequest(url,serverCallback);
+    }
+
+    static public void deleteDocByID(CollectionName coll, String id, ServerCallback serverCallback){
+        String url = Config.CONNECTION_STRING+coll.toString();
+        url += "/"+id;
+        MongoAdmin.jsonDeleteRequest(url,serverCallback);
+    }
+
 }
