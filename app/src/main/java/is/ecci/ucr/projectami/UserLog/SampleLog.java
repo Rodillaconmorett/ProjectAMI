@@ -1,5 +1,7 @@
 package is.ecci.ucr.projectami.UserLog;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 
 /**
@@ -7,18 +9,28 @@ import java.util.Date;
  */
 
 public class SampleLog {
-    private Date date;
+    private String date;
     private String bugName;
     private String sampleID;
-    private String site;
-    public SampleLog(Date dat, String name, String idSample, String sit){
+    private String siteID;
+    private int quantity;
+    public SampleLog(String dat, String name, String idSample, String sit, int n){
         date = dat;
         bugName = name;
         sampleID = idSample;
-        site = sit;
+        siteID = sit;
+        quantity = n;
     }
 
-    public Date getDate() {
+    public SampleLog(JSONObject sampleDoc) throws Exception {
+        sampleID = sampleDoc.getJSONObject("_id").getString("$oid");
+        date = sampleDoc.getString("date");
+        bugName = sampleDoc.getJSONObject("results").getString("bug_id");
+        quantity = Integer.parseInt(sampleDoc.getJSONObject("results").getString("qty"));
+        siteID = sampleDoc.getString("site_id");
+    }
+
+    public String getDate() {
         return date;
     }
 
@@ -30,7 +42,11 @@ public class SampleLog {
         return sampleID;
     }
 
-    public String getSite() {
-        return site;
+    public String getSiteID() {
+        return siteID;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }

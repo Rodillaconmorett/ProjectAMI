@@ -3,6 +3,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActivity;
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.Consultor;
+import is.ecci.ucr.projectami.DBConnectors.Inscriptor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.R;
@@ -74,8 +76,19 @@ public class LogUserAdapter extends ArrayAdapter<SampleLog> {
                         .setMessage("Se borrará el registro de la clasificación del insecto")
                         .setPositiveButton("Continuar", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                String sampleID = _samples.get(position).getSampleID();
-
+                                final String sampleID = _samples.get(position).getSampleID();
+                                Inscriptor.deleteDocByID(CollectionName.SAMPLE, sampleID, new ServerCallback() {
+                                    @Override
+                                    public JSONObject onSuccess(JSONObject result) {
+                                        Log.d(" Deleting sample","Successfull "+sampleID);
+                                        return null;
+                                    }
+                                    @Override
+                                    public JSONObject onFailure(JSONObject result) {
+                                        Log.d(" Deleting sample","Error "+sampleID);
+                                        return null;
+                                    }
+                                });
                                 _samples.remove(position);
                                 notifyDataSetChanged();
                             }
@@ -93,20 +106,21 @@ public class LogUserAdapter extends ArrayAdapter<SampleLog> {
         TextView date = (TextView) convertView.findViewById(R.id.dateSample);
         date.setText(_samples.get(position).getDate().toString());
 
-        TextView site = (TextView) convertView.findViewById(R.id.logSite);
+        final TextView site = (TextView) convertView.findViewById(R.id.logSite);
         Consultor.getDocById(new ServerCallback() {
             @Override
             public JSONObject onSuccess(JSONObject result) {
-                //site.setText(JsonParserLF.);
+                site.setText(JsonParserLF.parseSites(result).get(0).getSiteName());
                 return null;
             }
-
             @Override
             public JSONObject onFailure(JSONObject result) {
                 return null;
             }
-        }, CollectionName.SITE,_samples.get(position).getSite());
+        }, CollectionName.SITE,_samples.get(position).getSiteID());
 
+        TextView quantity = (TextView) convertView.findViewById(R.id.txtCantidad);
+        quantity.setText(_samples.get(position).getQuantity());
 
         // Devolvemos la vista para que se muestre en el ListView.
         return convertView;
