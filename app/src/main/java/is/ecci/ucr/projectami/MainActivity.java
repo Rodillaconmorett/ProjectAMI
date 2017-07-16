@@ -22,6 +22,7 @@ import android.widget.Button;
 import is.ecci.ucr.projectami.Activities.CatalogActivity;
 import is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActivity;
 import is.ecci.ucr.projectami.Activities.LogActivity;
+import is.ecci.ucr.projectami.Activities.PerfilActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.Consultor;
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         //set navegation
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -261,7 +261,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent activity;
         switch(id){
             case R.id.perfil_btn:
-
+                activity = new Intent(MainActivity.this, PerfilActivity.class);
+                startActivity(activity);
                 break;
 
             case R.id.map_btn:
@@ -289,8 +290,4 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
-
 }

@@ -38,7 +38,7 @@
             android:theme="@style/AppTheme.PopUpTheme"
             />
 
-        <activity android:name=".Activities.Classification.PerfilActivity"
+        <activity android:name=".Activities.PerfilActivity"
             android:label="PerfilActivity"
             android:theme="@style/AppTheme.PopUpTheme"
             />

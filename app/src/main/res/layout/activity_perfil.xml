@@ -1,6 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:rowCount="3"
+        android:columnCount="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_column="0"
+            android:layout_row="1">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnCount="1"
+                android:rowCount="4">
+
+            </GridLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_column="0"
+            android:layout_row="0">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/logo_nimbu"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_column="0"
+            android:layout_row="1">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:rowCount="4"
+                android:columnCount="1"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+
+
+
+                <EditText
+                    android:id="@+id/editTextNombre"
+                    android:layout_width="265dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+
+                    android:hint="Nombre"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextApellido"
+                    android:layout_width="265dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:layout_marginLeft="20dp"
+                    android:inputType="textPersonName"
+
+                    android:hint="Apellido"
+                    android:layout_column="0"
+                    android:layout_row="1"
+                    />
+
+                <EditText
+                    android:id="@+id/editCorreo"
+                    android:layout_width="265dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_marginLeft="20dp"
+                    android:layout_row="2"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+
+                    android:hint="Correo"
+                    />
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="33dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/add_bug_black" />
+
+
+
+
+            </GridLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:layout_column="0"
+            android:layout_row="2">
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:rowCount="4"
+                android:columnCount="1"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+
+                <EditText
+                    android:id="@+id/editContrasenaAc"
+                    android:layout_width="265dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+
+                    android:hint="Contraseña Actual"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    />
+
+                <EditText
+                    android:id="@+id/editNueva"
+                    android:layout_width="265dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:layout_marginLeft="20dp"
+                    android:inputType="textPersonName"
+
+                    android:hint="Nueva Contraseña"
+                    android:layout_column="0"
+                    android:layout_row="1"
+                    />
+
+                <EditText
+                    android:id="@+id/editRepite"
+                    android:layout_width="265dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_marginLeft="20dp"
+                    android:layout_row="2"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+
+                    android:hint="Repetir Contraseña"
+                    />
+
+                <Button
+                    android:id="@+id/btn_aceptar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Aceptar"
+                    android:layout_gravity="center"
+                    />
+
+
+            </GridLayout>
+
+
+        </RelativeLayout>
+    </GridLayout>
+
+</RelativeLayout>
