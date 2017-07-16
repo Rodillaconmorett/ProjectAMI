@@ -19,8 +19,6 @@
             android:label="Nimbu"
             />
 
-
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA58eEmyOdwXxCTRh0k9wqOJvN5-k5n-us" />
