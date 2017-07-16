@@ -28,6 +28,8 @@ import com.google.android.gms.common.api.Status;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DBConnectors.UserManagers;
@@ -120,6 +122,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                     Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
                     //signOut.setVisibility(View.VISIBLE);
                 }
+                LogInfo.setRoles(user.getRoles());
                 Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LogActivity.this, MainActivity.class);
                 //signOut.setVisibility(View.VISIBLE);
@@ -201,6 +204,16 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                     UserManagers.addNewUser(user, new ServerCallback() {
                         @Override
                         public JSONObject onSuccess(JSONObject result) {
+                            LogInfo.setEmail(user.getEmail());
+                            LogInfo.setPassword(user.getPassword());
+                            if(user.getFirstName()!=null && user.getLastName()!=null){
+                                LogInfo.setFirstName(user.getFirstName());
+                                LogInfo.setLastName(user.getLastName());
+                            }
+                            ArrayList<String> roles = new ArrayList<String>();
+                            roles.add("recolector");
+                            roles.add("usuario");
+                            LogInfo.setRoles(roles);
                             Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LogActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -214,7 +227,6 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                         }
                     });
                 }
-                Toast.makeText(getApplicationContext(),"Sorry, there was a problem. Please, re-try.",Toast.LENGTH_SHORT).show();
                 return null;
             }
         });
