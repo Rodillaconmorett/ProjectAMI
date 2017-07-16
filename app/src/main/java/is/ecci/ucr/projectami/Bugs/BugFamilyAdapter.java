@@ -1,8 +1,6 @@
 package is.ecci.ucr.projectami.Bugs;
 
 import android.content.Context;
-import android.media.Image;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.R;
 
@@ -69,13 +66,13 @@ public class BugFamilyAdapter extends ArrayAdapter<BugFamily> {
 
     public int getBugQualImg(double score){
         if(score < 3){
-            return R.drawable.lifefinder_icon_red;
+            return R.drawable.nimbu_icon_red;
         }
         else if(score < 7){
-            return R.drawable.lifefinder_icon_orange;
+            return R.drawable.nimbu_icon_orange;
         }
         else {
-            return R.drawable.lifefinder_icon_green;
+            return R.drawable.nimbu_icon_green;
         }
     }
 

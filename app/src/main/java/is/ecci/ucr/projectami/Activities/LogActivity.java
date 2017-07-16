@@ -47,6 +47,8 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
     private static GoogleSignInOptions googleSignInOptions;// loggin options
     private SignInButton signInButton;
     private Button logIn;
+    private Button signOut;
+    private static Boolean  logginWithGmailAPI =false;
 
 
     @Override
@@ -69,10 +71,25 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                signOut.setVisibility(View.VISIBLE);
                 Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(intent,777);
             }
         });
+
+        signOut = (Button) findViewById(R.id.btnSignOut);
+
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                signOut();
+                signOut.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        signOut.setVisibility(View.INVISIBLE);
 
         logIn = (Button) findViewById(R.id.buttonLogin);
         logIn.setOnClickListener(new View.OnClickListener(){
@@ -81,12 +98,10 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 EditText userText = (EditText)findViewById(R.id.userInput);
                 EditText passText = (EditText)findViewById(R.id.passwordInput);
                 String user, pass;
-                if(userText.getText() !=null && passText.getText()!=null) {
+                if(userText.getText()!=null && passText.getText()!=null) {
                     user = userText.getText().toString();
                     pass = passText.getText().toString();
-                    if(user.length() != 0 && pass.length() != 0) {
-                        logInUser(user, pass);
-                    }
+                    logInUser(user, pass);
                 }
             }
         });
@@ -99,21 +114,22 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 User user = JsonParserLF.parseUsers(result);
                 LogInfo.setEmail(user.getEmail());
                 LogInfo.setPassword(user.getPassword());
-                LogInfo.setRoles(user.getRoles());
                 if(user.getFirstName()!=null && user.getLastName()!=null){
                     LogInfo.setFirstName(user.getFirstName());
                     LogInfo.setLastName(user.getLastName());
-                    Toast.makeText(getApplicationContext(),"Hola, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
+                    //signOut.setVisibility(View.VISIBLE);
                 }
-                Toast.makeText(getApplicationContext(),"Hola, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LogActivity.this, MainActivity.class);
+                //signOut.setVisibility(View.VISIBLE);
                 startActivity(intent);
                 return null;
             }
 
             @Override
             public JSONObject onFailure(JSONObject result) {
-                Toast.makeText(getApplicationContext(),"No se pudo inciar sección.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Log failed. Please, re-try.",Toast.LENGTH_SHORT).show();
                 return null;
             }
         });
@@ -130,15 +146,20 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
 
         if(requestCode ==777){
             GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            Toast.makeText(this,"Log status "+ " "+ googleSignInResult.isSuccess(),Toast.LENGTH_SHORT).show();
             handleSignal(googleSignInResult);
         }
+
     }
 
     private void handleSignal(GoogleSignInResult googleSignInResult) {
         if(googleSignInResult.isSuccess()){
             loadPrincipalActivity(googleSignInResult);
+
+            logginWithGmailAPI=true;
+
         }else{
-            Toast.makeText(this,"Por favor, ingrese una cuenta correcta.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Log fail",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -160,10 +181,9 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 if(user.getFirstName()!=null && user.getLastName()!=null){
                     LogInfo.setFirstName(user.getFirstName());
                     LogInfo.setLastName(user.getLastName());
-                    Toast.makeText(getApplicationContext(),"Hola, "+ JsonParserLF.convert(LogInfo.getFirstName())+" "+ JsonParserLF.convert(LogInfo.getLastName())+"!",Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Hola, " + LogInfo.getEmail() + "!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
                 }
+                Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LogActivity.this, MainActivity.class);
                 startActivity(intent);
                 return null;
@@ -180,28 +200,20 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                     UserManagers.addNewUser(user, new ServerCallback() {
                         @Override
                         public JSONObject onSuccess(JSONObject result) {
-                            User user = JsonParserLF.parseUsers(result);
-                            LogInfo.setEmail(user.getEmail());
-                            LogInfo.setPassword(user.getPassword());
-                            if(user.getFirstName()!=null && user.getLastName()!=null){
-                                LogInfo.setFirstName(user.getFirstName());
-                                LogInfo.setLastName(user.getLastName());
-                                Toast.makeText(getApplicationContext(),"Hola, "+JsonParserLF.convert(LogInfo.getFirstName())+" "+ JsonParserLF.convert(LogInfo.getLastName())+"!",Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Hola, " + LogInfo.getEmail() + "!", Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LogActivity.this, MainActivity.class);
                             startActivity(intent);
                             return null;
                         }
+
                         @Override
                         public JSONObject onFailure(JSONObject result) {
-                            Toast.makeText(getApplicationContext(),"Hubo un problema. Por favor, intente de nuevo.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"Sorry, there was a problem. Please, re-try.",Toast.LENGTH_SHORT).show();
                             return null;
                         }
                     });
                 }
-                Toast.makeText(getApplicationContext(),"Hubo un problema. Por favor, intente de nuevo.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Sorry, there was a problem. Please, re-try.",Toast.LENGTH_SHORT).show();
                 return null;
             }
         });
@@ -220,6 +232,17 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
     @Override
     public void onStart() {
         super.onStart();
+
+    }
+
+    private void revokeAccess() {
+        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // ...
+                    }
+                });
     }
 
 }
