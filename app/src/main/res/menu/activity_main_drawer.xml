@@ -23,6 +23,10 @@
             android:id="@+id/settings_btn"
             android:icon="@drawable/settings_ico"
             android:title="Sesión" />
+        <item
+            android:id="@+id/usuarios_btn"
+            android:icon="@drawable/settings_ico"
+            android:title="Usuarios" />
     </group>
 
 

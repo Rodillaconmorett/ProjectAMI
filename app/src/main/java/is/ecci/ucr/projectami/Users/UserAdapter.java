@@ -19,6 +19,7 @@ import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.Activities.UsersManagerActivity;
 import is.ecci.ucr.projectami.Bugs.BugFamily;
 import is.ecci.ucr.projectami.R;
+import is.ecci.ucr.projectami.UserLog.LogUserActivity;
 
 /**
  * Created by alaincruzcasanova on 7/16/17.
@@ -37,7 +38,7 @@ public class UserAdapter extends ArrayAdapter<User> {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
         // En primer lugar "inflamos" una nueva vista, que será la que se
         // mostrará en la celda del ListView. Para ello primero creamos el
         // inflater, y después inflamos la vista.
@@ -71,8 +72,9 @@ public class UserAdapter extends ArrayAdapter<User> {
         historyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(this, null);
-//                intent.putExtra("user", (Serializable) datos.get(position));
+                Intent intent = new Intent(parent.getContext(), LogUserActivity.class);
+                intent.putExtra("user", (Serializable) datos.get(position));
+                parent.getContext().startActivity(intent);
             }
         });
 
