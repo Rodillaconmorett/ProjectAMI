@@ -260,6 +260,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         int id = item.getItemId();
         Intent activity;
         switch(id){
+            case R.id.perfil_btn:
+                activity = new Intent(MainActivity.this, PerfilActivity.class);
+                startActivity(activity);
+                break;
 
             case R.id.map_btn:
                 break;
