@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/perfil_btn"
-            android:icon="@drawable/map_ico"
+            android:icon="@drawable/default_image"
             android:title="Perfil"
             />
         <item
@@ -22,7 +22,7 @@
         <item
             android:id="@+id/settings_btn"
             android:icon="@drawable/settings_ico"
-            android:title="Ajustes" />
+            android:title="Sesión" />
     </group>
 
 
