@@ -7,8 +7,10 @@ import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DecisionTree.Matrix;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
+import is.ecci.ucr.projectami.LogInfo;
 import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.R;
+import is.ecci.ucr.projectami.ResolvingFeedbackActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -44,7 +46,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
     //Variables estáticas que se llaman desde otras clases, para las cuales existen métodos
     private static String currentBug;
-    private static LinkedList<Pair<String, String>> currentInfo;
+    private static LinkedList<Pair<String, String>> currentQuestionsRealized;
 
     //Variables de la clase
     String currentQuestion;
@@ -64,10 +66,29 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
         //Clase dedicada para pasar parámetro
         currentBug = "Unknown";
-        currentInfo = null;
+        currentQuestionsRealized = null;
         findViewById(R.id.progressBarQuestion).setVisibility(View.VISIBLE);
         findViewById(R.id.dynamicAnswers).setVisibility(View.GONE);
 
+        TextView btnResolve = (TextView) findViewById(R.id.txtResolve);
+        btnResolve.setVisibility(View.INVISIBLE);
+
+        if (LogInfo.getRoles() != null && LogInfo.getRoles().contains("bioadministrador")){
+            btnResolve.setVisibility(View.VISIBLE);
+            btnResolve.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    /*Intent intent = new Intent(QuestionsGUIActivity.this, ResolvingFeedbackActivity.class);
+                    startActivity(intent);*/
+                    Intent intent = new Intent(QuestionsGUIActivity.this, ResolvingFeedbackActivity.class);
+                    LinkedList<String> familiesLinked = treeControl.getPossibleFamilies();
+                    String families[] = familiesLinked.toArray(new String[familiesLinked.size()]);
+                    intent.putExtra("families", families);
+                    intent.putExtra("bioadmin", true);
+                    startActivityForResult(intent, 0XF);
+                }
+            });
+        }
 
         if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
             questions = new HashMap<String, String>();
@@ -105,7 +126,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         Button backB = (Button) (findViewById(R.id.backButton));
         backB.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //Boton de pregunta anterior
                 Button pressed = (Button) v;
                 try {
                     catchAction(pressed);
@@ -140,11 +161,17 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             if (currentExtraQuestions > 0) {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
                 currentExtraQuestions--;
-            } else {
-                currentInfo = treeControl.getQuestionsRealized();
+            } else { //Si se acaban las 5 preguntas extras de retroalimentacion
+                currentQuestionsRealized = treeControl.getQuestionsRealized();
                 try {
-                    System.out.println("Finishin the activity");
-                    terminarActividad();
+                    System.out.println("Finishing the activity");
+                    Intent intent = new Intent(QuestionsGUIActivity.this, ResolvingFeedbackActivity.class);
+                    LinkedList<String> familiesLinked = treeControl.getPossibleFamilies();
+                    String families[] = familiesLinked.toArray(new String[familiesLinked.size()]);
+                    intent.putExtra("families", families);
+                    intent.putExtra("bioadmin", false);
+                    startActivityForResult(intent, 0XF);
+                    //terminarActividad();
                 } catch (Exception e) {
                     //
                     System.out.println("Error finishing the frame");
@@ -183,12 +210,14 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         int arraySize = questionsAndOptions.length;
         if (arraySize > 0) {
             TextView question = (TextView) findViewById(R.id.questionID);
-            String string = questions.get(questionsAndOptions[0]);
+            String string = questions.get(questionsAndOptions[0]); //Traduce del id de la pregunta a la pregunta en si.
             currentQuestion = (string == null) ? questionsAndOptions[0] : string;
+
+            question.setText(currentQuestion);
             question.setText(JsonParserLF.convert(currentQuestion));
             LinearLayout answerContainer = (LinearLayout) findViewById(R.id.dynamicAnswers);
 
-            for (int i = 1; i < arraySize; i++) {
+            for (int i = 1; i < arraySize; i++) { //Agrega los botones por cada respuesta
                 Button button = new Button(this);
                 button.setText(translateReply(questionsAndOptions[i], true));
                 button.setLayoutParams(new LinearLayout.LayoutParams(
@@ -209,7 +238,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
             }
 
             if (treeControl.isLeaf()) {
-                //Seach for the id of the image
+                //Search by image id
                 int resourceId = getResources().getIdentifier("drawable/" + getImageName(currentQuestion), null, this.getApplicationContext().getPackageName());
                 if (resourceId > 0) {
                     //ImageView Setup
@@ -229,7 +258,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
         } else {
             currentBug = currentQuestion;
-            currentInfo = treeControl.getQuestionsRealized();
+            currentQuestionsRealized = treeControl.getQuestionsRealized();
             try {
                 terminarActividad();
             } catch (Throwable e) {
@@ -246,6 +275,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
      * @throws AnswerException
      */
     public void catchAction(Button button) throws AnswerException {
+        setCurrentQuestion();
         String textB = translateReply(button.getText().toString(), false);
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
@@ -344,6 +374,26 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         return new String(bytes);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0XF) { // Please, use a final int instead of hardcoded int value
+            if (resultCode == RESULT_OK) {
+                String value = (String) data.getExtras().getString("returning_from_resolving");
+                try {
+                    treeControl.resolve(value);
+                    currentBug = value;
+                    currentQuestionsRealized = treeControl.getQuestionsRealized();
+                    terminarActividad();
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                finish();
+            }
+        }
+    }
+
     public void terminarActividad() {
         Intent resultIntent = new Intent();
         resultIntent.putExtra("returning_from_classification", true);
@@ -355,8 +405,8 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         return currentBug;
     }
 
-    static LinkedList<Pair<String, String>> getCurrentInfo() {
-        return currentInfo;
+    static LinkedList<Pair<String, String>> getCurrentQuestionsRealized() {
+        return currentQuestionsRealized;
     }
 
     private String getImageName(String bugFamily) {

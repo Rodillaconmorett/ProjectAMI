@@ -14,7 +14,7 @@ import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugFamily;
 import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
-import is.ecci.ucr.projectami.UserLog.SampleLog;
+import is.ecci.ucr.projectami.Activities.UserLog.SampleLog;
 import is.ecci.ucr.projectami.Users.User;
 
 /**

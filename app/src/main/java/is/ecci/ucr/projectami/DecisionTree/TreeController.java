@@ -4,6 +4,7 @@ package is.ecci.ucr.projectami.DecisionTree;
 import android.util.Pair;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Random;
@@ -15,12 +16,18 @@ import java.util.TreeMap;
 
 public class TreeController implements Serializable {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     private enum InductionState {
         FOUND_COMMITED, FOUND_NOT_COMMITED, POSSIBLE_TO_FIND, IMPOSSIBLE_TO_FIND,
     }
 
     /*-----------------------------------------ATTRIBUTES-----------------------------------------*/
     private Node _actualNode;
+    private Node _rootNode;
     private ID3 _actualInstance;
     private Matrix _features;
     private Matrix _labels;
@@ -43,7 +50,8 @@ public class TreeController implements Serializable {
         _labels = new Matrix(mainMatrix, 0, 0, mainMatrix.rows(), 1);
 
         _actualInstance = new ID3();
-        _actualNode = _actualInstance.buildTree(_features, _labels);
+        _rootNode = _actualInstance.buildTree(_features, _labels);
+        _actualNode = _rootNode;
 
         _realizedQuestions = new LinkedList<Pair<Node, String>>();
 
@@ -61,6 +69,8 @@ public class TreeController implements Serializable {
     *  R:  -
     * */
     public LinkedHashSet<String> getQuestionAndOptions() {
+        monitor(); //Solo para monitorear las preguntas
+
         LinkedHashSet<String> result = new LinkedHashSet<String>();
         String buffer = "";
         if (_MIFoundState == InductionState.POSSIBLE_TO_FIND) {
@@ -93,107 +103,58 @@ public class TreeController implements Serializable {
     * */
     public void reply(String response) throws AnswerException {
         //int estadoRespuesta = -1;           //(11111111)Si -1 => INVALID
-        if (_MIFoundState == InductionState.POSSIBLE_TO_FIND) {
-            for (Double value : _actualNode.getAttribute().getValues()) {
-                if (response.equals(_features.attrValue(_actualNode.getAttribute().getColumnPositionID(), value.intValue()))) {
-                    //estadoRespuesta = 0;        //00000000
+        switch (_MIFoundState){
+            case POSSIBLE_TO_FIND:
+                for (Double value : _actualNode.getAttribute().getValues()) {
+                    if (response.equals(_features.attrValue(_actualNode.getAttribute().getColumnPositionID(), value.intValue()))) {
+                        //estadoRespuesta = 0;        //00000000
 
-                    Pair<Node, String> pair = new Pair<Node, String>(_actualNode, response);
-                    _realizedQuestions.add(pair);
+                        Pair<Node, String> pair = new Pair<Node, String>(_actualNode, response);
+                        _realizedQuestions.add(pair);
 
-                    _actualNode = _actualNode.getBranches().get(value);
+                        _actualNode = _actualNode.getBranches().get(value);
 
-                    if (_actualNode.getLabel().getValue() != -1) {
-                        _MIFoundState = InductionState.FOUND_NOT_COMMITED;
-                    }
-                    _questionsCounter++;
-                    return;
-                }
-            }
-            //if (estadoRespuesta == -1){
-            throw new AnswerException();
-            //}
-        } else if (_MIFoundState == InductionState.FOUND_NOT_COMMITED) {
-            if (response.equals("TRUE")) {
-                Pair<Node, String> pair = new Pair<Node, String>(_actualNode, response);
-                _realizedQuestions.add(pair);
-
-                _MIFoundState = InductionState.FOUND_COMMITED;
-            } else if (response.equals("FALSE")) {
-                _MIFoundState = InductionState.IMPOSSIBLE_TO_FIND;
-                int i = 0;
-                for (Pair<Node, String> pair : _realizedQuestions) {
-                    if (pair.second == "NA") {
-                        _actualNode = pair.first;
-                        _realizedQuestions.remove(i);
-                        break;
-                    }
-                    i++;
-                }
-                if (_realizedQuestions.size() == i) {
-                    boolean hasBeenAsked = true;
-                    Random numberNumber;
-                    int num;                                                        // NO ABARCA TODOS LOS NODOS
-                    Node randomQuestion;
-                    do {
-                        numberNumber = new Random();
-                        num = numberNumber.nextInt(_features.cols());                // NO ABARCA TODOS LOS NODOS
-                        randomQuestion = this.getNode(num);
-                        int j = 0;
-                        for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
-                            if (questionAndAnswer.first.getNodeID() == randomQuestion.getNodeID()) {
-                                break;
-                            }
-                            j++;
+                        if (_actualNode.getLabel().getValue() != -1) {
+                            _MIFoundState = InductionState.FOUND_NOT_COMMITED;
                         }
-                        if (j == _realizedQuestions.size()) {
-                            hasBeenAsked = false;
-                        }
-                    } while (hasBeenAsked);
-                    _actualNode = randomQuestion;
-
-                    //Si es un nodo hoja, abre posiblidad abre posibilidad de responder TRUE o FALSE.
-                    if (_actualNode.getLabel().getValue() != -1) {
-                        _MIFoundState = InductionState.FOUND_NOT_COMMITED;
+                        _questionsCounter++;
+                        return;
                     }
-                    _questionsCounter++;
                 }
-            } else {
+                //if (estadoRespuesta == -1){
                 throw new AnswerException();
-            }
-            return;
-        } else if (_MIFoundState == InductionState.IMPOSSIBLE_TO_FIND) {
-            //boolean areThereDoubts = false;
-            for (Double value : _actualNode.getAttribute().getValues()) { //Compara cada una de las respuestas con la ingresada
-                if (response.equals(_features.attrValue(_actualNode.getAttribute().getColumnPositionID(), value.intValue()))) {
-                    //estadoRespuesta = 0;        //00000000
-
-                    //Se agrega la pregunta con su respuesta a la lista de preguntas realizadas.
+                //}
+                //break;
+            case FOUND_NOT_COMMITED:
+                if (response.equals("TRUE")) {
                     Pair<Node, String> pair = new Pair<Node, String>(_actualNode, response);
                     _realizedQuestions.add(pair);
 
-                    //Busca una pregunta con respuesta NA dentro de la lista de preguntas realizadas.
+                    _MIFoundState = InductionState.FOUND_COMMITED;
+                } else if (response.equals("FALSE")) {
+                    _MIFoundState = InductionState.IMPOSSIBLE_TO_FIND;
+
+                    //Revisa en la lista de preguntas realizadas hay alguna NA para esclarecer y formar un feedback consistente.
                     int i = 0;
-                    for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
-                        if (questionAndAnswer.second == "NA") {
-                            _actualNode = questionAndAnswer.first;
+                    for (Pair<Node, String> pair : _realizedQuestions) {
+                        if (pair.second.equals("NA")) {
+                            _actualNode = pair.first;
                             _realizedQuestions.remove(i);
                             break;
+
                         }
                         i++;
                     }
-
-                    //Si no se encuentra ninguna, busca un nodo aleatorio no preguntado.
-                    if (_realizedQuestions.size() == i) {
+                    if (_realizedQuestions.size() == i) { //Si no hubieron NAs en la lista
                         boolean hasBeenAsked = true;
                         Random numberNumber;
-                        int num;                                                        // NO ABARCA TODOS LOS NODOS
+                        int num;
                         Node randomQuestion;
                         do {
                             numberNumber = new Random();
-                            num = numberNumber.nextInt(_features.cols());                // NO ABARCA TODOS LOS NODOS
-                            randomQuestion = this.getNode(num);                        // Sacamos un nodo aleatorio
-                            int j = 0;                                                    // Verificamos si el nodo ya se preguntó
+                            num = numberNumber.nextInt((int)_actualInstance.getNodeCounter() - 1);
+                            randomQuestion = this.getNode(num);
+                            int j = 0;
                             for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
                                 if (questionAndAnswer.first.getNodeID() == randomQuestion.getNodeID()) {
                                     break;
@@ -205,17 +166,74 @@ public class TreeController implements Serializable {
                             }
                         } while (hasBeenAsked);
                         _actualNode = randomQuestion;
-                    }
 
-                    //Si es un nodo hoja, abre posiblidad abre posibilidad de responder TRUE o FALSE.
-                    if (_actualNode.getLabel().getValue() != -1) {
-                        _MIFoundState = InductionState.FOUND_NOT_COMMITED;
+                        //Si es un nodo hoja, abre posiblidad abre posibilidad de responder TRUE o FALSE.
+                        if (_actualNode.getLabel().getValue() != -1) {
+                            _MIFoundState = InductionState.FOUND_NOT_COMMITED;
+                        }
+                        _questionsCounter++;
                     }
-                    _questionsCounter++;
-                    return;
+                } else {
+                    throw new AnswerException();
                 }
-            }
-            throw new AnswerException();
+                //return;
+                break;
+            case IMPOSSIBLE_TO_FIND:
+                //boolean areThereDoubts = false;
+                for (Double value : _actualNode.getAttribute().getValues()) { //Compara cada una de las respuestas con la ingresada
+                    if (response.equals(_features.attrValue(_actualNode.getAttribute().getColumnPositionID(), value.intValue()))) {
+                        //estadoRespuesta = 0;        //00000000
+
+                        //Se agrega la pregunta con su respuesta a la lista de preguntas realizadas.
+                        Pair<Node, String> pair = new Pair<Node, String>(_actualNode, response);
+                        _realizedQuestions.add(pair);
+
+                        //Busca una pregunta con respuesta NA dentro de la lista de preguntas realizadas.
+                        int i = 0;
+                        for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
+                            if (questionAndAnswer.second.equals("NA")) {
+                                _actualNode = questionAndAnswer.first;
+                                _realizedQuestions.remove(i);
+                                break;
+                            }
+                            i++;
+                        }
+
+                        //Si no se encuentra ninguna, busca un nodo aleatorio no preguntado.
+                        if (_realizedQuestions.size() == i) {
+                            boolean hasBeenAsked = true;
+                            Random numberNumber;
+                            int num;
+                            Node randomQuestion;
+                            do {
+                                numberNumber = new Random();
+                                num = numberNumber.nextInt(_actualInstance.getNodeCounter() - 1);
+                                randomQuestion = this.getNode(num);                        // Sacamos un nodo aleatorio
+                                int j = 0;                                                    // Verificamos si el nodo ya se preguntó
+                                for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
+                                    if (questionAndAnswer.first.getNodeID() == randomQuestion.getNodeID()) {
+                                        break;
+                                    }
+                                    j++;
+                                }
+                                if (j == _realizedQuestions.size()) {
+                                    hasBeenAsked = false;
+                                }
+                            } while (hasBeenAsked);
+                            _actualNode = randomQuestion;
+                        }
+
+                        //Si es un nodo hoja, abre posibilidad de responder TRUE o FALSE.
+                        if (_actualNode.getLabel().getValue() != -1) {
+                            _MIFoundState = InductionState.FOUND_NOT_COMMITED;
+                        }
+                        _questionsCounter++;
+                        return;
+                    }
+                }
+                throw new AnswerException();
+                //break;
+            default:
         }
 
     }
@@ -226,20 +244,121 @@ public class TreeController implements Serializable {
     *  R:
     * */
     public void reply(String response, String newProposalOption) throws AnswerException {
-        _realizedQuestions.add(new Pair<Node, String>(_actualNode, newProposalOption));
-        this.reply(response);
-    }
+        if (response.equals("NA") && !newProposalOption.equals("")){
+            switch (_MIFoundState){
+                case POSSIBLE_TO_FIND:
+                    for (Double value : _actualNode.getAttribute().getValues()) {
+                        if (response.equals(_features.attrValue(_actualNode.getAttribute().getColumnPositionID(), value.intValue()))) {
+                            //estadoRespuesta = 0;        //00000000
 
-    private Node getNode(int n) {
-        if (_realizedQuestions.size() != 0) {
-            return getNodeAux(_realizedQuestions.getFirst().first, 0, n).first;
+                            Pair<Node, String> pair = new Pair<Node, String>(_actualNode, newProposalOption);  //Se coloca en las _realizedQuestions la nueva propuesta de respuesta. Y se continúa
+                            _realizedQuestions.add(pair);
+
+                            _actualNode = _actualNode.getBranches().get(value);
+
+                            if (_actualNode.getLabel().getValue() != -1) {
+                                _MIFoundState = InductionState.FOUND_NOT_COMMITED;
+                            }
+                            _questionsCounter++;
+                            return;
+                        }
+                    }
+                    //if (estadoRespuesta == -1){
+                    throw new AnswerException();
+                    //}
+                    //break;
+                case FOUND_NOT_COMMITED:
+                    throw new AnswerException("'NA' isn't an option");
+                case IMPOSSIBLE_TO_FIND:
+                    for (Double value : _actualNode.getAttribute().getValues()) { //Compara cada una de las respuestas con la ingresada
+                        if (response.equals(_features.attrValue(_actualNode.getAttribute().getColumnPositionID(), value.intValue()))) {
+                            //estadoRespuesta = 0;        //00000000
+
+                            //Se agrega la pregunta con su respuesta a la lista de preguntas realizadas.
+                            Pair<Node, String> pair = new Pair<Node, String>(_actualNode, newProposalOption);   //Se coloca en las _realizedQuestions la nueva propuesta de respuesta.
+                            _realizedQuestions.add(pair);
+
+                            //Busca una pregunta con respuesta NA dentro de la lista de preguntas realizadas.
+                            int i = 0;
+                            for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
+                                if (questionAndAnswer.second.equals("NA")) {
+                                    _actualNode = questionAndAnswer.first;
+                                    _realizedQuestions.remove(i);
+                                    break;
+                                }
+                                i++;
+                            }
+
+                            //Si no se encuentra ninguna, busca un nodo aleatorio no preguntado.
+                            if (_realizedQuestions.size() == i) {
+                                boolean hasBeenAsked = true;
+                                Random numberNumber;
+                                int num;
+                                Node randomQuestion;
+                                do {
+                                    numberNumber = new Random();
+                                    num = numberNumber.nextInt(_actualInstance.getNodeCounter() - 1);
+                                    randomQuestion = this.getNode(num);                        // Sacamos un nodo aleatorio
+                                    int j = 0;                                                    // Verificamos si el nodo ya se preguntó
+                                    for (Pair<Node, String> questionAndAnswer : _realizedQuestions) {
+                                        if (questionAndAnswer.first.getNodeID() == randomQuestion.getNodeID()) {
+                                            break;
+                                        }
+                                        j++;
+                                    }
+                                    if (j == _realizedQuestions.size()) {
+                                        hasBeenAsked = false;
+                                    }
+                                } while (hasBeenAsked);
+                                _actualNode = randomQuestion;
+                            }
+
+                            //Si es un nodo hoja, abre posibilidad de responder TRUE o FALSE.
+                            if (_actualNode.getLabel().getValue() != -1) { //Si es hoja
+                                _MIFoundState = InductionState.FOUND_NOT_COMMITED;
+                            } else {
+                                _MIFoundState = InductionState.POSSIBLE_TO_FIND;
+                            }
+                            _questionsCounter++;
+                            return;
+                        }
+                    }
+                    throw new AnswerException();
+                    //break;
+                default:
+                    break;
+            }
         } else {
-            return getNodeAux(_actualNode, 0, n).first;
+            //_realizedQuestions.add(new Pair<Node, String>(_actualNode, newProposalOption));
+            this.reply(response);
         }
     }
 
-    private Pair<Node, Integer> getNodeAux(Node currentNode, int i, int n) {
-        if (i == n) {
+    public LinkedList<String> getPossibleFamilies(){
+        LinkedList<String> result = new LinkedList<String>();
+        if (isLeaf()){
+            result.add(_actualNode.getLabel().getStrValue());
+        } else {
+            result = getPossibleFamiliesAux(_actualNode,result).second;
+        }
+        return result;
+    }
+
+    private Pair<Node, LinkedList<String> > getPossibleFamiliesAux(Node currentNode, LinkedList<String> foundFamilies){
+        if (currentNode.getLabel().getValue() != -1){//Si es un nodo hoja agrega
+            foundFamilies.add(currentNode.getLabel().getStrValue());
+        } else{
+            Pair<Node,LinkedList<String>> actual;
+            for (Double value : currentNode.getAttribute().getValues()) {
+                actual = getPossibleFamiliesAux(currentNode.getBranches().get(value), foundFamilies);
+            }
+        }
+        return new Pair<Node, LinkedList<String>>(currentNode,foundFamilies);
+    }
+    private Node getNode(int n) {return getNodeAux(_rootNode, n);}
+
+    private Node getNodeAux(Node currentNode, int n) {
+        /*if (i == n) {
             return new Pair<Node, Integer>(currentNode, i);
         } else if (currentNode.getLabel().getValue() == -1) {
             Pair<Node, Integer> pair;
@@ -253,10 +372,23 @@ public class TreeController implements Serializable {
             return new Pair<Node, Integer>(currentNode, i);
         } else {
             return new Pair<Node, Integer>(currentNode, i + 1);
+        }*/
+        if (currentNode.getNodeID() == n) {
+        } else  {//Nodo Interno?
+            if (currentNode.getLabel().getValue() == -1){
+                Node actual;
+                for (Double value : currentNode.getAttribute().getValues()) {
+                    actual = getNodeAux(currentNode.getBranches().get(value), n);
+                    if (actual.getNodeID() == n) {
+                        return actual;
+                    }
+                }
+            }
         }
+        return currentNode;
     }
 
-    /* E: attribute-> En este caso es la pregunta que se responde, value-> La respuesta a la pregunta
+    /* E: attribute-> La pregunta, value-> La respuesta a la pregunta
      * S: Agrega la pregunta a la lista de preguntas respondidas
      * R: La lista contenga al menos una pregunta, con atributos distintos a attribute.
      * */
@@ -273,6 +405,18 @@ public class TreeController implements Serializable {
         _realizedQuestions.add(new Pair<Node, String>(node, "TRUE"));
     }
 
+    /* E: Nombre de la familia para resolver retroalimentacion
+    *  S: -
+    *  R: Debe estar secuencia de preguntas sin resolver.
+    * */
+    public void resolve(String MIFamilyName) throws Exception {
+        if (_MIFoundState != InductionState.FOUND_COMMITED){
+            addAnswer("familia", MIFamilyName);
+            _MIFoundState = InductionState.FOUND_COMMITED;
+        }else {
+            throw new Exception("Failed Attempt: This induction is already resolved. Try to resolve an unresolved induction.");
+        }
+    }
     /* E:  -
     *  S:  Resetea el nodoActual al nodo raÃ­z del Ã¡rbol de decisiÃ³n.
     *  R:  -
@@ -346,6 +490,60 @@ public class TreeController implements Serializable {
             i++;
         }
         return matrix;
+    }
+
+
+    private void monitor(){
+        System.out.println("ESTADO: " + _MIFoundState.toString());
+        monitorQuestionsRealized(true);
+        monitorPossibleFamilies(true);
+    }
+
+    private String monitorPossibleFamilies(boolean print){
+        LinkedList<String> test = getPossibleFamilies();
+        String result = "{";
+        for (String family: test){
+            result += family + ",";
+        }
+        result = result.substring(0, result.length()-1) + "}";
+        if (print) System.out.println(result);
+        return result;
+    }
+
+    private String monitorQuestionsRealized(boolean print){
+        String result = "ROOT";
+        for (Pair<Node, String> pair: _realizedQuestions){
+            if (pair.first.getLabel().getValue() != -1){
+                result += "LEAFNODE:  " + pair.first.getLabel().getStrValue()+ " : "+ pair.second + "\n";
+            }else {
+                result += "NODE: " + pair.first.getAttribute().getName() + " : " + pair.second + "\n";
+            }
+        }
+        if (print)
+            System.out.println(result);
+        return result;
+    }
+
+    public void printTree(){
+        printTreeAux("",_rootNode, _features, _labels);
+    }
+
+    private void printTreeAux(String espaciado,Node nodito, Matrix features, Matrix labels){
+        //Si el nodo es una hoja
+        if (nodito.getLabel().getValue() != -1){
+            System.out.println(espaciado + "Node " + nodito.getNodeID() + ": "+ nodito.getLabel().getStrValue());
+        }
+        else {//Si el nodo es interno
+            System.out.println(espaciado + "Node "+ nodito.getNodeID() + ": " + nodito.getAttribute().getName());
+        }
+        LinkedHashMap<Double,Node> sub = nodito.getBranches();
+        if(!sub.isEmpty()){
+            for (Double nodititito : sub.keySet()){
+                System.out.println(espaciado+"|   Valor = " + features.attrValue(nodito.getAttribute().getColumnPositionID(), nodititito.intValue()));
+                printTreeAux(espaciado+"|   ",sub.get(nodititito), features, labels)	;
+            }
+        }
+
     }
 
     public LinkedList<Pair<String, String>> getQuestionsRealized() {

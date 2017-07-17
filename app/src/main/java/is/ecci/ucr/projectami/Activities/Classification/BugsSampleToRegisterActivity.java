@@ -1,13 +1,10 @@
 package is.ecci.ucr.projectami.Activities.Classification;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,28 +14,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.os.Handler;
 import android.widget.Toast;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import is.ecci.ucr.projectami.Bugs.Bug;
 
 import is.ecci.ucr.projectami.Bugs.BugMap;
-import is.ecci.ucr.projectami.DBConnectors.Config;
 import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.Inscriptor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.LogInfo;
-import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SampleBugsAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
@@ -63,7 +56,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bugs_sample_to_register);
 
         Intent intent = this.getIntent();
-        site = (Site) intent.getExtras().getSerializable("site");                    // Nombre de intent variable
+        site = (Site) intent.getExtras().getSerializable("site");       // Nombre de intent variable
 
         ListView list = (ListView) findViewById(R.id.lstBugList);
 
@@ -97,7 +90,6 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         _bugsListToRegister = new ArrayList<Bug>();
         adapter = new SampleBugsAdapter(this, _bugsListToRegister);
         list.setAdapter(adapter);
-
     }
 
 
@@ -124,7 +116,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
 
     public void registerResult() {
         String currentBug = QuestionsGUIActivity.getCurrentBug();
-        LinkedList<Pair<String, String>> currentInfo = QuestionsGUIActivity.getCurrentInfo();
+        LinkedList<Pair<String, String>> currentInfo = QuestionsGUIActivity.getCurrentQuestionsRealized();
 
         if (registered(currentBug)) {
             ViewGroup currentView = findItem((ViewGroup) findViewById(R.id.lstBugList), currentBug);

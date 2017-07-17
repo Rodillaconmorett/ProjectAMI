@@ -1,8 +1,6 @@
-package is.ecci.ucr.projectami.UserLog;
+package is.ecci.ucr.projectami.Activities.UserLog;
 
 import org.json.JSONObject;
-
-import java.util.Date;
 
 /**
  * Created by Milton on 15-Jul-17.

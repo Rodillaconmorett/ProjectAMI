@@ -13,7 +13,7 @@ public class ID3 {
 		_nodeCounter = 0;
 	}
 	
-	public double getNodeCounter() {
+	public int getNodeCounter() {
 		return _nodeCounter;
 	}
 	
@@ -55,7 +55,7 @@ public class ID3 {
 ////			//System.out.print(counter + " : "+ attri.getName() + "{");
 ////			for (Double value : attri.getValues()){
 ////				/*examples.attrValue(): String
-////				Este m�todo hace uso de m_enum_to_str.get(attr).get(val) el cual devuelve el nombre del valor de atributo.
+////				Este mtodo hace uso de m_enum_to_str.get(attr).get(val) el cual devuelve el nombre del valor de atributo.
 ////				*/
 ////				//System.out.print(examples.attrValue(attri.getColumnPositionID(), value.intValue()) + ",");
 ////			}

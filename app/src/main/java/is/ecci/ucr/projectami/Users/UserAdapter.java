@@ -19,7 +19,7 @@ import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.Activities.UsersManagerActivity;
 import is.ecci.ucr.projectami.Bugs.BugFamily;
 import is.ecci.ucr.projectami.R;
-import is.ecci.ucr.projectami.UserLog.LogUserActivity;
+import is.ecci.ucr.projectami.Activities.UserLog.LogUserActivity;
 
 /**
  * Created by alaincruzcasanova on 7/16/17.

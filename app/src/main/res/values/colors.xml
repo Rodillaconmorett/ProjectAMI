@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1E78BC</color>
-    <color name="colorPrimaryDark">#11456B</color>
+    <color name="colorPrimary">#1e78bc</color>
+    <color name="colorPrimaryDark">#11456b</color>
     <color name="colorAccent">#868785</color>
     <color name="especiesColor">#8dc63f</color>
     <color name="puntajeColor">#f7941e</color>
@@ -9,8 +9,8 @@
     <color name="hghQualColor">#8dc63f</color>
     <color name="medQualColor">#f7941e</color>
     <color name="lowQualColor">#ED1B24</color>
-    <color name="startRedActionBar">#9b0000</color>
-    <color name="endRedActionBar">#ea0000</color>
+    <color name="startRedActionBar">#d6aeaeae</color>
+    <color name="endRedActionBar">#979797</color>
     <color name="gray">#707070</color>
     <color name="googleColor">#c93930</color>
 </resources>

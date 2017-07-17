@@ -13,11 +13,10 @@ package is.ecci.ucr.projectami.DecisionTree;
 
 public class AnswerException extends Exception {
     public AnswerException(){
-        super();
+        super("Answer Not Registred");
     }
 
-    @Override
-    public String getMessage() {
-        return "Answer Not Registred";
+    public AnswerException(String _message){
+        super(_message);
     }
 }
