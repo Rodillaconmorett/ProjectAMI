@@ -12,9 +12,9 @@ public class LogInfo {
     private static String email, password, firstName, lastName;
     private static int age;
     private static boolean logged;
-    private static ArrayList<String> roles;
+    private static ArrayList<String> roles = new ArrayList<>();
 
-    public LogInfo(){
+    private LogInfo(){
 
     }
 
@@ -68,6 +68,10 @@ public class LogInfo {
 
     public static ArrayList<String> getRoles(){
         return roles;
+    }
+
+    public static void clearRoles(){
+        roles = new ArrayList<>();
     }
 
     public static void setLogged(boolean logged) {
