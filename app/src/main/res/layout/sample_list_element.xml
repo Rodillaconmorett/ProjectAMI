@@ -49,6 +49,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/trash_can_icon"
+        android:backgroundTint="?android:attr/colorControlNormal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

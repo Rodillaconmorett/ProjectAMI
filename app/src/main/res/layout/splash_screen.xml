@@ -11,7 +11,7 @@
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop"
         android:src="@drawable/background_splash"
-        android:tint="@color/place_autocomplete_prediction_primary_text_highlight"
+        android:tint="@color/place_autocomplete_search_hint"
         android:tintMode="add"
 
         />

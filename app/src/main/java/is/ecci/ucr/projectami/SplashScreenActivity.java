@@ -9,6 +9,8 @@ import android.view.Window;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import is.ecci.ucr.projectami.Activities.Classification.QuestionsGUIActivity;
+
 public class SplashScreenActivity extends Activity {
 
     // Set the duration of the splash screen
