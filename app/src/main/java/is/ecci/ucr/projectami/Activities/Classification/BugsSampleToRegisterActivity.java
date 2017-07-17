@@ -93,14 +93,6 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         _bugsListToRegister = new ArrayList<Bug>();
         adapter = new SampleBugsAdapter(this, _bugsListToRegister);
         list.setAdapter(adapter);
-
-        TextView btnResolve = (TextView) findViewById(R.id.txtResolve);
-        btnResolve.setVisibility(View.INVISIBLE);
-
-        if (LogInfo.getRoles() != null && LogInfo.getRoles().contains("bioadministrador")){
-            btnResolve.setVisibility(View.VISIBLE);
-        }
-
     }
 
 

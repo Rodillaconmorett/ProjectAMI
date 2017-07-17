@@ -1,5 +1,7 @@
 package is.ecci.ucr.projectami.Activities.Classification;
 
+import is.ecci.ucr.projectami.Activities.LogActivity;
+import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
@@ -7,8 +9,10 @@ import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DecisionTree.Matrix;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.DecisionTree.AnswerException;
+import is.ecci.ucr.projectami.LogInfo;
 import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.R;
+import is.ecci.ucr.projectami.ResolvingFeedbackActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -68,6 +72,24 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         findViewById(R.id.progressBarQuestion).setVisibility(View.VISIBLE);
         findViewById(R.id.dynamicAnswers).setVisibility(View.GONE);
 
+        TextView btnResolve = (TextView) findViewById(R.id.txtResolve);
+        btnResolve.setVisibility(View.INVISIBLE);
+
+        if (LogInfo.getRoles() != null && LogInfo.getRoles().contains("bioadministrador")){
+            btnResolve.setVisibility(View.VISIBLE);
+            btnResolve.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    /*Intent intent = new Intent(QuestionsGUIActivity.this, ResolvingFeedbackActivity.class);
+                    startActivity(intent);*/
+                    Intent intent = new Intent(QuestionsGUIActivity.this, ResolvingFeedbackActivity.class);
+                    LinkedList<String> familiesLinked = treeControl.getPossibleFamilies();
+                    String families[] = familiesLinked.toArray(new String[familiesLinked.size()]);
+                    intent.putExtra("families", families);
+                    startActivityForResult(intent, 0XF);
+                }
+            });
+        }
 
         if (!openedBefore) {   //Si el árbol ya había sido inicializado, no se vuelve a inicializar
             questions = new HashMap<String, String>();
@@ -135,7 +157,6 @@ public class QuestionsGUIActivity extends AppCompatActivity {
      * Set the current question and sends it to other method to publish it on the gui
      */
     protected void setCurrentQuestion() {
-
         if (extraQuestion) {
             if (currentExtraQuestions > 0) {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
@@ -339,6 +360,24 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         string = new String(bytes);
         string.replace(((char) 65533), '¿');
         return string;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0XF) { // Please, use a final int instead of hardcoded int value
+            if (resultCode == RESULT_OK) {
+                String value = (String) data.getExtras().getString("returning_from_resolving");
+                try {
+                    treeControl.resolve(value);
+                    currentBug = value;
+                    currentInfo = treeControl.getQuestionsRealized();
+                    terminarActividad();
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+
+                }
+            }
+        }
     }
 
     public void terminarActividad() {

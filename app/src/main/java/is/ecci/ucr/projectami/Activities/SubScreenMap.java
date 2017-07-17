@@ -132,8 +132,10 @@ public class SubScreenMap extends Activity {
                 startActivity(intent);
             }else {
                 Toast.makeText(getApplicationContext(),"Lo sentimos, no tiene el rol necesario para realizar esta acción",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(SubScreenMap.this, LogActivity.class);
-                startActivity(intent);
+                if (!LogInfo.isLogged()){
+                    Intent intent = new Intent(SubScreenMap.this, LogActivity.class);
+                    startActivity(intent);
+                }
             }
 
         }

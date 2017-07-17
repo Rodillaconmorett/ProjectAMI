@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="is.ecci.ucr.projectami">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/nimbu_ic"
@@ -15,9 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:label="Nimbu"
-            />
+        <activity
+            android:name=".MainActivity"
+            android:label="Nimbu" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -26,21 +28,21 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".Activities.SamplePointInfoActivity"
+        <activity
+            android:name=".Activities.SamplePointInfoActivity"
             android:label="SamplePointInfoActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-
-        <activity android:name=".Activities.LogActivity"/>
-        <activity android:name=".Activities.SubScreenMap"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".Activities.LogActivity" />
+        <activity
+            android:name=".Activities.SubScreenMap"
             android:label="SubScreenMap"
-            android:theme="@style/AppTheme.PopUpTheme"
-            />
-        <activity android:name=".Activities.Classification.QuestionsGUIActivity"
-            android:label="QuestionsGUI"/>
-        <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity"></activity>
-        <activity android:name=".Activities.CatalogActivity"></activity>
-
-
+            android:theme="@style/AppTheme.PopUpTheme" />
+        <activity
+            android:name=".Activities.Classification.QuestionsGUIActivity"
+            android:label="QuestionsGUI" />
+        <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity" />
+        <activity android:name=".Activities.CatalogActivity" />
+        <activity android:name=".ResolvingFeedbackActivity"></activity>
     </application>
 
 </manifest>

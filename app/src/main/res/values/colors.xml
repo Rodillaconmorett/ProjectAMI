@@ -9,8 +9,8 @@
     <color name="hghQualColor">#8dc63f</color>
     <color name="medQualColor">#f7941e</color>
     <color name="lowQualColor">#ED1B24</color>
-    <color name="startRedActionBar">#9b0000</color>
-    <color name="endRedActionBar">#ea0000</color>
+    <color name="startRedActionBar">#d6aeaeae</color>
+    <color name="endRedActionBar">#979797</color>
     <color name="gray">#707070</color>
     <color name="googleColor">#c93930</color>
 </resources>
