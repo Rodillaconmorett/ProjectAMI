@@ -8,6 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
+import is.ecci.ucr.projectami.DBConnectors.UserManagers;
 import is.ecci.ucr.projectami.LogInfo;
 import is.ecci.ucr.projectami.MainActivity;
 import is.ecci.ucr.projectami.R;
@@ -78,6 +82,20 @@ import is.ecci.ucr.projectami.Users.User;
                             User user = new User(uEmail, newP, uName, uLastName);
                             LogInfo.setPassword(newP);
                             //Llamar al update TODO
+                            UserManagers.updateUser(user, new ServerCallback() {
+                                @Override
+                                public JSONObject onSuccess(JSONObject result) {
+
+                                    Toast.makeText(getApplicationContext(),"User updated",Toast.LENGTH_SHORT).show();
+                                    return null;
+                                }
+
+                                @Override
+                                public JSONObject onFailure(JSONObject result) {
+                                    Toast.makeText(getApplicationContext(),"Can´t update this user, please try again",Toast.LENGTH_SHORT).show();
+                                    return null;
+                                }
+                            });
                             Intent intent = new Intent(PerfilActivity.this, MainActivity.class);
                             startActivity(intent);
                         }

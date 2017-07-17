@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         //set navegation
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -261,16 +262,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent activity;
         switch(id){
             case R.id.perfil_btn:
-                activity = new Intent(MainActivity.this, PerfilActivity.class);
+                activity = new Intent(MainActivity.this,PerfilActivity.class);
                 startActivity(activity);
                 break;
 
             case R.id.map_btn:
                 break;
-            case R.id.add_bug_btn:
-                activity = new Intent(MainActivity.this, BugsSampleToRegisterActivity.class);
-                startActivity(activity);
-                break;
+
             case R.id.catalog_btn:
                 activity = new Intent(MainActivity.this, CatalogActivity.class);
                 startActivity(activity);
@@ -290,4 +288,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+
 }

@@ -100,12 +100,7 @@
 
                     android:hint="Correo"
                     />
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="33dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/add_bug_black" />
+
 
 
 

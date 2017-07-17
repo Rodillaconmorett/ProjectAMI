@@ -12,10 +12,6 @@
             android:icon="@drawable/map_ico"
             android:title="Mapa" />
         <item
-            android:id="@+id/add_bug_btn"
-            android:icon="@drawable/add_bug_black"
-            android:title="Registrar insecto" />
-        <item
             android:id="@+id/catalog_btn"
             android:icon="@drawable/list_ico"
             android:title="Catálogo" />
@@ -25,7 +21,7 @@
             android:title="Sesión" />
         <item
             android:id="@+id/usuarios_btn"
-            android:icon="@drawable/settings_ico"
+            android:icon="@drawable/find_user_icon"
             android:title="Usuarios" />
     </group>
 
