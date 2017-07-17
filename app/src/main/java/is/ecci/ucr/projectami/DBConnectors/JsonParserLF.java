@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -55,6 +56,24 @@ public class JsonParserLF {
                 }
             } else {
                 user = readUser(response);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public static ArrayList<User> parseArrayUsers(JSONObject response) {
+        ArrayList<User> user = new ArrayList<>();
+        try{
+            if(response.has("_embedded")){
+                JSONArray jsonArray = response.getJSONArray("_embedded");
+                for (int i = 0; i<jsonArray.length(); i++) {
+                    JSONObject docJson = jsonArray.getJSONObject(i);
+                    user.add(readUser(docJson));
+                }
+            } else {
+                user.add(readUser(response));
             }
         } catch (JSONException e) {
             e.printStackTrace();
