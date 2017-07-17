@@ -125,6 +125,8 @@ public class SubScreenMap extends Activity {
     View.OnClickListener btnRegstrHandler = new View.OnClickListener() {
         public void onClick(View v){
              /* consultar si tiene el privilegio necesario */
+
+             LogInfo.getRoles();
             if (LogInfo.getRoles()!= null && LogInfo.getRoles().contains("recolector")){
                 Intent intent = new Intent(SubScreenMap.this, BugsSampleToRegisterActivity.class);
                 intent.putExtra("site", site);
