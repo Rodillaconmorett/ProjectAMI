@@ -6,8 +6,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.UserManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -126,6 +128,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                     //signOut.setVisibility(View.VISIBLE);
                 }
                 LogInfo.setRoles(user.getRoles());
+                LogInfo.setLogged(true);
                 Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LogActivity.this, MainActivity.class);
                 //signOut.setVisibility(View.VISIBLE);
@@ -190,6 +193,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                     Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getFirstName()+" "+LogInfo.getLastName()+"!",Toast.LENGTH_SHORT).show();
                 }
                 LogInfo.setRoles(user.getRoles());
+                LogInfo.setLogged(true);
                 Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LogActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -217,6 +221,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                             roles.add("recolector");
                             roles.add("usuario");
                             LogInfo.setRoles(roles);
+                            LogInfo.setLogged(true);
                             Toast.makeText(getApplicationContext(),"Hello, "+LogInfo.getEmail()+"!",Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LogActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -242,9 +247,10 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                     public void onResult(Status status) {
                         if(LogInfo.isLogged()){
                             if(LogInfo.getRoles()!=null){
-                                LogInfo.getRoles().clear();
+                                LogInfo.clearRoles();
                                 LogInfo.setLogged(false);
-
+                                Intent intent = new Intent(LogActivity.this, MainActivity.class);
+                                startActivity(intent);
                             }
                         }
 

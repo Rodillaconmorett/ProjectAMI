@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -92,8 +93,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         MongoAdmin.setContext(this.getApplicationContext());
         samplingPoints = new LinkedList<>();
 
-
-
+        NavigationView navigationView1 = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView1.getMenu();
+        nav_Menu.findItem(R.id.usuarios_btn).setVisible((LogInfo.getRoles().contains("administrator")));
 
 
         /*
@@ -277,12 +279,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(activity);
                 break;
             case R.id.usuarios_btn:
-                activity = new Intent(MainActivity.this, UsersManagerActivity.class);
-                startActivity(activity);
+                if(LogInfo.getRoles().contains("administrator")) {
+                    activity = new Intent(MainActivity.this, UsersManagerActivity.class);
+                    startActivity(activity);
+                } else {
+                    Toast.makeText(this.getApplicationContext(),"Sorry, only administrators can see the users.",4).show();
+                }
                 break;
             case R.id.settings_btn:
                 if(LogInfo.isLogged()){
                     // Aqui inicia el activity de ajustes
+                    activity = new Intent(MainActivity.this, LogActivity.class);
+                    startActivity(activity);
                 }
                 else {
                     activity = new Intent(MainActivity.this, LogActivity.class);
