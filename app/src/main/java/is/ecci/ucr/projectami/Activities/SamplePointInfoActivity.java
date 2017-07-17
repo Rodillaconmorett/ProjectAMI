@@ -7,9 +7,13 @@
         import android.os.Bundle;
         import android.support.v7.app.AppCompatActivity;
         import android.util.Log;
+        import android.view.MotionEvent;
         import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.AbsListView;
         import android.widget.DatePicker;
         import android.widget.ImageButton;
+        import android.widget.ListAdapter;
         import android.widget.ListView;
         import android.widget.TextView;
         import android.widget.Toast;
@@ -107,7 +111,6 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
 
         /************** INITIALIZE THE LIST ******************/
         lvBugs = (ListView) findViewById(R.id.lvBugs);
-
         //lvBugs.setAdapter(bugFamilyAdapter);
 
         /*************** LOAD THE DATEPICKER **************/
@@ -186,8 +189,8 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
                  return null;
              }
          },site.getObjID()
-        );
-        //,initialDate,finalDate);
+        //);
+        ,initialDate,finalDate);
     }
 
     View.OnClickListener btnBackHandler = new View.OnClickListener() {
@@ -203,18 +206,18 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, monthOfYear);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            finalDate = String.valueOf(year);
-            finalDate += "-";
+            initialDate = String.valueOf(year);
+            initialDate += "-";
             if(monthOfYear < 9){
-                finalDate += "0";
+                initialDate += "0";
             }
-            finalDate += String.valueOf(monthOfYear + 1);
-            finalDate += "-";
+            initialDate += String.valueOf(monthOfYear + 1);
+            initialDate += "-";
             if(dayOfMonth < 10){
-                finalDate += "0";
+                initialDate += "0";
             }
-            finalDate += String.valueOf(dayOfMonth);
-            txtFinalDate.setText(finalDate);
+            initialDate += String.valueOf(dayOfMonth);
+            txtInitialDate.setText(initialDate);
         }
     };
 
@@ -244,10 +247,11 @@ public class SamplePointInfoActivity extends AppCompatActivity implements View.O
     View.OnClickListener btnDateHandler = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            Toast.makeText(SamplePointInfoActivity.this, "Ingrese la fecha inicial y luego la fecha final", 1000).show();
             new DatePickerDialog(SamplePointInfoActivity.this, dateF, calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
             new DatePickerDialog(SamplePointInfoActivity.this, dateI, calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
         }
     };
 
