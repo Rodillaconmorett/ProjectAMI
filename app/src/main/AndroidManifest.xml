@@ -42,12 +42,22 @@
             android:theme="@style/AppTheme.PopUpTheme"
             />
 
-        <activity
-            android:name=".Activities.Classification.QuestionsGUIActivity"
-            android:label="QuestionsGUI" />
 
-        <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity" />
-        <activity android:name=".Activities.CatalogActivity" />
+        <activity android:name=".Activities.UsersManagerActivity"
+            android:label="UsersManagerActivity"
+            android:theme="@style/AppTheme.PopUpTheme"
+            />
+
+        <activity android:name=".UserLog.LogUserActivity"
+            android:label="LogActivity"
+            android:theme="@style/AppTheme.PopUpTheme"
+            />
+
+        <activity android:name=".Activities.Classification.QuestionsGUIActivity"
+            android:label="QuestionsGUI"/>
+        <activity android:name=".Activities.Classification.BugsSampleToRegisterActivity"></activity>
+        <activity android:name=".Activities.CatalogActivity"></activity>
+
 
         <activity android:name=".ResolvingFeedbackActivity"></activity>
 
