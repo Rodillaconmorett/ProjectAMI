@@ -1,10 +1,13 @@
 package is.ecci.ucr.projectami.Activities.Classification;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +26,7 @@ import com.google.firebase.auth.UserInfo;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -30,10 +34,13 @@ import is.ecci.ucr.projectami.Bugs.Bug;
 
 import is.ecci.ucr.projectami.Bugs.BugMap;
 import is.ecci.ucr.projectami.DBConnectors.Config;
+import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.Inscriptor;
+import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
 import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
 import is.ecci.ucr.projectami.DecisionTree.TreeController;
 import is.ecci.ucr.projectami.LogInfo;
+import is.ecci.ucr.projectami.Questions;
 import is.ecci.ucr.projectami.R;
 import is.ecci.ucr.projectami.SampleBugsAdapter;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
@@ -125,6 +132,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
             ViewGroup currentView = findItem((ViewGroup) findViewById(R.id.lstBugList), currentBug);
             if (currentView != null) {
                 highligthItem(currentView);
+                Toast.makeText(getApplicationContext(),"El macro invertebrado ya había sido clasificado anteriormente y es un "+currentBug,Toast.LENGTH_SHORT).show();
             }
         } else {
             if (!currentBug.equals("Unknown")) {
@@ -182,16 +190,16 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
         int childCount = currentView.getChildCount();
         for (int i = 0; i < childCount; i++) {
             String bugID = (String) ((TextView) currentView.getChildAt(i).findViewById(R.id.txtName)).getText();
-            String quantityValue = ((TextView)currentView.getChildAt(i).findViewById(R.id.numberPicker)).getText().toString();
+            String quantityValue = ((TextView) currentView.getChildAt(i).findViewById(R.id.numberPicker)).getText().toString();
             int quantity = 1;
 
-            if(!(quantityValue == null || quantityValue.equals(""))){
+            if (!(quantityValue == null || quantityValue.equals(""))) {
                 quantity = Integer.parseInt(quantityValue);
             }
 
             bugMap.add(new BugMap(bugID, quantity));
         }
-
+        calculateSamplingScore(bugMap);
         if (bugMap.size() > 0) {
             if (LogInfo.getEmail() != null && LogInfo.getPassword() != null) {
                 Inscriptor.insertSamplingQuantity(bugMap, site.getObjID(), LogInfo.getEmail(), new ServerCallback() {
@@ -208,7 +216,7 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
                         if (resultString.matches(".*401.*")) {
                             Toast.makeText(getApplicationContext(), "No tiene permisos para ingresar muestras.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getApplicationContext(), "No se pudieron agregar los datos correctamente..", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "No se pudieron agregar los datos correctamente.", Toast.LENGTH_SHORT).show();
                         }
                         return null;
                     }
@@ -217,6 +225,37 @@ public class BugsSampleToRegisterActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Tiene que ingresar su usuario antes de agregar muestras.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void calculateSamplingScore(LinkedList<BugMap> bugMap) {
+        int quantity = bugMap.size();
+        final ArrayList<String> bugsToFind = new ArrayList<String>();
+
+        for (int i = 0; i < quantity; i++) {
+            bugsToFind.add(bugMap.get(i).getName());
+        }
+
+        Consultor.getBugsByIdRange(new ServerCallback() {
+            @Override
+            public JSONObject onSuccess(JSONObject result) {
+                ArrayList<Bug> bugsArray = JsonParserLF.parseBugsArray(result);
+                int quantity = bugsArray.size();
+                double score = 0;
+
+                for (int i = 0; i < quantity; i++) {
+                    score = score + bugsArray.get(i).getScore();
+                }
+                Toast.makeText(getApplicationContext(), "El puntaje obtenido durante la calificación es "+score+" puntos", Toast.LENGTH_SHORT).show();
+                return null;
+            }
+
+            @Override
+            public JSONObject onFailure(JSONObject result) {
+                return null;
+            }
+        }, bugsToFind);
+
+
     }
 
     public void regiterFeedBackOnDataBase() {

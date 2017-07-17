@@ -3,6 +3,11 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/perfil_btn"
+            android:icon="@drawable/map_ico"
+            android:title="Perfil"
+            />
+        <item
             android:id="@+id/map_btn"
             android:icon="@drawable/map_ico"
             android:title="Mapa" />
