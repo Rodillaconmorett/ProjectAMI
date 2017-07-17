@@ -240,6 +240,13 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
+                        if(LogInfo.isLogged()){
+                            if(LogInfo.getRoles()!=null){
+                                LogInfo.getRoles().clear();
+                                LogInfo.setLogged(false);
+
+                            }
+                        }
 
                     }
                 });
