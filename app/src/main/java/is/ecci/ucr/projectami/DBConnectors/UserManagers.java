@@ -100,6 +100,11 @@ public class UserManagers {
         params.put(Config.JSON_CONTENT_TYPE_KEY,Config.JSON_CONTENT_TYPE);
         MongoAdmin.jsonPatchRequest(jsonBody,getURL,callback);
     }
+
+    static public void getUsers(ServerCallback serverCallback){
+        String getURL = Config.CONNECTION_STRING_USERS+CollectionName.USERS;
+        MongoAdmin.jsonGetRequest(getURL,serverCallback);
+    }
 }
 
 /*Example #1 - Insert a simple user*/

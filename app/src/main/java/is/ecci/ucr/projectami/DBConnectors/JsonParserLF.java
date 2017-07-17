@@ -188,13 +188,39 @@ public class JsonParserLF {
     private static User readUser(JSONObject userDoc) throws JSONException {
         String email = userDoc.getString("_id");
         String pass = userDoc.getString("password");
-        String firstName = userDoc.getJSONObject("name").getString("first");
-        String lastName = userDoc.getJSONObject("name").getString("last");
-        String validated = userDoc.getString("validated");
+        String firstName;
+        String lastName;
+        if (userDoc.has("name")) {
+            if (userDoc.getJSONObject("name").has("first")) {
+                firstName = userDoc.getJSONObject("name").getString("first");
+
+            } else {
+                firstName = "N/A";
+            }
+            if (userDoc.getJSONObject("name").has("last")) {
+                lastName = userDoc.getJSONObject("name").getString("last");
+            } else {
+                lastName = "";
+            }
+        } else {
+            firstName = "N/A";
+            lastName = "";
+        }
+        String validated;
+        if(userDoc.has("validated")){
+            validated = userDoc.getString("validated");
+        } else {
+            validated = "false";
+        }
         ArrayList<String> arrayRoles = new ArrayList<>();
         boolean validatedBool;
         validatedBool = validated != "false";
-        String date = userDoc.getString("date_created");
+        String date;
+        if(userDoc.has("date_created")){
+            date = userDoc.getString("date_created");
+        } else {
+            date = "2017-01-01";
+        }
         JSONArray roles = userDoc.getJSONArray("roles");
         for(int i = 0; i<roles.length(); i++){
             arrayRoles.add(roles.get(i).toString());

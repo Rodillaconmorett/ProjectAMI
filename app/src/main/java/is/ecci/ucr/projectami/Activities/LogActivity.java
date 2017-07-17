@@ -225,7 +225,7 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
 
                         @Override
                         public JSONObject onFailure(JSONObject result) {
-                            Toast.makeText(getApplicationContext(),"Sorry, there was a problem. Please, re-try.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"Sorry, we couldn't connect to our servers. Please, re-try.",Toast.LENGTH_SHORT).show();
                             return null;
                         }
                     });

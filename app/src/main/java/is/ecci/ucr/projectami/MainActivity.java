@@ -24,6 +24,7 @@ import is.ecci.ucr.projectami.Activities.Classification.BugsSampleToRegisterActi
 import is.ecci.ucr.projectami.Activities.LogActivity;
 import is.ecci.ucr.projectami.Activities.PerfilActivity;
 import is.ecci.ucr.projectami.Activities.SubScreenMap;
+import is.ecci.ucr.projectami.Activities.UsersManagerActivity;
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
@@ -50,6 +51,7 @@ import java.util.LinkedList;
 import is.ecci.ucr.projectami.Bugs.Bug;
 import is.ecci.ucr.projectami.Bugs.BugAdapter;
 import is.ecci.ucr.projectami.DBConnectors.ServerCallback;
+import is.ecci.ucr.projectami.DBConnectors.UserManagers;
 import is.ecci.ucr.projectami.SamplingPoints.SamplingPoint;
 import is.ecci.ucr.projectami.SamplingPoints.Site;
 
@@ -264,7 +266,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 activity = new Intent(MainActivity.this, PerfilActivity.class);
                 startActivity(activity);
                 break;
-
             case R.id.map_btn:
                 break;
             case R.id.add_bug_btn:
@@ -273,6 +274,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case R.id.catalog_btn:
                 activity = new Intent(MainActivity.this, CatalogActivity.class);
+                startActivity(activity);
+                break;
+            case R.id.usuarios_btn:
+                activity = new Intent(MainActivity.this, UsersManagerActivity.class);
                 startActivity(activity);
                 break;
             case R.id.settings_btn:

@@ -43,14 +43,14 @@ public class UserAdapter extends ArrayAdapter<User> {
         // mostrará en la celda del ListView. Para ello primero creamos el
         // inflater, y después inflamos la vista.
         LayoutInflater inflater = LayoutInflater.from(context);
-        View item = inflater.inflate(R.layout.catalog_frame, null);
+        View item = inflater.inflate(R.layout.user_frame, null);
 
 
         TextView nombre = (TextView) item.findViewById(R.id.user_name);
         String userName = datos.get(position).getFirstName();
         String userLast = datos.get(position).getLastName();
         if(userName==null){
-            userName = "";
+            userName = "N/A";
         }
         if(userLast==null){
             userLast = "";
@@ -60,8 +60,8 @@ public class UserAdapter extends ArrayAdapter<User> {
         TextView txtScore = (TextView) item.findViewById(R.id.user_email);
         txtScore.setText( datos.get(position).getEmail());
 
-        Button editButton = (Button)convertView.findViewById(R.id.edit_user_btn);
-        Button historyButton = (Button)convertView.findViewById(R.id.check_user_hist_btn);
+        Button editButton = (Button)item.findViewById(R.id.edit_user_btn);
+        Button historyButton = (Button)item.findViewById(R.id.check_user_hist_btn);
 
         editButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -72,9 +72,10 @@ public class UserAdapter extends ArrayAdapter<User> {
         historyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(parent.getContext(), LogUserActivity.class);
-                intent.putExtra("user", (Serializable) datos.get(position));
-                parent.getContext().startActivity(intent);
+                StaticUser.setUser(datos.get(position));
+                Intent intent = new Intent(context, LogUserActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
 
