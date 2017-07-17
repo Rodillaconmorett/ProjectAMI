@@ -1,7 +1,5 @@
 package is.ecci.ucr.projectami.Activities.Classification;
 
-import is.ecci.ucr.projectami.Activities.LogActivity;
-import is.ecci.ucr.projectami.Activities.SubScreenMap;
 import is.ecci.ucr.projectami.DBConnectors.CollectionName;
 import is.ecci.ucr.projectami.DBConnectors.Consultor;
 import is.ecci.ucr.projectami.DBConnectors.JsonParserLF;
@@ -48,7 +46,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
     //Variables estáticas que se llaman desde otras clases, para las cuales existen métodos
     private static String currentBug;
-    private static LinkedList<Pair<String, String>> currentInfo;
+    private static LinkedList<Pair<String, String>> currentQuestionsRealized;
 
     //Variables de la clase
     String currentQuestion;
@@ -68,7 +66,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
         //Clase dedicada para pasar parámetro
         currentBug = "Unknown";
-        currentInfo = null;
+        currentQuestionsRealized = null;
         findViewById(R.id.progressBarQuestion).setVisibility(View.VISIBLE);
         findViewById(R.id.dynamicAnswers).setVisibility(View.GONE);
 
@@ -86,6 +84,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                     LinkedList<String> familiesLinked = treeControl.getPossibleFamilies();
                     String families[] = familiesLinked.toArray(new String[familiesLinked.size()]);
                     intent.putExtra("families", families);
+                    intent.putExtra("bioadmin", true);
                     startActivityForResult(intent, 0XF);
                 }
             });
@@ -163,10 +162,16 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 displayOnScreen(hashLinkedToArray(treeControl.getQuestionAndOptions()));
                 currentExtraQuestions--;
             } else { //Si se acaban las 5 preguntas extras de retroalimentacion
-                currentInfo = treeControl.getQuestionsRealized();
+                currentQuestionsRealized = treeControl.getQuestionsRealized();
                 try {
                     System.out.println("Finishing the activity");
-                    terminarActividad();
+                    Intent intent = new Intent(QuestionsGUIActivity.this, ResolvingFeedbackActivity.class);
+                    LinkedList<String> familiesLinked = treeControl.getPossibleFamilies();
+                    String families[] = familiesLinked.toArray(new String[familiesLinked.size()]);
+                    intent.putExtra("families", families);
+                    intent.putExtra("bioadmin", false);
+                    startActivityForResult(intent, 0XF);
+                    //terminarActividad();
                 } catch (Exception e) {
                     //
                     System.out.println("Error finishing the frame");
@@ -253,7 +258,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
 
         } else {
             currentBug = currentQuestion;
-            currentInfo = treeControl.getQuestionsRealized();
+            currentQuestionsRealized = treeControl.getQuestionsRealized();
             try {
                 terminarActividad();
             } catch (Throwable e) {
@@ -270,6 +275,7 @@ public class QuestionsGUIActivity extends AppCompatActivity {
      * @throws AnswerException
      */
     public void catchAction(Button button) throws AnswerException {
+        setCurrentQuestion();
         String textB = translateReply(button.getText().toString(), false);
         if (textB.equals("NA")) {
             ((LinearLayout) findViewById(R.id.dynamicAnswers)).removeAllViews();
@@ -376,12 +382,14 @@ public class QuestionsGUIActivity extends AppCompatActivity {
                 try {
                     treeControl.resolve(value);
                     currentBug = value;
-                    currentInfo = treeControl.getQuestionsRealized();
+                    currentQuestionsRealized = treeControl.getQuestionsRealized();
                     terminarActividad();
                 } catch (Exception e){
                     System.out.println(e.getMessage());
 
                 }
+            } else if (resultCode == RESULT_CANCELED) {
+                finish();
             }
         }
     }
@@ -397,8 +405,8 @@ public class QuestionsGUIActivity extends AppCompatActivity {
         return currentBug;
     }
 
-    static LinkedList<Pair<String, String>> getCurrentInfo() {
-        return currentInfo;
+    static LinkedList<Pair<String, String>> getCurrentQuestionsRealized() {
+        return currentQuestionsRealized;
     }
 
     private String getImageName(String bugFamily) {
