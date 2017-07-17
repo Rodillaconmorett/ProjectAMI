@@ -56,7 +56,6 @@ import is.ecci.ucr.projectami.Users.User;
             currentPassword.setText(LogInfo.getPassword());
         }
 
-
         Button btn= (Button) findViewById(R.id.btn_aceptar);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
